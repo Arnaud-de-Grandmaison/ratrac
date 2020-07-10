@@ -38,9 +38,7 @@ public:
   bool operator==(const RayTracerTuple &rhs) const {
     return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && w() == rhs.w();
   }
-  bool operator!=(const RayTracerTuple &rhs) const {
-    return ! operator==(rhs);
-  }
+  bool operator!=(const RayTracerTuple &rhs) const { return !operator==(rhs); }
 
 private:
   DataTy m_tuple[4];
@@ -49,14 +47,15 @@ private:
 template <class DataTy = RayTracerDataType>
 class RayTracerPoint : public RayTracerTuple<DataTy> {
 public:
-  RayTracerPoint(DataTy x, DataTy y, DataTy z) : RayTracerTuple(x, y, z, 1.0) {}
+  RayTracerPoint(DataTy x, DataTy y, DataTy z)
+      : RayTracerTuple<DataTy>(x, y, z, 1.0) {}
 };
 
 template <class DataTy = RayTracerDataType>
 class RayTracerVector : public RayTracerTuple<DataTy> {
 public:
   RayTracerVector(DataTy x, DataTy y, DataTy z)
-      : RayTracerTuple(x, y, z, 0.0) {}
+      : RayTracerTuple<DataTy>(x, y, z, 0.0) {}
 };
 
 using Point = RayTracerPoint<RayTracerDataType>;
