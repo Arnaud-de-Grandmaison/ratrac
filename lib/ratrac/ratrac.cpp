@@ -1,7 +1,7 @@
 #include "ratrac/ratrac.h"
 
-#include <string>
 #include <iostream>
+#include <string>
 
 using namespace ratrac;
 using namespace std;
