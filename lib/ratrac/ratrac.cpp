@@ -6,4 +6,4 @@
 using namespace ratrac;
 using namespace std;
 
-void World::say(const string &msg) const { cout << msg << "\n"; }
+void World::say(ostream &os, const string &msg) const { os << msg << "\n"; }

@@ -1,12 +1,13 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 namespace ratrac {
 
 class World {
 public:
-  void say(const std::string &msg) const;
+  void say(std::ostream &os, const std::string &msg) const;
 };
 
 } // namespace ratrac

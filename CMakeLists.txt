@@ -51,7 +51,7 @@ target_include_directories(ratrac PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 # ========================================================
 # Unit testing.
 # --------------------------------------------------------
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 # ========================================================
 # Ratrac main
