@@ -50,6 +50,7 @@ TEST(RayTracerTuple, operations) {
   EXPECT_EQ(p + v, Tuple(1.0, 1.0, 6.0, 1.0));
   p += v;
   EXPECT_EQ(p, Tuple(1.0, 1.0, 6.0, 1.0));
+}
 
 int main(int argc, char **argv) {
   InitGoogleTest(&argc, argv);
