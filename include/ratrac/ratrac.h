@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 namespace ratrac {
 class World {
@@ -35,14 +36,39 @@ public:
       return Type::error;
     }
   }
-  bool operator==(const RayTracerTuple &rhs) const {
-    return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && w() == rhs.w();
+
+  bool operator==(const RayTracerTuple<DataTy> &rhs) const {
+    return close_to_equal(x(), rhs.x()) && close_to_equal(y(), rhs.y()) &&
+           close_to_equal(z(), rhs.z()) && close_to_equal(w(), rhs.w());
   }
-  bool operator!=(const RayTracerTuple &rhs) const { return !operator==(rhs); }
+  bool operator!=(const RayTracerTuple<DataTy> &rhs) const {
+    return !operator==(rhs);
+  }
+
+  RayTracerTuple<DataTy> &operator+=(const RayTracerTuple<DataTy> &rhs) {
+    m_tuple[0] += rhs.x();
+    m_tuple[1] += rhs.y();
+    m_tuple[2] += rhs.z();
+    m_tuple[3] += rhs.w();
+    return *this;
+  }
 
 private:
   DataTy m_tuple[4];
+
+  static bool close_to_equal(const RayTracerDataType &a,
+                             const RayTracerDataType &b) {
+    const RayTracerDataType EPSILON = 0.00001;
+    return std::abs(a - b) < EPSILON;
+  }
 };
+template <class DataTy = RayTracerDataType>
+RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
+                                 const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple<DataTy> tmp = lhs;
+  tmp += rhs;
+  return tmp;
+}
 
 template <class DataTy = RayTracerDataType>
 class RayTracerPoint : public RayTracerTuple<DataTy> {
