@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.17)
+cmake_minimum_required (VERSION 3.16)
 project(ratrac)
 
 find_program(CCACHE_PROGRAM ccache)
