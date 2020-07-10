@@ -2,6 +2,8 @@
 Ratrac:a ray tracer experiment
 ===============================================================================
 
+![](https://github.com/actions/Arnaud-de-Grandmaison/workflows/C%2FC%2B%2B+CI/badge.svg)
+
 Build
 =====
 
