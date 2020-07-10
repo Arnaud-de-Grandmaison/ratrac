@@ -102,17 +102,17 @@ public:
   
   /** Adding two Vectors returns a Vector. */
   RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
-    m_tuple[0] += rhs.x();
-    m_tuple[1] += rhs.y();
-    m_tuple[2] += rhs.z();
+    RayTracerTuple<DataTy>::m_tuple[0] += rhs.x();
+    RayTracerTuple<DataTy>::m_tuple[1] += rhs.y();
+    RayTracerTuple<DataTy>::m_tuple[2] += rhs.z();
     return *this;
   }
   /** A subtraction of two Vectors returns a Vector. */
   RayTracerVector<DataTy> &operator-=(const RayTracerVector<DataTy> &rhs) {
-    m_tuple[0] -= rhs.x();
-    m_tuple[1] -= rhs.y();
-    m_tuple[2] -= rhs.z();
-    m_tuple[3] -= rhs.w();
+    RayTracerTuple<DataTy>::m_tuple[0] -= rhs.x();
+    RayTracerTuple<DataTy>::m_tuple[1] -= rhs.y();
+    RayTracerTuple<DataTy>::m_tuple[2] -= rhs.z();
+    RayTracerTuple<DataTy>::m_tuple[3] -= rhs.w();
     return *this;
   }
 };
@@ -135,10 +135,10 @@ public:
 
   /** Subtracting a Vector from a Point returns a Point. */
   RayTracerPoint<DataTy> &operator-=(const RayTracerVector<DataTy> &rhs) {
-    m_tuple[0] -= rhs.x();
-    m_tuple[1] -= rhs.y();
-    m_tuple[2] -= rhs.z();
-    m_tuple[3] -= rhs.w();
+    RayTracerTuple<DataTy>::m_tuple[0] -= rhs.x();
+    RayTracerTuple<DataTy>::m_tuple[1] -= rhs.y();
+    RayTracerTuple<DataTy>::m_tuple[2] -= rhs.z();
+    RayTracerTuple<DataTy>::m_tuple[3] -= rhs.w();
     return *this;
   }
 };
