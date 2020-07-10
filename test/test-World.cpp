@@ -31,6 +31,10 @@ TEST(RayTracerTuple, init) {
   EXPECT_EQ(rtt.w(), 0.0);
   EXPECT_EQ(rtt.type(), Tuple::Type::vector);
   EXPECT_NE(rtt.type(), Tuple::Type::point);
+
+  Point p(4.0, -4.0, 3.0);
+  EXPECT_TRUE(p == Tuple(4.0, -4.0, 3.0, 1.0));
+  EXPECT_FALSE(p != Tuple(4.0, -4.0, 3.0, 1.0));
 }
 
 int main(int argc, char **argv) {

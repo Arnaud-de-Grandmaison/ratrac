@@ -10,6 +10,7 @@ public:
 };
 
 using RayTracerDataType = double;
+
 template <class DataTy = RayTracerDataType> class RayTracerTuple {
 public:
   enum class Type {
@@ -34,11 +35,26 @@ public:
       return Type::error;
     }
   }
+  bool operator==(const RayTracerTuple &rhs) const {
+    return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && w() == rhs.w();
+  }
+  bool operator!=(const RayTracerTuple &rhs) const {
+    return ! operator==(rhs);
+  }
 
 private:
   DataTy m_tuple[4];
 };
 
-using Tuple = RayTracerTuple<double>;
+template <class DataTy = RayTracerDataType>
+class RayTracerPoint : public RayTracerTuple<DataTy> {
+public:
+  RayTracerPoint(DataTy x, DataTy y, DataTy z) : RayTracerTuple(x, y, z, 1.0) {}
+
+
+};
+
+using Point = RayTracerPoint<RayTracerDataType>;
+using Tuple = RayTracerTuple<RayTracerDataType>;
 
 } // namespace ratrac
