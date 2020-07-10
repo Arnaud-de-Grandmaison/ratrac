@@ -44,12 +44,43 @@ TEST(RayTracerTuple, init) {
   EXPECT_FALSE(v != Tuple(4.0, -4.0, 3.0, 0.0));
 }
 
-TEST(RayTracerTuple, operations) { 
+TEST(RayTracerTuple, operations) {
+  // Sum
+  // ===
+
+  // Sum of a Point and a Vector
   Point p(3.0, -2.0, 5.0);
   Vector v(-2.0, 3.0, 1.0);
   EXPECT_EQ(p + v, Tuple(1.0, 1.0, 6.0, 1.0));
   p += v;
   EXPECT_EQ(p, Tuple(1.0, 1.0, 6.0, 1.0));
+
+  // Substraction
+  // ============
+
+  // Subtracting two Tuples
+  Tuple t1(3.0, 2.0, 1.0, 0.0);
+  Tuple t2(5.0, 6.0, 7.0, 1.0);
+  EXPECT_EQ(t1 - t2, Tuple(-2.0, -4.0, -6.0, -1.0));
+  t1 -= t2;
+  EXPECT_EQ(t1, Tuple(-2.0, -4.0, -6.0, -1.0));
+
+  // Subtracting two Points
+  Point p1(3.0, 2.0, 1.0);
+  Point p2(5.0, 6.0, 7.0);
+  EXPECT_EQ(p1 - p2, Vector(-2.0, -4.0, -6.0));
+
+  // Subtracting two Vectors
+    Vector v1(3.0, 2.0, 1.0);
+  Vector v2(5.0, 6.0, 7.0);
+  EXPECT_EQ(v1 - v2, Vector(-2.0, -4.0, -6.0));
+
+  // Subtracting a Vector from a Point
+  p = Point(3, 2, 1);
+  v = Vector(5, 6, 7);
+  EXPECT_EQ(p - v, Point(-2.0, -4.0, -6.0));
+  p -= v;
+  EXPECT_EQ(p, Point(-2.0, -4.0, -6.0));
 }
 
 int main(int argc, char **argv) {
