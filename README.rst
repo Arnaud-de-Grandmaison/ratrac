@@ -1,8 +1,18 @@
-|BadgeLicence| |BadgeBuild|
+|BadgeLicence| |BadgeBuild| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence|
 
 .. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
 
 .. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
+
+.. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
+
+.. |BadgeContributorsNb| image:: https://img.shields.io/github/contributors/arnaud-de-grandmaison/ratrac
+
+.. |BadgeLastCommitMaster| image:: https://img.shields.io/github/last-commit/arnaud-de-grandmaison/ratrac/master
+
+.. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/m/arnaud-de-grandmaison/ratrac
+
+.. |BadgeMainLanguage| image:: https://img.shields.io/github/languages/top/arnaud-de-grandmaison/ratrac
 
 ===============================================================================
 Ratrac:a ray tracer experiment
