@@ -1,7 +1,11 @@
-.. image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac .. image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
 ===============================================================================
-Ratrac:a ray tracer experiment
+|BadgeLicence| Ratrac:a ray tracer experiment |BadgeBuild|
 ===============================================================================
+
+
+.. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
+
+.. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
 
 Build
 =====
