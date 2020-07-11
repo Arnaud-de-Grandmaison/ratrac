@@ -1,3 +1,5 @@
+.. image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac   :alt: GitHub
+
 ===============================================================================
 Ratrac:a ray tracer experiment
 ===============================================================================
