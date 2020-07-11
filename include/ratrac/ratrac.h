@@ -77,10 +77,11 @@ public:
     return *this;
   }
 
-  RayTracerTuple<DataTy> operator-() {
+  RayTracerTuple<DataTy> operator-() const {
     return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
                                   -m_tuple[3]);
   }
+
   RayTracerTuple<DataTy> operator*(const DataTy &rhs) {
     return RayTracerTuple<DataTy>(m_tuple[0] * rhs, m_tuple[1] * rhs,
                                   m_tuple[2] * rhs, m_tuple[3] * rhs);
