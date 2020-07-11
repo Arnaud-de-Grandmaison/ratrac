@@ -12,7 +12,7 @@
 
 .. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/m/arnaud-de-grandmaison/ratrac
     :alt: GitHub commit activity
-    :target: /commits/master
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/commits/master
 
 .. |BadgeMainLanguage| image:: https://img.shields.io/github/languages/top/arnaud-de-grandmaison/ratrac
 
