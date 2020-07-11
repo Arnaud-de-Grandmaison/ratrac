@@ -34,12 +34,12 @@ TEST(RayTracerTuple, init) {
   EXPECT_NE(rtt.type(), Tuple::Type::point);
 
   // Point initialisation
-  Point p(4.0, -4.0, 3.0);
+  Tuple p = Point(4.0, -4.0, 3.0);
   EXPECT_TRUE(p == Tuple(4.0, -4.0, 3.0, 1.0));
   EXPECT_FALSE(p != Tuple(4.0, -4.0, 3.0, 1.0));
 
   // Vector initialisation
-  Vector v(4.0, -4.0, 3.0);
+  Tuple v = Vector(4.0, -4.0, 3.0);
   EXPECT_TRUE(v == Tuple(4.0, -4.0, 3.0, 0.0));
   EXPECT_FALSE(v != Tuple(4.0, -4.0, 3.0, 0.0));
 }
@@ -56,18 +56,18 @@ TEST(RayTracerTuple, operations) {
   EXPECT_EQ(t1, Tuple(8.0, 8.0, 8.0, 2.0));
 
   // Adding two Points
-  Point p1(3.0, 2.0, 1.0);
-  Point p2(5.0, 6.0, 7.0);
+  Tuple p1 = Point(3.0, 2.0, 1.0);
+  Tuple p2 = Point(5.0, 6.0, 7.0);
   EXPECT_EQ(p1 + p2, Tuple(8.0, 8.0, 8.0, 2.0));
 
   // Adding two Vectors
-  Vector v1(3.0, 2.0, 1.0);
-  Vector v2(5.0, 6.0, 7.0);
+  Tuple v1 = Vector(3.0, 2.0, 1.0);
+  Tuple v2 = Vector(5.0, 6.0, 7.0);
   EXPECT_EQ(v1 + v2, Vector(8.0, 8.0, 8.0));
 
   // Sum of a Point and a Vector => Point
-  Point p(3.0, -2.0, 5.0);
-  Vector v(-2.0, 3.0, 1.0);
+  Tuple p = Point(3.0, -2.0, 5.0);
+  Tuple v = Vector(-2.0, 3.0, 1.0);
   EXPECT_EQ(p + v, Tuple(1.0, 1.0, 6.0, 1.0));
   p += v;
   EXPECT_EQ(p, Tuple(1.0, 1.0, 6.0, 1.0));
@@ -93,8 +93,8 @@ TEST(RayTracerTuple, operations) {
   EXPECT_EQ(v1 - v2, Vector(-2.0, -4.0, -6.0));
 
   // Subtracting a Vector from a Point
-  p = Point(3, 2, 1);
-  v = Vector(5, 6, 7);
+  p = Point(3.0, 2.0, 1.0);
+  v = Vector(5.0, 6.0, 7.0);
   EXPECT_EQ(p - v, Point(-2.0, -4.0, -6.0));
   p -= v;
   EXPECT_EQ(p, Point(-2.0, -4.0, -6.0));

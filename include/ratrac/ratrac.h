@@ -75,7 +75,8 @@ public:
     m_tuple[2] -= rhs.z();
     m_tuple[3] -= rhs.w();
     return *this;
-  };
+  }
+
   RayTracerTuple<DataTy> operator-() {
     return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
                                   -m_tuple[3]);
@@ -85,12 +86,11 @@ public:
                                   m_tuple[2] * rhs, m_tuple[3] * rhs);
   }
 
-protected:
+private:
   /** An array formated as following: Tuple(x, y, z, w). Args type:
    * float/double. */
   DataTy m_tuple[4];
 
-private:
   /** Tests if two coordinates are approximalty equal. The difference must be
    * less than EPSILON. Currently, EPSILON = 0.00001. */
   static bool close_to_equal(const DataTy &a, const DataTy &b) {
@@ -99,55 +99,19 @@ private:
   }
 };
 
-/** A class representing a Vector3 or a Vector4 whre w = 0. */
-template <class DataTy> class RayTracerVector : public RayTracerTuple<DataTy> {
-public:
-  /** RayTracerVector = {x, y, z, 0} */
-  RayTracerVector(DataTy x, DataTy y, DataTy z)
-      : RayTracerTuple<DataTy>(x, y, z, 0.0) {}
+/** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
+template <class DataTy>
+RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
+                              const DataTy &z) {
+  return RayTracerTuple<DataTy>(x, y, z, 0.0);
+}
 
-  /** Adding two Vectors returns a Vector. */
-  RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
-    RayTracerTuple<DataTy>::m_tuple[0] += rhs.x();
-    RayTracerTuple<DataTy>::m_tuple[1] += rhs.y();
-    RayTracerTuple<DataTy>::m_tuple[2] += rhs.z();
-    return *this;
-  }
-  /** A subtraction of two Vectors returns a Vector. */
-  RayTracerVector<DataTy> &operator-=(const RayTracerVector<DataTy> &rhs) {
-    RayTracerTuple<DataTy>::m_tuple[0] -= rhs.x();
-    RayTracerTuple<DataTy>::m_tuple[1] -= rhs.y();
-    RayTracerTuple<DataTy>::m_tuple[2] -= rhs.z();
-    RayTracerTuple<DataTy>::m_tuple[3] -= rhs.w();
-    return *this;
-  }
-};
-
-/** A class representing a Point or a Vector4 where w = 1. */
-template <class DataTy> class RayTracerPoint : public RayTracerTuple<DataTy> {
-public:
-  /** RayTracerPoint = {x, y, z, 1} */
-  RayTracerPoint(DataTy x, DataTy y, DataTy z)
-      : RayTracerTuple<DataTy>(x, y, z, 1.0) {}
-
-  // /* Adding two Points does not really make sense. However, it will returns
-  // the point which is in middle of both. */
-  // RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
-  //  m_tuple[0] += rhs.x();
-  //  m_tuple[1] += rhs.y();
-  //  m_tuple[2] += rhs.z();
-  //  return *this;
-  //}
-
-  /** Subtracting a Vector from a Point returns a Point. */
-  RayTracerPoint<DataTy> &operator-=(const RayTracerVector<DataTy> &rhs) {
-    RayTracerTuple<DataTy>::m_tuple[0] -= rhs.x();
-    RayTracerTuple<DataTy>::m_tuple[1] -= rhs.y();
-    RayTracerTuple<DataTy>::m_tuple[2] -= rhs.z();
-    RayTracerTuple<DataTy>::m_tuple[3] -= rhs.w();
-    return *this;
-  }
-};
+/** Helper to create a Point, i.e. a Tuple with w = 1.0 */
+template <class DataTy>
+RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
+                             const DataTy &z) {
+  return RayTracerTuple<DataTy>(x, y, z, 1.0);
+}
 
 // Other/External operators
 // ========================
@@ -166,27 +130,9 @@ RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
   return tmp;
 }
 
-/** Subtracting two Points returns a Vector. */
-template <class DataTy>
-RayTracerVector<DataTy> operator-(const RayTracerPoint<DataTy> &lhs,
-                                  const RayTracerPoint<DataTy> &rhs) {
-  return RayTracerVector<DataTy>(lhs.x() - rhs.x(), lhs.y() - rhs.y(),
-                                 lhs.z() - rhs.z());
-}
-
-/** Subtracting a Vector from a Point returns a Point. */
-template <class DataTy>
-RayTracerPoint<DataTy> operator-(const RayTracerPoint<DataTy> &lhs,
-                                 const RayTracerVector<DataTy> &rhs) {
-  RayTracerPoint<DataTy> tmp = lhs;
-  tmp -= rhs;
-  return tmp;
-}
-
-/** Substracting two Tuples/Vectors returns respectively a Tuple or a Vector./n
-WARNING: May makes trouble with RayTracerVector<DataTy>
-operator-(const RayTracerPoint<DataTy> &lhs, const RayTracerPoint<DataTy>
-&rhs)*/
+/** Substracting two Tuples/Vectors returns respectively a Tuple or a Vector.
+ * Subtracting two Points returns a Vector.
+ * Subtracting a Vector from a Point returns a Point. */
 template <class DataTy>
 RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
                                  const RayTracerTuple<DataTy> &rhs) {
@@ -200,8 +146,8 @@ RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
 /** Current supported types: double, float.
  * Note: Integers are not supported because of EPSILON. */
 using RayTracerDataType = double;
-using Point = RayTracerPoint<RayTracerDataType>;
-using Vector = RayTracerVector<RayTracerDataType>;
+//using Point = RayTracerPoint<RayTracerDataType>;
+//using Vector = RayTracerVector<RayTracerDataType>;
 using Tuple = RayTracerTuple<RayTracerDataType>;
 
 } // namespace ratrac
