@@ -1,4 +1,4 @@
-|BadgeLicence| |BadgeBuild| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence|
+|BadgeLicence| |BadgeBuild| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage|
 
 .. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
 
