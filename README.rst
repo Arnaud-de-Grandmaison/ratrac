@@ -1,20 +1,32 @@
 |BadgeLicence| |BadgeBuild| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage|
 
 .. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
-
+    :alt: Github licence
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/blob/master/LICENSE
+    
 .. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
+    :alt: Github last build status
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/runs/860837594
 
 .. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
+    :alt: Github size
+    :target: #
 
 .. |BadgeContributorsNb| image:: https://img.shields.io/github/contributors/arnaud-de-grandmaison/ratrac
+    :alt: Github number of contributors
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/graphs/contributors
 
 .. |BadgeLastCommitMaster| image:: https://img.shields.io/github/last-commit/arnaud-de-grandmaison/ratrac/master
-
+    :alt: Github last commit day on master branch
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/commits/master
+   
 .. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/m/arnaud-de-grandmaison/ratrac
     :alt: GitHub commit activity
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/commits/master
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/graphs/commit-activity
 
 .. |BadgeMainLanguage| image:: https://img.shields.io/github/languages/top/arnaud-de-grandmaison/ratrac
+    :alt: Github main language
+    :target: /#
 
 ===============================================================================
 Ratrac:a ray tracer experiment
