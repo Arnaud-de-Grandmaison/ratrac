@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <string>
@@ -63,22 +64,18 @@ public:
   // operations
 
   RayTracerTuple<DataTy> &operator+=(const RayTracerTuple<DataTy> &rhs) {
-    m_tuple[0] += rhs.x();
-    m_tuple[1] += rhs.y();
-    m_tuple[2] += rhs.z();
-    m_tuple[3] += rhs.w();
+    for (unsigned i=0; i<m_tuple.size(); i++)
+      m_tuple[i] += rhs.m_tuple[i];
     return *this;
   }
   RayTracerTuple<DataTy> &operator-=(const RayTracerTuple<DataTy> &rhs) {
-    m_tuple[0] -= rhs.x();
-    m_tuple[1] -= rhs.y();
-    m_tuple[2] -= rhs.z();
-    m_tuple[3] -= rhs.w();
+    for (unsigned i=0; i<m_tuple.size(); i++)
+      m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
   RayTracerTuple<DataTy> &operator*=(const DataTy &rhs) {
-    for (unsigned i=0; i<4; i++)
-      m_tuple[i] *= rhs;
+    for (DataTy &c: m_tuple)
+      c *= rhs;
     return *this;
   }
 
@@ -91,7 +88,7 @@ public:
 private:
   /** An array formated as following: Tuple(x, y, z, w). Args type:
    * float/double. */
-  DataTy m_tuple[4];
+  std::array<DataTy, 4> m_tuple;
 
   /** Tests if two coordinates are approximalty equal. The difference must be
    * less than EPSILON. Currently, EPSILON = 0.00001. */
