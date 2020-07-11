@@ -76,15 +76,16 @@ public:
     m_tuple[3] -= rhs.w();
     return *this;
   }
+  RayTracerTuple<DataTy> &operator*=(const DataTy &rhs) {
+    for (unsigned i=0; i<4; i++)
+      m_tuple[i] *= rhs;
+    return *this;
+  }
+
 
   RayTracerTuple<DataTy> operator-() const {
     return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
                                   -m_tuple[3]);
-  }
-
-  RayTracerTuple<DataTy> operator*(const DataTy &rhs) {
-    return RayTracerTuple<DataTy>(m_tuple[0] * rhs, m_tuple[1] * rhs,
-                                  m_tuple[2] * rhs, m_tuple[3] * rhs);
   }
 
 private:
@@ -139,6 +140,22 @@ RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
                                  const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp -= rhs;
+  return tmp;
+}
+
+/** Scalar multiplication. */
+template <class DataTy>
+RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
+                                 const DataTy &rhs) {
+  RayTracerTuple<DataTy> tmp = lhs;
+  tmp *= rhs;
+  return tmp;
+}
+template <class DataTy>
+RayTracerTuple<DataTy> operator*(const DataTy &lhs,
+                                 const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple<DataTy> tmp = rhs;
+  tmp *= lhs;
   return tmp;
 }
 

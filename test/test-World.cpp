@@ -114,9 +114,11 @@ TEST(RayTracerTuple, operations) {
   // Multiplying a tuple by a scalar (3.5)
   t = Tuple(1.0, -2.0, 3.0, -4.0);
   EXPECT_EQ(t * 3.5, Tuple(3.5, -7, 10.5, -14));
+  EXPECT_EQ(3.5 * t, Tuple(3.5, -7, 10.5, -14));
 
   // Multiplying a tuple by a fraction (0.5)
   EXPECT_EQ(t * 0.5, Tuple(0.5, -1, 1.5, -2));
+  EXPECT_EQ(0.5 * t, Tuple(0.5, -1, 1.5, -2));
 
   // Divison
   // =======
