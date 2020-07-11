@@ -29,7 +29,7 @@ public:
   /** Initialise the Tuple/Vector4.*/
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
       : m_tuple{x, y, z, w} {}
-  
+
   // Accessors
   // =========
 
@@ -76,9 +76,18 @@ public:
     m_tuple[3] -= rhs.w();
     return *this;
   };
+  RayTracerTuple<DataTy> operator-() {
+    return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
+                                  -m_tuple[3]);
+  }
+  RayTracerTuple<DataTy> operator*(const DataTy &rhs) {
+    return RayTracerTuple<DataTy>(m_tuple[0] * rhs, m_tuple[1] * rhs,
+                                  m_tuple[2] * rhs, m_tuple[3] * rhs);
+  }
 
 protected:
-  /** An array formated as following: Tuple(x, y, z, w). Args type: float/double. */
+  /** An array formated as following: Tuple(x, y, z, w). Args type:
+   * float/double. */
   DataTy m_tuple[4];
 
 private:
@@ -96,7 +105,7 @@ public:
   /** RayTracerVector = {x, y, z, 0} */
   RayTracerVector(DataTy x, DataTy y, DataTy z)
       : RayTracerTuple<DataTy>(x, y, z, 0.0) {}
-  
+
   /** Adding two Vectors returns a Vector. */
   RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
     RayTracerTuple<DataTy>::m_tuple[0] += rhs.x();
@@ -121,8 +130,9 @@ public:
   RayTracerPoint(DataTy x, DataTy y, DataTy z)
       : RayTracerTuple<DataTy>(x, y, z, 1.0) {}
 
-  // /* Adding two Points does not really make sense. However, it will returns the point which is in middle of both. */
-  //RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
+  // /* Adding two Points does not really make sense. However, it will returns
+  // the point which is in middle of both. */
+  // RayTracerVector<DataTy> &operator+=(const RayTracerVector<DataTy> &rhs) {
   //  m_tuple[0] += rhs.x();
   //  m_tuple[1] += rhs.y();
   //  m_tuple[2] += rhs.z();
@@ -144,7 +154,8 @@ public:
 
 // Adding two Tuples/Points/Vector returns repectively a Tuple, a Point or a
 // Vector.
-// However adding two points does not really make sense, actually, it will return the middle between both.
+// However adding two points does not really make sense, actually, it will
+// return the middle between both.
 /** Adding two Tuples/Points/Vector returns a Tuple (because the Tests of the
 book does not required any other kind of return Type).*/
 template <class DataTy>
@@ -172,14 +183,13 @@ RayTracerPoint<DataTy> operator-(const RayTracerPoint<DataTy> &lhs,
   return tmp;
 }
 
-
-
 /** Substracting two Tuples/Vectors returns respectively a Tuple or a Vector./n
 WARNING: May makes trouble with RayTracerVector<DataTy>
-operator-(const RayTracerPoint<DataTy> &lhs, const RayTracerPoint<DataTy> &rhs)*/
+operator-(const RayTracerPoint<DataTy> &lhs, const RayTracerPoint<DataTy>
+&rhs)*/
 template <class DataTy>
 RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
-                  const RayTracerTuple<DataTy> &rhs) {
+                                 const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp -= rhs;
   return tmp;
