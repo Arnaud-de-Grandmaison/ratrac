@@ -20,13 +20,13 @@
     :alt: Github last commit day on master branch
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/commits/master
    
-.. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/m/arnaud-de-grandmaison/ratrac
+.. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/y/arnaud-de-grandmaison/ratrac
     :alt: GitHub commit activity
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/graphs/commit-activity
 
 .. |BadgeMainLanguage| image:: https://img.shields.io/github/languages/top/arnaud-de-grandmaison/ratrac
     :alt: Github main language
-    :target: /#
+    :target: #
 
 ===============================================================================
 Ratrac:a ray tracer experiment
