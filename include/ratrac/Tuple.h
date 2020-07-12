@@ -7,11 +7,12 @@ namespace ratrac {
 // Classes
 // =======
 
-/** RayTraceTuple represent the Tuples ratrac uses to manipulate point and vectors. */
+/** RayTraceTuple represent the Tuples ratrac uses to manipulate point and
+ * vectors. */
 template <class DataTy> class RayTracerTuple {
 public:
-
-  /** As shown here, Type must not be error or 0. It is a Point if w == 1 and a Vector if w == 0. */
+  /** As shown here, Type must not be error or 0. It is a Point if w == 1 and a
+   * Vector if w == 0. */
   enum class Type {
     error = 0,
     point = 1,
@@ -39,6 +40,19 @@ public:
     }
   }
 
+  // Advanced vectors properties
+  // ===========================
+
+  // #help: DataTy sould be rather a double or a float ?
+  const double magnitude() const {
+    return std::sqrt(m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1] +
+                     m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3]);
+    // #help: Which is better ?
+    /*
+    return std::sqrt(std::pow(m_tuple[0], 2) + std::pow(m_tuple[1], 2) +
+                     std::pow(m_tuple[2], 2) + std::pow(m_tuple[3], 2));*/
+  }
+
   // Operators
   // =========
 
@@ -55,21 +69,25 @@ public:
   // operations
 
   RayTracerTuple<DataTy> &operator+=(const RayTracerTuple<DataTy> &rhs) {
-    for (unsigned i=0; i<m_tuple.size(); i++)
+    for (unsigned i = 0; i < m_tuple.size(); i++)
       m_tuple[i] += rhs.m_tuple[i];
     return *this;
   }
   RayTracerTuple<DataTy> &operator-=(const RayTracerTuple<DataTy> &rhs) {
-    for (unsigned i=0; i<m_tuple.size(); i++)
+    for (unsigned i = 0; i < m_tuple.size(); i++)
       m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
   RayTracerTuple<DataTy> &operator*=(const DataTy &rhs) {
-    for (DataTy &c: m_tuple)
+    for (DataTy &c : m_tuple)
       c *= rhs;
     return *this;
   }
-
+  RayTracerTuple<DataTy> &operator/=(const DataTy &rhs) {
+    for (DataTy &c : m_tuple)
+      c /= rhs;
+    return *this;
+  }
 
   RayTracerTuple<DataTy> operator-() const {
     return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
@@ -108,10 +126,7 @@ RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
 
 // Adding two Tuples/Points/Vector returns repectively a Tuple, a Point or a
 // Vector.
-// However adding two points does not really make sense, actually, it will
-// return the middle between both.
-/** Adding two Tuples/Points/Vector returns a Tuple (because the Tests of the
-book does not required any other kind of return Type).*/
+/** Adding two Tuples/Vector4.*/
 template <class DataTy>
 RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
                                  const RayTracerTuple<DataTy> &rhs) {
@@ -147,13 +162,22 @@ RayTracerTuple<DataTy> operator*(const DataTy &lhs,
   return tmp;
 }
 
+/** Scalar division. */
+template <class DataTy>
+RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
+                                 const DataTy &rhs) {
+  RayTracerTuple<DataTy> tmp = lhs;
+  tmp /= rhs;
+  return tmp;
+}
+
 // Renaming classes for external usage
 
 /** Current supported types: double, float.
  * Note: Integers are not supported because of EPSILON. */
 using RayTracerDataType = double;
-//using Point = RayTracerPoint<RayTracerDataType>;
-//using Vector = RayTracerVector<RayTracerDataType>;
+// using Point = RayTracerPoint<RayTracerDataType>;
+// using Vector = RayTracerVector<RayTracerDataType>;
 using Tuple = RayTracerTuple<RayTracerDataType>;
 
 } // namespace ratrac

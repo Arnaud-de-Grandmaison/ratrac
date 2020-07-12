@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include <cmath>
+
 using namespace ratrac;
 using namespace testing;
 
@@ -114,13 +116,32 @@ TEST(RayTracerTuple, operations) {
   // =======
 
   // Dividing a tuple by a scalar (2)
+  t = Tuple(1.0, -2.0, 3.0, -4.0);
+  EXPECT_EQ(t / 2.0, Tuple(0.5, -1.0, 1.5, -2.0));
+  // Not required by the book => not defined in the Tuple class
+  // EXPECT_EQ(2.0 / t, Tuple(?, ?, ?, ?));
+
+  // Not required by the book
+  // Dividing a tuple by a fraction (0.5)
+  // EXPECT_EQ(t / 0.5, Tuple(0.5, -1, 1.5, -2));
+  // EXPECT_EQ(0.5 / t, Tuple(0.5, -1, 1.5, -2));
 
   // Getting magnitude
   // =================
 
   // Simple tests
+  v = Vector(1.0, 0.0, 0.0);
+  EXPECT_EQ(v.magnitude(), 1.0);
+  v = Vector(0.0, 1.0, 0.0);
+  EXPECT_EQ(v.magnitude(), 1.0);
+  v = Vector(0.0, 0.0, 1.0);
+  EXPECT_EQ(v.magnitude(), 1.0);
 
   // Advanced tests
+  v = Vector(1.0, 2.0, 3.0);
+  EXPECT_EQ(v.magnitude(), std::sqrt(14));
+  v = Vector(-1.0, -2.0, -3.0);
+  EXPECT_EQ(v.magnitude(), std::sqrt(14));
 
   // Normalizing
   // ===========
