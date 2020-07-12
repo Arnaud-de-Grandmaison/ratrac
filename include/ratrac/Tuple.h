@@ -6,7 +6,10 @@
 namespace ratrac {
 // Classes
 // =======
-
+template <class DataTy> inline RayTracerTuple<DataTy> Vector;
+template <class DataTy>
+inline RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
+                                    const DataTy &z);
 /** RayTraceTuple represent the Tuples ratrac uses to manipulate point and
  * vectors. */
 template <class DataTy> class RayTracerTuple {
