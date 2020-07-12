@@ -22,3 +22,4 @@ macro(add_test name)
 endmacro(add_test name)
 
 add_test(Tuple)
+add_test(Color)

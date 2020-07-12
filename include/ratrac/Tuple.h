@@ -16,7 +16,6 @@ public:
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
       : m_tuple{x, y, z, w} {}
 
-
   /** Helpers to create points and vectors. */
   static RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
                                        const DataTy &z) {
