@@ -6,11 +6,7 @@
 namespace ratrac {
 // Classes
 // =======
-template <class DataTy> class RayTracerTuple;
-template <class DataTy> inline RayTracerTuple<DataTy> Vector;
-template <class DataTy>
-inline RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
-                                    const DataTy &z);
+
 /** RayTraceTuple represent the Tuples ratrac uses to manipulate point and
  * vectors. */
 template <class DataTy> class RayTracerTuple {
@@ -26,6 +22,17 @@ public:
   /** Initialise the Tuple/Vector4.*/
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
       : m_tuple{x, y, z, w} {}
+
+
+  /** Helpers to create points and vectors. */
+  static RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
+                                       const DataTy &z) {
+    return RayTracerTuple<DataTy>(x, y, z, 0.0);
+  }
+  static RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
+                                      const DataTy &z) {
+    return RayTracerTuple<DataTy>(x, y, z, 1.0);
+  }
 
   // Accessors
   // =========
@@ -129,14 +136,14 @@ private:
 template <class DataTy>
 inline RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
                                      const DataTy &z) {
-  return RayTracerTuple<DataTy>(x, y, z, 0.0);
+  return RayTracerTuple<DataTy>::Vector(x, y, z);
 }
 
 /** Helper to create a Point, i.e. a Tuple with w = 1.0 */
 template <class DataTy>
 inline RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
                                     const DataTy &z) {
-  return RayTracerTuple<DataTy>(x, y, z, 1.0);
+  return RayTracerTuple<DataTy>::Point(x, y, z);
 }
 
 // Other/External operators
