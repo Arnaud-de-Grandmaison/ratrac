@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <cmath>
 #include <ostream>
 
 namespace ratrac {
@@ -18,6 +17,7 @@ public:
   Color(const float &red, const float &green, const float &blue,
         const float &alpha)
       : m_color{red, green, blue, alpha} {}
+  Color() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
 
   // Accessors
   // =========
