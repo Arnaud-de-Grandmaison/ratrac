@@ -21,5 +21,4 @@ macro(add_test name)
   add_dependencies(check check-${name})
 endmacro(add_test name)
 
-add_test(World)
 add_test(Tuple)

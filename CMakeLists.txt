@@ -61,5 +61,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 # ========================================================
 # Ratrac main
 # --------------------------------------------------------
-add_executable(ratrac-main main-ratrac.cpp)
-target_link_libraries(ratrac-main ratrac)
+add_executable(tick-main main-tick.cpp)
+target_link_libraries(tick-main ratrac)
