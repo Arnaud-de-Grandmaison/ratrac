@@ -43,7 +43,6 @@ public:
   // Advanced vectors properties
   // ===========================
 
-  // #help: DataTy sould be rather a double or a float ?
   double magnitude() const {
     double result = 0.0;
     for (const DataTy &c : m_tuple)
@@ -92,6 +91,14 @@ public:
   RayTracerTuple<DataTy> operator-() const {
     return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
                                   -m_tuple[3]);
+  }
+
+  DataTy dot(const RayTracerTuple<DataTy> &rhs) const {
+    DataTy result = 0;
+    for (unsigned i = 0; i < m_tuple.size(); i++) {
+      result += m_tuple[i] * rhs.m_tuple[i];
+    }
+    return result;
   }
 
 private:
@@ -169,6 +176,13 @@ RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
   RayTracerTuple<DataTy> tmp = lhs;
   tmp /= rhs;
   return tmp;
+}
+/** Dot product. */
+template <class DataTy>
+DataTy dot(const RayTracerTuple<DataTy> &lhs,
+           const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple<DataTy> tmp = lhs;
+  return tmp.dot(rhs);
 }
 
 // Renaming classes for external usage

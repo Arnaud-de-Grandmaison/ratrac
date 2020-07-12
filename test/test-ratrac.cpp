@@ -155,6 +155,10 @@ TEST(RayTracerTuple, operations) {
   // Dot product (/scalar product)
   // =============================
 
+  v1 = Vector(1.0, 2.0, 3.0);
+  v2 = Vector(2.0, 3.0, 4.0);
+  EXPECT_EQ(dot(v1, v2), 20);
+
   // Cross product
   // =============
 }
