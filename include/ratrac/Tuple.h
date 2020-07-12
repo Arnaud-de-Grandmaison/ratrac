@@ -11,13 +11,6 @@ namespace ratrac {
  * vectors. */
 template <class DataTy> class RayTracerTuple {
 public:
-  /** As shown here, Type must not be error or 0. It is a Point if w == 1 and a
-   * Vector if w == 0. */
-  enum class Type {
-    error = 0,
-    point = 1,
-    vector = 2,
-  };
 
   /** Initialise the Tuple/Vector4.*/
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
@@ -41,15 +34,9 @@ public:
   const DataTy &y() const { return m_tuple[1]; }
   const DataTy &z() const { return m_tuple[2]; }
   const DataTy &w() const { return m_tuple[3]; }
-  Type type() const {
-    if (m_tuple[3] == 1.0) {
-      return Type::point;
-    } else if (m_tuple[3] == 0.0) {
-      return Type::vector;
-    } else {
-      return Type::error;
-    }
-  }
+
+  bool isPoint() const { return m_tuple[3] == 1.0; }
+  bool isVector() const { return m_tuple[3] == 0.0; }
 
   // Advanced vectors properties
   // ===========================
