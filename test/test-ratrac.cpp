@@ -146,6 +146,12 @@ TEST(RayTracerTuple, operations) {
   // Normalizing
   // ===========
 
+  v = Vector(4.0, 0.0, 0.0);
+  EXPECT_EQ(v.normalize(), Vector(1.0, 0.0, 0.0));
+  v = Vector(1.0, 2.0, 3.0);
+  EXPECT_EQ(v.normalize(),
+            Vector(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
+
   // Dot product (/scalar product)
   // =============================
 

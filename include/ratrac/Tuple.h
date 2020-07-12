@@ -44,14 +44,14 @@ public:
   // ===========================
 
   // #help: DataTy sould be rather a double or a float ?
-  const double magnitude() const {
-    return std::sqrt(m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1] +
-                     m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3]);
-    // #help: Which is better ?
-    /*
-    return std::sqrt(std::pow(m_tuple[0], 2) + std::pow(m_tuple[1], 2) +
-                     std::pow(m_tuple[2], 2) + std::pow(m_tuple[3], 2));*/
+  double magnitude() const {
+    double result = 0.0;
+    for (const DataTy &c : m_tuple)
+      result += c * c;
+    return std::sqrt(result);
   }
+
+  RayTracerTuple<DataTy> normalize() const { return *this / magnitude(); }
 
   // Operators
   // =========
@@ -105,7 +105,7 @@ private:
     const DataTy EPSILON = 0.00001;
     return std::abs(a - b) < EPSILON;
   }
-};
+}; // namespace ratrac
 
 /** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
 template <class DataTy>
