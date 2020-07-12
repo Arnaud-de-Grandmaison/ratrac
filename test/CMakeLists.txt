@@ -15,7 +15,7 @@ macro(add_test name)
                  ${CMAKE_CURRENT_SOURCE_DIR}/test-${name}.cpp)
   target_include_directories(test-${name} PRIVATE ${WAN_SOURCE_DIR})
   target_link_libraries(test-${name} gtest ratrac)
-  add_custom_target(check-${name} test-${name} --gtest_output=xml:test-${name}.xml
+  add_custom_target(check-${name} test-${name} --gtest_color=yes --gtest_output=xml:test-${name}.xml
                     DEPENDS test-${name}
                     COMMENT "Running ${name} unit tests")
   add_dependencies(check check-${name})
