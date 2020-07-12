@@ -123,15 +123,15 @@ private:
 
 /** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
 template <class DataTy>
-RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
-                              const DataTy &z) {
+inline RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
+                                     const DataTy &z) {
   return RayTracerTuple<DataTy>(x, y, z, 0.0);
 }
 
 /** Helper to create a Point, i.e. a Tuple with w = 1.0 */
 template <class DataTy>
-RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
-                             const DataTy &z) {
+inline RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
+                                    const DataTy &z) {
   return RayTracerTuple<DataTy>(x, y, z, 1.0);
 }
 
@@ -142,8 +142,8 @@ RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
 // Vector.
 /** Adding two Tuples/Vector4.*/
 template <class DataTy>
-RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
-                                 const RayTracerTuple<DataTy> &rhs) {
+inline RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
+                                        const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp += rhs;
   return tmp;
@@ -153,8 +153,8 @@ RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
  * Subtracting two Points returns a Vector.
  * Subtracting a Vector from a Point returns a Point. */
 template <class DataTy>
-RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
-                                 const RayTracerTuple<DataTy> &rhs) {
+inline RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
+                                        const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp -= rhs;
   return tmp;
@@ -162,15 +162,15 @@ RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
 
 /** Scalar multiplication. */
 template <class DataTy>
-RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
-                                 const DataTy &rhs) {
+inline RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
+                                        const DataTy &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
 template <class DataTy>
-RayTracerTuple<DataTy> operator*(const DataTy &lhs,
-                                 const RayTracerTuple<DataTy> &rhs) {
+inline RayTracerTuple<DataTy> operator*(const DataTy &lhs,
+                                        const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = rhs;
   tmp *= lhs;
   return tmp;
@@ -178,8 +178,8 @@ RayTracerTuple<DataTy> operator*(const DataTy &lhs,
 
 /** Scalar division. */
 template <class DataTy>
-RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
-                                 const DataTy &rhs) {
+inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
+                                        const DataTy &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp /= rhs;
   return tmp;
@@ -190,14 +190,14 @@ RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
 
 /** Dot product. */
 template <class DataTy>
-DataTy dot(const RayTracerTuple<DataTy> &lhs,
-           const RayTracerTuple<DataTy> &rhs) {
+inline DataTy dot(const RayTracerTuple<DataTy> &lhs,
+                  const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   return tmp.dot(rhs);
 }
 template <class DataTy>
-RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
-                             const RayTracerTuple<DataTy> &rhs) {
+inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
+                                    const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   return tmp.cross(rhs);
 }
