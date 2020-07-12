@@ -23,3 +23,4 @@ endmacro(add_test name)
 
 add_test(Tuple)
 add_test(Color)
+add_test(Canvas)
