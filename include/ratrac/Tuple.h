@@ -93,12 +93,19 @@ public:
                                   -m_tuple[3]);
   }
 
+  // Advanced operations
+
   DataTy dot(const RayTracerTuple<DataTy> &rhs) const {
     DataTy result = 0;
     for (unsigned i = 0; i < m_tuple.size(); i++) {
       result += m_tuple[i] * rhs.m_tuple[i];
     }
     return result;
+  }
+  RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &rhs) const {
+    return Vector(m_tuple[1] * rhs.m_tuple[2] - m_tuple[2] * rhs.m_tuple[1],
+                  m_tuple[2] * rhs.m_tuple[0] - m_tuple[0] * rhs.m_tuple[2],
+                  m_tuple[0] * rhs.m_tuple[1] - m_tuple[1] * rhs.m_tuple[0]);
   }
 
 private:
@@ -177,6 +184,10 @@ RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
   tmp /= rhs;
   return tmp;
 }
+
+// Advanced operations
+// ===================
+
 /** Dot product. */
 template <class DataTy>
 DataTy dot(const RayTracerTuple<DataTy> &lhs,
@@ -184,7 +195,12 @@ DataTy dot(const RayTracerTuple<DataTy> &lhs,
   RayTracerTuple<DataTy> tmp = lhs;
   return tmp.dot(rhs);
 }
-
+template <class DataTy>
+RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
+                             const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple<DataTy> tmp = lhs;
+  return tmp.cross(rhs);
+}
 // Renaming classes for external usage
 
 /** Current supported types: double, float.

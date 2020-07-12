@@ -161,6 +161,11 @@ TEST(RayTracerTuple, operations) {
 
   // Cross product
   // =============
+
+  v1 = Vector(1.0, 2.0, 3.0);
+  v2 = Vector(2.0, 3.0, 4.0);
+  EXPECT_EQ(cross(v1, v2), Vector(-1.0, 2.0, -1.0));
+  EXPECT_EQ(cross(v2, v1), Vector(1.0, -2.0, 1.0));
 }
 
 int main(int argc, char **argv) {
