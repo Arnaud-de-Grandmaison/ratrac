@@ -18,7 +18,7 @@ static unsigned capComponent(float c, int MaxValue) {
 
 void Canvas::to_ppm(ostream &os) const {
   const int MaxValue = 255;
-  os << "PS3\n";
+  os << "P3\n";
   os << m_width << " " << m_height << "\n";
   os << MaxValue << '\n';
   for(unsigned y = 0; y < m_height; y++) {
