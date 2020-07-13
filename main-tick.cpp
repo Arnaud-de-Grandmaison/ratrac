@@ -1,4 +1,7 @@
 #include "ratrac/ratrac.h"
+#include "ratrac/Tuple.h"
+#include "ratrac/Color.h"
+#include "ratrac/Canvas.h"
 
 #include <cmath>
 #include <fstream>
@@ -92,22 +95,11 @@ void experiment2(const char *filename) {
   Projectile p(Point(0.0, 1.0, 0.0), normalize(Vector(1.0, 1.8, 0.0)) * 11.25);
   Environment e(p, Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
 
-  while (e.projectile().position().y() >= 0.0) {
+  for (; e.projectile().position().y() >= 0.0; e.tick()) {
     Tuple Pos = e.projectile().position();
-    int x = round(Pos.x());
-    if (x < 0)
-      x = 0;
-    else if (x > C.width())
-      x = C.width();
-
-    int y = round(Pos.y());
-    if (y < 0)
-      y = 0;
-    else if (y > C.height())
-      y = C.height();
-
-    C.at(x, C.height() - y) = Color(.8, .8, .8);
-    e.tick();
+    unsigned x = cap(Pos.x(), C.width());
+    unsigned y = C.height() - cap(Pos.y(), C.height());
+    C.at(x, y) = Color(.8, .8, .8);
   };
 
   ofstream file(filename);

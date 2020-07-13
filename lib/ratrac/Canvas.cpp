@@ -1,20 +1,10 @@
+#include "ratrac/ratrac.h"
 #include "ratrac/Canvas.h"
 
-#include <cmath>
 #include <string>
 
 using namespace ratrac;
 using namespace std;
-
-// Cap color component to [0:MaxValue]
-static unsigned capComponent(float c, int MaxValue) {
-  int v  = round(c * MaxValue);
-  if (v < 0)
-    return 0;
-  else if (v > MaxValue)
-    return MaxValue;
-  return v;
-}
 
 void Canvas::to_ppm(ostream &os) const {
   const int MaxValue = 255;
@@ -28,9 +18,9 @@ void Canvas::to_ppm(ostream &os) const {
     for (unsigned x = 0; x < m_width; x++) {
       const Color &Pixel = at(x, y);
       // Scale to MaxValue
-      unsigned r = capComponent(Pixel.red(), MaxValue);
-      unsigned g = capComponent(Pixel.green(), MaxValue);
-      unsigned b = capComponent(Pixel.blue(), MaxValue);
+      unsigned r = cap(Pixel.red() * MaxValue, MaxValue);
+      unsigned g = cap(Pixel.green() * MaxValue, MaxValue);
+      unsigned b = cap(Pixel.blue() * MaxValue, MaxValue);
       for (const unsigned &c: {r, g, b}) {
         string s = to_string(c);
         if (lineLenght + delimiter.size() + s.size() > 70) {
