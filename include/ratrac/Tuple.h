@@ -182,6 +182,19 @@ inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
   return tmp;
 }
 
+// Function like operators
+// =======================
+
+template <class DataTy>
+double magnitude(const RayTracerTuple<DataTy> &T) {
+  return T.magnitude();
+}
+
+template <class DataTy>
+RayTracerTuple<DataTy> normalize(const RayTracerTuple<DataTy> &T) {
+  return T.normalize();
+}
+
 // Advanced operations
 // ===================
 
