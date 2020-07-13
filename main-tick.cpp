@@ -1,19 +1,27 @@
 #include "ratrac/ratrac.h"
 
+#include <cmath>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 using namespace ratrac;
 using namespace std;
 
 class Projectile {
 public:
-  Projectile(Tuple position, Tuple velocity)
+  Projectile(const Tuple &position, const Tuple &velocity)
       : m_position{position}, m_velocity{velocity} {};
 
   // Accessors
   const Tuple &position() const { return m_position; }
   const Tuple &velocity() const { return m_velocity; }
+
+  void update(const Tuple &position, const Tuple &velocity) {
+    m_position = position;
+    m_velocity = velocity;
+  }
 
 private:
   // a Point
@@ -24,40 +32,41 @@ private:
 
 class Environment {
 public:
-  Environment(Tuple gravity, Tuple wind) : m_gravity{gravity}, m_wind{wind} {};
+  Environment(const Projectile &projectile, const Tuple &gravity,
+              const Tuple &wind) : m_proj(projectile), m_gravity{gravity}, m_wind{wind} {};
 
   // Accessors
   const Tuple &gravity() const { return m_gravity; }
   const Tuple &wind() const { return m_wind; }
 
+  void tick() {
+    Tuple position = m_proj.position() + m_proj.velocity();
+    Tuple velocity = m_proj.velocity() + m_gravity + m_wind;
+    m_proj.update(position, velocity);
+  }
+
+  const Projectile &projectile() const { return m_proj; }
+
 private:
+  // Our projectile
+  Projectile m_proj;
   // a Vector
   Tuple m_gravity;
   // a Vector
   Tuple m_wind;
 };
 
-inline Projectile tick(Environment e, Projectile p) {
-  Tuple position = p.position() + p.velocity();
-  Tuple velocity = p.velocity() + e.gravity() + e.wind();
-  return Projectile(position, velocity);
-}
-
-int main(int argc, char *argv[]) {
+void experiment1() {
   ios state(nullptr);
 
   Projectile p(Point(0.0, 1.0, 0.0), Vector(1.0, 1.0, 0.0).normalize());
-  Environment e(Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
+  Environment e(p, Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
 
-  string answer = "";
-  Tuple p_preposition = p.position();
-  Tuple p_postposition = {0.0, 1.0, 0.0, 1.0};
-  int it = 0;
-  do {
-
-    p_preposition = p.position();
-    p = tick(e, p);
-    p_postposition = p.position();
+  unsigned it = 0;
+  while (e.projectile().position().y() >= 0.0) {
+    Tuple p_preposition = e.projectile().position();
+    e.tick();
+    Tuple p_postposition = e.projectile().position();
     cout << "Iteration n " << it << ":\n";
 
     state.copyfmt(cout);
@@ -74,6 +83,39 @@ int main(int argc, char *argv[]) {
     cout.copyfmt(state);
 
     it++;
-  } while (p_postposition.y() > 0);
+  };
+}
+
+void experiment2(const char *filename) {
+  Canvas C(900, 550);
+
+  Projectile p(Point(0.0, 1.0, 0.0), normalize(Vector(1.0, 1.8, 0.0)) * 11.25);
+  Environment e(p, Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
+
+  while (e.projectile().position().y() >= 0.0) {
+    Tuple Pos = e.projectile().position();
+    int x = round(Pos.x());
+    if (x < 0)
+      x = 0;
+    else if (x > C.width())
+      x = C.width();
+
+    int y = round(Pos.y());
+    if (y < 0)
+      y = 0;
+    else if (y > C.height())
+      y = C.height();
+
+    C.at(x, C.height() - y) = Color(.8, .8, .8);
+    e.tick();
+  };
+
+  ofstream file(filename);
+  C.to_ppm(file);
+}
+
+int main(int argc, char *argv[]) {
+  experiment1();
+  experiment2("tick.ppm");
   return 0;
 }
