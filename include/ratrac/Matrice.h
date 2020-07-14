@@ -7,6 +7,8 @@
 #include <tuple>
 #include <vector>
 
+// #help: Should float be a double or in a template ?
+
 namespace ratrac {
 /** A matrice of multiple forms. At the moment all types are supported. */
 class Matrice {
@@ -108,6 +110,32 @@ inline Matrice transpose(const Matrice &M) {
   return Matrice(future_matrice);
 }
 
+/** Returns the determinant of a 2*2 matrice. */
+inline float determinant(const Matrice &M) {
+  return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
+}
+
+/** Returns a submatrix(a matrice# with one row and column less). */
+inline Matrice submatrix(const Matrice &M, const unsigned line,
+                         const unsigned column) {
+  std::vector<std::vector<float>> current_matrix(M.matrice());
+
+  std::vector<std::vector<float>> table;
+  std::vector<float> line_vec;
+  for (unsigned it_line(0); it_line < std::get<0>(M.size()); it_line++) {
+    if (it_line != line) {
+      for (unsigned it_column(0); it_column < std::get<1>(M.size());
+           it_column++) {
+        if (it_column != column) {
+          line_vec.push_back(current_matrix[it_line][it_column]);
+        }
+      }
+      table.push_back(line_vec);
+      line_vec.clear();
+    }
+  }
+  return Matrice(table);
+}
 } // namespace ratrac
 
 /** Return something like :

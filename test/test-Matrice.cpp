@@ -118,6 +118,20 @@ TEST(RayTracerMatrice, other_stuff) {
       {{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}});
   EXPECT_EQ(transpose(M),
             Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
+
+  EXPECT_EQ(transpose(identity_matrix()), identity_matrix());
+
+  // Inverting Matrices
+  // ==================
+
+  // Calculating the determinant of a 2*2 matrix
+  M = std::vector<std::vector<float>>({{1, 5}, {-3, 2}});
+  EXPECT_EQ(determinant(M), 17);
+
+  // A submatrix of a 3*3 matrix is a 2*2 matrix
+  M = std::vector<std::vector<float>>({{1, 5, 0}, {-3, 2, 7}, {0, 6, -3}});
+  EXPECT_EQ(submatrix(M, 0, 2),
+            Matrice(std::vector<std::vector<float>>({{-3, 2}, {0, 6}})));
 }
 
 int main(int argc, char **argv) {
