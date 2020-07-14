@@ -123,8 +123,4 @@ inline Color operator/(const Color &lhs, const float &rhs) {
 }
 } // namespace ratrac
 
-std::ostream &operator<<(std::ostream &os, const ratrac::Color &C) {
-  os << "Color { reg:" << C.red() << ", green:" << C.green()
-     << ", blue:" << C.blue() << ", alpha:" << C.alpha() << "}";
-  return os;
-}
+std::ostream &operator<<(std::ostream &os, const ratrac::Color &C);
