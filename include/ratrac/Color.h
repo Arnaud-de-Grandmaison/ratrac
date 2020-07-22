@@ -79,7 +79,7 @@ private:
    * less than EPSILON. Currently, EPSILON = 0.00001. */
   static bool close_to_equal(const float &a, const float &b) {
     const float EPSILON = 0.00001;
-    return std::fabsf(a - b) < EPSILON;
+    return std::fabs(a - b) < EPSILON;
   }
 }; // namespace ratrac
 
