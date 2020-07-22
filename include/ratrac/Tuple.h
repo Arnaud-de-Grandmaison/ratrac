@@ -112,11 +112,21 @@ private:
 
   /** Tests if two coordinates are approximalty equal. The difference must be
    * less than EPSILON. Currently, EPSILON = 0.00001. */
-  static bool close_to_equal(const DataTy &a, const DataTy &b) {
-    const DataTy EPSILON = 0.00001;
-    return std::abs(a - b) < EPSILON;
-  }
-}; // namespace ratrac
+  static bool close_to_equal(const DataTy &a, const DataTy &b);
+};
+
+template <>
+inline bool RayTracerTuple<double>::close_to_equal(const double &a,
+                                                   const double &b) {
+  const double EPSILON = 0.00001;
+  return std::fabs(a - b) < EPSILON;
+}
+template <>
+inline bool RayTracerTuple<float>::close_to_equal(const float &a,
+                                                  const float &b) {
+  const float EPSILON = 0.00001;
+  return std::fabsf(a - b) < EPSILON;
+}
 
 /** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
 template <class DataTy>
