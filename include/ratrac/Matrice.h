@@ -2,14 +2,19 @@
 
 #include "ratrac/Tuple.h"
 
+#include <cmath>
 #include <iostream>
 #include <ostream>
 #include <tuple>
 #include <vector>
-
 // #help: Should float be a double or in a template ?
 
 namespace ratrac {
+// template/constructor/? of functions @compiler
+class Matrice;
+float cofactor(const Matrice &M, const unsigned &line, const unsigned &column);
+float determinant(const Matrice &M);
+
 /** A matrice of multiple forms. At the moment all types are supported. */
 class Matrice {
 public:
@@ -20,7 +25,8 @@ public:
 
   /** Returns m_matrice. */
   std::vector<std::vector<float>> matrice() const { return m_matrice; }
-  /** Returns the size as a tuple<int x, int, y>.*/
+  /** Returns the size as a tuple<int x, int, y>.
+  #help: should probably returns a int rather than a tuple. */
   std::tuple<int, int> size() const {
     return std::tuple<int, int>(m_matrice.size(), m_matrice[0].size());
   };
@@ -28,14 +34,38 @@ public:
   float at(unsigned line, unsigned column) const {
     return m_matrice[line][column];
   };
+  const bool is_invertible() const { return determinant(*this) != 0; }
+
+  // Editors
+
+  void set(const unsigned &line, const unsigned &column, const float &value) {
+    m_matrice[line][column] = value;
+  }
 
   // Operators
 
   bool operator==(const Matrice &rhs) const {
     return m_matrice == rhs.m_matrice;
   }
+
+  bool approximatly_equal(const Matrice &rhs) {
+    for (int row(0); row < std::get<0>(size()); row++) {
+      for (int column(0); column < std::get<1>(size()); column++) {
+        if (!close_to_equal(at(row, column), rhs.at(row, column))) {
+          std::cout << row << column << at(row, column) << rhs.at(row, column)
+                    << std::endl;
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   bool operator!=(const Matrice &rhs) const { return !operator==(rhs); }
 
+  static bool close_to_equal(const float &a, const float &b) {
+    const float EPSILON = 0.00001;
+    return std::abs(a - b) < EPSILON;
+  }
   // Both must be 4*4 matrices.
   // #help: do we have to raise an error if matrices are not of size 4x4
   //        Actually, it works for every case, except if both matrices have
@@ -112,7 +142,16 @@ inline Matrice transpose(const Matrice &M) {
 
 /** Returns the determinant of a 2*2 matrice. */
 inline float determinant(const Matrice &M) {
-  return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
+  if (M.size() == std::tuple<int, int>(2, 2))
+    return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
+  else if (M.size() == std::tuple<int, int>(4, 4) ||
+           M.size() == std::tuple<int, int>(3, 3)) {
+    float result = 0;
+    for (int column(0); column < std::get<1>(M.size()); column++) {
+      result += M.at(0, column) * cofactor(M, 0, column);
+    }
+    return result;
+  }
 }
 
 /** Returns a submatrix(a matrice# with one row and column less). */
@@ -136,6 +175,40 @@ inline Matrice submatrix(const Matrice &M, const unsigned line,
   }
   return Matrice(table);
 }
+
+/** Returns the determinant of a submatrice; " minor is easier to say than
+ * determinant of a submatrice ". */
+inline float minor(const Matrice &M, const unsigned &line,
+                   const unsigned &column) {
+  return determinant(submatrix(M, line, column));
+}
+
+/** Returns the cofactor of a 3*3 matrix.
+#help: can be optimised (& ?)*/
+inline float cofactor(const Matrice &M, const unsigned &line,
+                      const unsigned &column) {
+  if (((line + column) % 2) != 0) {
+    return -minor(M, line, column);
+  } else {
+    return minor(M, line, column);
+  }
+}
+
+/* Returns an inversed matrix. */
+inline Matrice inverse(const Matrice &M) {
+  if (M.is_invertible()) {
+    Matrice M2 = M;
+    float cofac;
+    for (int row(0); row < std::get<0>(M.size()); row++) {
+      for (int col(0); col < std::get<1>(M.size()); col++) {
+        cofac = cofactor(M, row, col);
+        M2.set(col, row, cofac / determinant(M));
+      }
+    }
+    return M2;
+  }
+}
+
 } // namespace ratrac
 
 /** Return something like :
