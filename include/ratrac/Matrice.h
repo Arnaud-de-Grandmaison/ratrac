@@ -260,7 +260,7 @@ inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
   return result;
 }
 
-// #ToDo: convert into RayTracerMatrice (v2/after rework)
+/** Refer at the top of p49 for visual explanations. */
 template <class DataTy>
 inline RayTracerMatrice<DataTy> scaling(const DataTy &x, const DataTy &y,
                                         const DataTy &z) {
@@ -270,7 +270,7 @@ inline RayTracerMatrice<DataTy> scaling(const DataTy &x, const DataTy &y,
   result.set(2, 2, z);
   return result;
 }
-
+/** Refer at the top of p50 for visual explanations. */
 template <class DataTy>
 inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
   RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
@@ -281,6 +281,7 @@ inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
   return result;
 }
 
+/** Refer at the bottom of p50 for visual explanations. */
 template <class DataTy>
 inline RayTracerMatrice<DataTy> rotation_y(const DataTy &radians) {
   RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
@@ -298,6 +299,21 @@ inline RayTracerMatrice<DataTy> rotation_z(const DataTy &radians) {
   result.set(0, 1, -std::sin(radians));
   result.set(1, 0, std::sin(radians));
   result.set(1, 1, std::cos(radians));
+  return result;
+}
+
+/** Function that moves points proportionnaly to an axis. See image p51 for more
+ * information.*/
+template <class DataTy>
+inline RayTracerMatrice<DataTy> shearing(DataTy Xy, DataTy Xz, DataTy Yx,
+                                         DataTy Yz, DataTy Zx, DataTy Zy) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 1, Xy);
+  result.set(0, 2, Xz);
+  result.set(1, 0, Yx);
+  result.set(1, 2, Yz);
+  result.set(2, 0, Zx);
+  result.set(2, 1, Zy);
   return result;
 }
 

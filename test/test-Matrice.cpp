@@ -296,6 +296,39 @@ TEST(RayTracerMatrice, transformations) {
   EXPECT_EQ(half_quarter * p,
             Point<double>(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
   EXPECT_EQ(full_quarter * p, Point<double>(-1, 0, 0));
+
+  // Shearing
+  // ========
+
+  // A shearing transformation moves x in proportion to y
+  transform = shearing<double>(1, 0, 0, 0, 0, 0);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(5, 3, 4));
+
+  // A shearing transformation moves x in proportion to z
+  transform = shearing<double>(0, 1, 0, 0, 0, 0);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(6, 3, 4));
+
+  // A shearing transformation moves y in proportion to x
+  transform = shearing<double>(0, 0, 1, 0, 0, 0);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(2, 5, 4));
+
+  // A shearing transformation moves y in proportion to z
+  transform = shearing<double>(0, 0, 0, 1, 0, 0);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(2, 7, 4));
+
+  // A shearing transformation moves z in proportion to x
+  transform = shearing<double>(0, 0, 0, 0, 1, 0);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(2, 3, 6));
+
+  // A shearing transformation moves x in proportion to z
+  transform = shearing<double>(0, 0, 0, 0, 0, 1);
+  p = Point<double>(2, 3, 4);
+  EXPECT_EQ(transform * p, Point<double>(2, 3, 7));
 }
 
 int main(int argc, char **argv) {
