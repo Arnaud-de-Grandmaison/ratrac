@@ -3,6 +3,9 @@
 
 #include "gtest/gtest.h"
 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 #include <sstream>
 #include <tuple>
 #include <vector>
@@ -229,6 +232,58 @@ TEST(RayTracerMatrice, other_stuff) {
   Matrice M3 = M * M2;
   EXPECT_TRUE((M3 * inverse(M2)).approximatly_equal(M));
 }
+
+TEST(RayTracerMatrice, transformations) {
+  // Translation matrix
+  // ==================
+
+  // Mutiplying by a translating matrix
+  Matrice transform = translation(5, -3, 2);
+  Tuple p = Point(-3., 4., 5.);
+  EXPECT_EQ(transform * p, Point(2., 1., 7.));
+
+  // Multiplying by the inverse of a translation matrix
+  transform = translation(5, -3, 2);
+  Matrice inv = inverse(transform);
+  p = Point(-3., 4., 5.);
+  EXPECT_EQ(inv * p, Point(-8., 7., 3.));
+
+  // Translation does not affect vectors
+  transform = translation(5, -3, 2);
+  Tuple v = Vector(-3., 4., 5.);
+  EXPECT_EQ(transform * v, v);
+
+  // Scaling matrix
+  // ==============
+
+  // A scaling matrix applied to a point
+  transform = scaling(2, 3, 4);
+  p = Point(-4., 6., 8.);
+  EXPECT_EQ(transform * p, Point(-8., 18., 32.));
+
+  // A scaling matrix applied to a vector
+  // transform = scaling(2, 3, 4);
+  v = Vector(-4., 6., 8.);
+  EXPECT_EQ(transform * v, Vector(-8., 18., 32.));
+
+  // Multiplying by the inverse of a scaling matrix
+  transform = scaling(2, 3, 4);
+  inv = inverse(transform);
+  v = Vector(-4., 6., 8.);
+  EXPECT_EQ(inv * v, Vector(-2., 2., 2.));
+
+  // Relfection is scaling by a negative value
+  transform = scaling(-1, 1, 1);
+  p = Point(2., 3., 4.);
+  EXPECT_EQ(transform * p, Point(-2., 3., 4.));
+
+  // Rotating a point around the x axis
+  p = Point(0., 1., 0.);
+  half_quarter = rotation_x(3.14 / 4);
+  full_quarter = rotation_x(3.14 / 2);
+  EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
+}
+
 int main(int argc, char **argv) {
   InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

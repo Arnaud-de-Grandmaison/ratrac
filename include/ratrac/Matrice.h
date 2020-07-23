@@ -98,6 +98,9 @@ private:
   std::vector<std::vector<float>> m_matrice;
 };
 
+// Operators
+// =========
+
 inline Matrice operator*(const Matrice &lhs, const Matrice &rhs) {
   Matrice tmp = lhs;
   tmp *= rhs;
@@ -116,6 +119,9 @@ inline Tuple operator*(const Matrice &lhs, const Tuple &rhs) {
   return Tuple(future_tuple[0], future_tuple[1], future_tuple[2],
                future_tuple[3]);
 }
+
+// Other chapter 3 stuff
+// =====================
 
 /** Return an identity matrice being as following:
 Matrice {    1.0,    0.0,    0.0,    0.0},
@@ -207,6 +213,36 @@ inline Matrice inverse(const Matrice &M) {
     }
     return M2;
   }
+}
+
+// Chapter 4 transformations
+// =========================
+
+// #ToDo: convert into RayTracerMatrice (v2/after rework)
+inline Matrice translation(const float &x, const float &y, const float &z) {
+  Matrice result = identity_matrix();
+  result.set(0, 3, x);
+  result.set(1, 3, y);
+  result.set(2, 3, z);
+  return result;
+}
+
+// #ToDo: convert into RayTracerMatrice (v2/after rework)
+inline Matrice scaling(const float &x, const float &y, const float &z) {
+  Matrice result = identity_matrix();
+  result.set(0, 0, x);
+  result.set(1, 1, y);
+  result.set(2, 2, z);
+  return result;
+}
+
+inline Matrice rotation_x(const double &radians) {
+  Matrice result = identity_matrix();
+  result.set(1, 1, std::cos(radians));
+  result.set(1, 2, -std::sin(radians));
+  result.set(2, 1, std::sin(radians));
+  result.set(2, 2, std::cos(radians));
+  return result;
 }
 
 } // namespace ratrac
