@@ -12,15 +12,18 @@ namespace ratrac {
 
 /** Color represent a Color which is used by ratrac to manipulate
  * Points and Vectors. */
-class Color {
+template <class ColorTy> class RayTracerColor {
+  static_assert(std::is_floating_point<ColorTy>::value,
+                "Color ColorTy must be a floating point type.");
+
 public:
   /** Initialise the Color/Tuple/Vector4.*/
-  Color(const float &red, const float &green, const float &blue)
+  RayTracerColor(const float &red, const float &green, const float &blue)
       : m_color{red, green, blue, 1.0f} {} // Should it be Color(x, y, z, 1.0f)
-  Color(const float &red, const float &green, const float &blue,
-        const float &alpha)
+  RayTracerColor(const float &red, const float &green, const float &blue,
+                 const float &alpha)
       : m_color{red, green, blue, alpha} {}
-  Color() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
+  RayTracerColor() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
 
   typedef float ColorType;
 
@@ -42,45 +45,45 @@ public:
 
   // equal/not equal
 
-  bool operator==(const Color &rhs) const {
+  bool operator==(const RayTracerColor &rhs) const {
     return close_to_equal(red(), rhs.red()) &&
            close_to_equal(green(), rhs.green()) &&
            close_to_equal(blue(), rhs.blue()) &&
            close_to_equal(alpha(), rhs.alpha());
   }
-  bool operator!=(const Color &rhs) const { return !operator==(rhs); }
+  bool operator!=(const RayTracerColor &rhs) const { return !operator==(rhs); }
 
   // operations
 
-  Color &operator+=(const Color &rhs) {
+  RayTracerColor &operator+=(const RayTracerColor &rhs) {
     for (unsigned i = 0; i < m_color.size() - 1; i++)
       m_color[i] += rhs.m_color[i];
     return *this;
   }
-  Color &operator-=(const Color &rhs) {
+  RayTracerColor &operator-=(const RayTracerColor &rhs) {
     for (unsigned i = 0; i < m_color.size() - 1; i++)
       m_color[i] -= rhs.m_color[i];
     return *this;
   }
-  Color &operator*=(const float &rhs) {
+  RayTracerColor &operator*=(const float &rhs) {
     for (unsigned i = 0; i < m_color.size() - 1; i++)
       m_color[i] *= rhs;
     return *this;
   }
-  Color &operator*=(const Color &rhs) {
+  RayTracerColor &operator*=(const RayTracerColor &rhs) {
     for (unsigned i = 0; i < m_color.size(); i++)
       m_color[i] *= rhs.m_color[i];
     return *this;
   }
-  Color &operator/=(const float &rhs) {
+  RayTracerColor &operator/=(const float &rhs) {
     for (float &c : m_color)
       c /= rhs;
     return *this;
   }
 
 private:
-  /** An array formated as following: Color(red, green, blue, alpha). Args type:
-   * float. */
+  /** An array formated as following: RayTracerColor(red, green, blue, alpha).
+   * Args type: float. */
   std::array<ColorType, 4> m_color;
 };
 
@@ -88,41 +91,56 @@ private:
 // ========================
 
 /** Adding two Colors. */
-inline Color operator+(const Color &lhs, const Color &rhs) {
-  Color tmp = lhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator+(const RayTracerColor<ColorTy> &lhs,
+                                         const RayTracerColor<ColorTy> &rhs) {
+  RayTracerColor<ColorTy> tmp(lhs);
   tmp += rhs;
   return tmp;
 }
 /** Subtracting two Colors. */
-inline Color operator-(const Color &lhs, const Color &rhs) {
-  Color tmp = lhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator-(const RayTracerColor<ColorTy> &lhs,
+                                         const RayTracerColor<ColorTy> &rhs) {
+  RayTracerColor<ColorTy> tmp(lhs);
   tmp -= rhs;
   return tmp;
 }
 /** Scalar multiplication. */
-inline Color operator*(const Color &lhs, const float &rhs) {
-  Color tmp = lhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
+                                         const float &rhs) {
+  RayTracerColor<ColorTy> tmp(lhs);
   tmp *= rhs;
   return tmp;
 }
 /** Scalar multiplication reversed. */
-inline Color operator*(const float &lhs, const Color &rhs) {
-  Color tmp = rhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator*(const float &lhs,
+                                         const RayTracerColor<ColorTy> &rhs) {
+  RayTracerColor<ColorTy> tmp(rhs);
   tmp *= lhs;
   return tmp;
 }
 /** Colors multiplication. */
-inline Color operator*(const Color &lhs, const Color &rhs) {
-  Color tmp = rhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
+                                         const RayTracerColor<ColorTy> &rhs) {
+  RayTracerColor<ColorTy> tmp(rhs);
   tmp *= lhs;
   return tmp;
 }
 /** Scalar division. */
-inline Color operator/(const Color &lhs, const float &rhs) {
-  Color tmp = lhs;
+template <class ColorTy>
+inline RayTracerColor<ColorTy> operator/(const RayTracerColor<ColorTy> &lhs,
+                                         const float &rhs) {
+  RayTracerColor<ColorTy> tmp(lhs);
   tmp /= rhs;
   return tmp;
 }
+
+using Color = RayTracerColor<RayTracerColorType>;
+
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Color &C);
