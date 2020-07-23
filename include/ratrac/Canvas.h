@@ -42,7 +42,11 @@ public:
   unsigned width() const { return m_width; }
   unsigned height() const { return m_height; }
 
-  Color &at(unsigned x, unsigned y) { return m_canvas[y * m_width + x]; }
+  Color &at(unsigned x, unsigned y) {
+    assert(x < m_width && "x is out of bounds.");
+    assert(y < m_height && "y is out of bounds.");
+    return m_canvas[y * m_width + x];
+  }
   const Color &at(unsigned x, unsigned y) const {
     assert(x < m_width && "x is out of bounds.");
     assert(y < m_height && "y is out of bounds.");
