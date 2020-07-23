@@ -250,8 +250,10 @@ inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
 // =========================
 
 // #ToDo: convert into RayTracerMatrice (v2/after rework)
-inline Matrice translation(const float &x, const float &y, const float &z) {
-  Matrice result = identity_matrix();
+template <class DataTy>
+inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
+                                            const DataTy &z) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 3, x);
   result.set(1, 3, y);
   result.set(2, 3, z);
@@ -259,20 +261,43 @@ inline Matrice translation(const float &x, const float &y, const float &z) {
 }
 
 // #ToDo: convert into RayTracerMatrice (v2/after rework)
-inline Matrice scaling(const float &x, const float &y, const float &z) {
-  Matrice result = identity_matrix();
+template <class DataTy>
+inline RayTracerMatrice<DataTy> scaling(const DataTy &x, const DataTy &y,
+                                        const DataTy &z) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
   result.set(0, 0, x);
   result.set(1, 1, y);
   result.set(2, 2, z);
   return result;
 }
 
-inline Matrice rotation_x(const double &radians) {
-  Matrice result = identity_matrix();
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
   result.set(1, 1, std::cos(radians));
   result.set(1, 2, -std::sin(radians));
   result.set(2, 1, std::sin(radians));
   result.set(2, 2, std::cos(radians));
+  return result;
+}
+
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_y(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 0, std::cos(radians));
+  result.set(0, 2, std::sin(radians));
+  result.set(2, 0, -std::sin(radians));
+  result.set(2, 2, std::cos(radians));
+  return result;
+}
+
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_z(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 0, std::cos(radians));
+  result.set(0, 1, -std::sin(radians));
+  result.set(1, 0, std::sin(radians));
+  result.set(1, 1, std::cos(radians));
   return result;
 }
 

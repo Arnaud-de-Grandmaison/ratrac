@@ -3,12 +3,15 @@
 
 #include "gtest/gtest.h"
 
-#define _USE_MATH_DEFINES
-
 #include <cmath>
 #include <sstream>
 #include <tuple>
 #include <vector>
+
+#define _USE_MATH_DEFINES
+#ifndef M_PI
+const double M_PI = 3.14159265;
+#endif // ! M_PI
 
 using namespace ratrac;
 using namespace testing;
@@ -219,18 +222,18 @@ TEST(RayTracerMatrice, transformations) {
   // ==================
 
   // Mutiplying by a translating matrix
-  Matrice transform = translation(5, -3, 2);
+  Matrice transform = translation(5., -3., 2.);
   Tuple p = Point(-3., 4., 5.);
   EXPECT_EQ(transform * p, Point(2., 1., 7.));
 
   // Multiplying by the inverse of a translation matrix
-  transform = translation(5, -3, 2);
+  transform = translation(5., -3., 2.);
   Matrice inv = inverse(transform);
   p = Point(-3., 4., 5.);
   EXPECT_EQ(inv * p, Point(-8., 7., 3.));
 
   // Translation does not affect vectors
-  transform = translation(5, -3, 2);
+  transform = translation(5., -3., 2.);
   Tuple v = Vector(-3., 4., 5.);
   EXPECT_EQ(transform * v, v);
 
@@ -238,7 +241,7 @@ TEST(RayTracerMatrice, transformations) {
   // ==============
 
   // A scaling matrix applied to a point
-  transform = scaling(2, 3, 4);
+  transform = scaling(2., 3., 4.);
   p = Point(-4., 6., 8.);
   EXPECT_EQ(transform * p, Point(-8., 18., 32.));
 
@@ -248,21 +251,51 @@ TEST(RayTracerMatrice, transformations) {
   EXPECT_EQ(transform * v, Vector(-8., 18., 32.));
 
   // Multiplying by the inverse of a scaling matrix
-  transform = scaling(2, 3, 4);
+  transform = scaling(2., 3., 4.);
   inv = inverse(transform);
   v = Vector(-4., 6., 8.);
   EXPECT_EQ(inv * v, Vector(-2., 2., 2.));
 
   // Relfection is scaling by a negative value
-  transform = scaling(-1, 1, 1);
+  transform = scaling(-1., 1., 1.);
   p = Point(2., 3., 4.);
   EXPECT_EQ(transform * p, Point(-2., 3., 4.));
 
+  // Rotating
+  // ========
+
+  // X axis
+
   // Rotating a point around the x axis
   p = Point(0., 1., 0.);
-  half_quarter = rotation_x(3.14 / 4);
-  full_quarter = rotation_x(3.14 / 2);
-  EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
+  Matrice half_quarter = rotation_x(M_PI / 4);
+  Matrice full_quarter = rotation_x(M_PI / 2);
+  EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, std::sqrt(2) / 2));
+
+  /// The inverse of an x-rotation rotates in the opposite direction
+  p = Point(0., 1., 0.);
+  half_quarter = rotation_x(M_PI / 4);
+  inv = inverse(half_quarter);
+  EXPECT_EQ(inv * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
+
+  // Y axis
+
+  // Rotating a point around the y axis
+  p = Point<double>(0, 0, 1);
+  half_quarter = rotation_y(M_PI / 4);
+  full_quarter = rotation_y(M_PI / 2);
+  EXPECT_EQ(half_quarter * p,
+            Point<double>(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+  EXPECT_EQ(full_quarter * p, Point<double>(1, 0, 0));
+  // Z axis
+
+  // Rotating a point arround the z axis
+  p = Point<double>(0, 1, 0);
+  half_quarter = rotation_z(M_PI / 4);
+  full_quarter = rotation_z(M_PI / 2);
+  EXPECT_EQ(half_quarter * p,
+            Point<double>(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+  EXPECT_EQ(full_quarter * p, Point<double>(-1, 0, 0));
 }
 
 int main(int argc, char **argv) {
