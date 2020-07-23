@@ -22,7 +22,11 @@ template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 /** A matrice of multiple forms. At the moment all types are supported. */
 template <class DataTy> class RayTracerMatrice {
 public:
+  // Constructors
+  // ============
+
   /** Not secured; every kind of matrices can be generated/exist. */
+  RayTracerMatrice(){};
   RayTracerMatrice(const RayTracerMatrice &) = default;
   RayTracerMatrice(const std::vector<std::vector<DataTy>> &M) : m_matrice(M) {}
   RayTracerMatrice(std::vector<std::vector<DataTy>> &&M)
@@ -35,6 +39,21 @@ public:
          it != il.end(); it++)
       m_matrice.push_back(*it);
   }
+
+  /** Return an identity matrice being as following:
+Matrice {    1.0,    0.0,    0.0,    0.0},
+      {    0.0,    1.0,    0.0,    0.0},
+      {    0.0,    0.0,    1.0,    0.0},
+      {    0.0,    0.0,    0.0,    1.0}}*/
+  static RayTracerMatrice identity_matrix() {
+    return RayTracerMatrice({{1., 0., 0., 0.},
+                             {0., 1., 0., 0.},
+                             {0., 0., 1., 0.},
+                             {0., 0., 0., 1.}});
+  }
+
+  // Special operators
+  // =================
 
   RayTracerMatrice &operator=(const RayTracerMatrice &) = default;
   RayTracerMatrice &operator=(RayTracerMatrice &&) = default;
@@ -49,6 +68,7 @@ public:
   }
 
   // Accessors
+  // =========
 
   /** Returns m_matrice. */
   std::vector<std::vector<DataTy>> matrice() const { return m_matrice; }
@@ -70,14 +90,8 @@ public:
   }
   const bool is_invertible() const { return determinant(*this) != 0; }
 
-  // Editors
-
-  void set(const unsigned &line, const unsigned &column, const DataTy &value) {
-    m_matrice[line][column] = value;
-  }
-
   // Operators
-
+  // =========
   bool operator==(const RayTracerMatrice &rhs) const {
     return m_matrice == rhs.m_matrice;
   }
@@ -96,18 +110,6 @@ public:
   static bool close_to_equal(const DataTy &a, const DataTy &b) {
     const DataTy EPSILON = 0.00001;
     return std::fabs(a - b) < EPSILON;
-  }
-
-  /** Return an identity matrice being as following:
-  Matrice {    1.0,    0.0,    0.0,    0.0},
-          {    0.0,    1.0,    0.0,    0.0},
-          {    0.0,    0.0,    1.0,    0.0},
-          {    0.0,    0.0,    0.0,    1.0}}*/
-  static RayTracerMatrice identity_matrix() {
-    return RayTracerMatrice({{1., 0., 0., 0.},
-                             {0., 1., 0., 0.},
-                             {0., 0., 1., 0.},
-                             {0., 0., 0., 1.}});
   }
 
   // Both must be 4*4 matrices.
@@ -134,6 +136,25 @@ public:
     m_matrice = future_matrix;
     return *this;
   }
+
+  // Editors
+  // =======
+
+  void set(const unsigned &line, const unsigned &column, const DataTy &value) {
+    m_matrice[line][column] = value;
+  }
+
+  void rotate_x(DataTy radians) { this *= rotation_x(radians); }
+  void rotate_y(DataTy radians) { this *= rotation_y(radians); }
+  void rotate_z(DataTy radians) { this *= rotation_z(radians); }
+
+  void scale(DataTy x, DataTy y, DataTy z) { this *= scaling(x, y, z); }
+  /*
+  #help: Should be working...
+  void translate(DataTy x, DataTy y, DataTy z) {
+    //this = this * translation(x, y, z);
+    this *= translation(x, y, z);
+  }*/
 
 private:
   // #Help: Should it be an array as a matrice is of fixed size.
@@ -253,7 +274,7 @@ inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
 template <class DataTy>
 inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
                                             const DataTy &z) {
-  Matrice result = Matrice::identity_matrix();
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
   result.set(0, 3, x);
   result.set(1, 3, y);
   result.set(2, 3, z);
