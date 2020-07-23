@@ -15,8 +15,8 @@ namespace ratrac {
 // template/constructor/? of functions @compiler
 template <class DataTy> class RayTracerMatrice;
 template <class DataTy>
-DataTy cofactor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
-                const unsigned &column);
+DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
+                unsigned column);
 template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 
 /** A matrice of multiple forms. At the moment all types are supported. */
@@ -192,14 +192,13 @@ inline DataTy determinant(const RayTracerMatrice<DataTy> &M) {
 /** Returns a submatrix(a matrice# with one row and column less). */
 template <class DataTy>
 inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
-                                          const unsigned line,
-                                          const unsigned column) {
+                                          unsigned line, unsigned column) {
   assert(line < M.getNumLines() && "line out of Matrice bounds.");
   assert(column < M.getNumColumns() && "column out of Matrice bounds.");
   std::vector<std::vector<DataTy>> table = M.matrice();
-  table.erase(table.begin()+line);
-  for (std::vector<DataTy> &v: table)
-    v.erase(v.begin()+column);
+  table.erase(table.begin() + line);
+  for (std::vector<DataTy> &v : table)
+    v.erase(v.begin() + column);
 
   return RayTracerMatrice<DataTy>(table);
 }
@@ -207,15 +206,15 @@ inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
 /** Returns the determinant of a submatrice; " minor is easier to say than
  * determinant of a submatrice ". */
 template <class DataTy>
-inline DataTy minor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
-                    const unsigned &column) {
+inline DataTy minor(const RayTracerMatrice<DataTy> &M, unsigned line,
+                    unsigned column) {
   return determinant(submatrix(M, line, column));
 }
 
 /** Returns the cofactor of a 3*3 matrix. */
 template <class DataTy>
-inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
-                       const unsigned &column) {
+inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
+                       unsigned column) {
   DataTy m = minor(M, line, column);
 
   return ((line + column) % 2) != 0 ? -m : m;
