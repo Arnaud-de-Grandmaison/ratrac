@@ -329,6 +329,36 @@ TEST(RayTracerMatrice, transformations) {
   transform = shearing<double>(0, 0, 0, 0, 0, 1);
   p = Point<double>(2, 3, 4);
   EXPECT_EQ(transform * p, Point<double>(2, 3, 7));
+
+  // Chaining transformations
+  // ========================
+
+  // Individual transformations are applied in sequence
+  // --------------------------------------------------
+
+  p = Point<double>(1, 0, 1);
+  Matrice A = rotation_x(M_PI / 2);
+  Matrice B = scaling<double>(5, 5, 5);
+  Matrice C = translation<double>(10, 5, 7);
+  // Apply rotation first
+  Tuple p2 = A * p;
+  EXPECT_EQ(p2, Point<double>(1, -1, 0));
+  // Then apply scaling
+  Tuple p3 = B * p2;
+  EXPECT_EQ(p3, Point<double>(5, -5, 0));
+  // Then apply translation
+  Tuple p4 = C * p3;
+  EXPECT_EQ(p4, Point<double>(15, 0, 7));
+
+  // Chained transformations must be applied in reverse order
+  // --------------------------------------------------------
+
+  p = Point<double>(1, 0, 1);
+  A = rotation_x(M_PI / 2);
+  B = scaling<double>(5, 5, 5);
+  C = translation<double>(10, 5, 7);
+  Matrice T = C * B * A;
+  EXPECT_EQ(T * p, Point<double>(15, 0, 7));
 }
 
 int main(int argc, char **argv) {
