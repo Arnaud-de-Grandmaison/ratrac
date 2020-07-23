@@ -22,8 +22,8 @@ if(UNIX)
   # -pthread is needed for the testing framework.
   set(CMAKE_C_FLAGS "-Wall -pthread")
   set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_C_FLAGS}")
-  set(CMAKE_C_FLAGS_RELEASE "-DNDEBUG")
-  set(CMAKE_C_FLAGS_DEBUG "-g -DDEBUG")
+  set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG")
+  set(CMAKE_C_FLAGS_DEBUG "-O1 -g -DDEBUG")
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
 
