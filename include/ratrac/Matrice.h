@@ -21,6 +21,7 @@ template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 
 /** A matrice of multiple forms. At the moment all types are supported. */
 template <class DataTy> class RayTracerMatrice {
+  static_assert(std::is_floating_point<DataTy>::value, "Matrice DataTy must be a floating point type.");
 public:
   // Constructors
   // ============
