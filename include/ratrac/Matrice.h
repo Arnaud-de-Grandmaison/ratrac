@@ -124,13 +124,11 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
         future_matrix[line][column] = 0;
         // Extract column
         added_rhs.clear();
-        for (int it_line(0); it_line < rhs.getNumLines(); it_line++) {
+        for (unsigned it_line = 0; it_line < rhs.getNumLines(); it_line++)
           added_rhs.push_back(rhs.m_matrice[it_line][column]);
-        }
         // Do the specific operation
-        for (int it(0); it < getNumLines(); it++) {
+        for (unsigned it = 0; it < getNumLines(); it++)
           future_matrix[line][column] += m_matrice[line][it] * added_rhs[it];
-        }
       }
     }
     m_matrice = future_matrix;
