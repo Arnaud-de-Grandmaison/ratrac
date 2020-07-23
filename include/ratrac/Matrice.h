@@ -186,15 +186,12 @@ inline float minor(const Matrice &M, const unsigned &line,
   return determinant(submatrix(M, line, column));
 }
 
-/** Returns the cofactor of a 3*3 matrix.
-#help: can be optimised (& ?)*/
+/** Returns the cofactor of a 3*3 matrix. */
 inline float cofactor(const Matrice &M, const unsigned &line,
                       const unsigned &column) {
-  if (((line + column) % 2) != 0) {
-    return -minor(M, line, column);
-  } else {
-    return minor(M, line, column);
-  }
+  float m = minor(M, line, column);
+
+  return ((line + column) % 2) != 0 ? -m : m;
 }
 
 /* Returns an inversed matrix. */
