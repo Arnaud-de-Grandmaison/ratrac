@@ -68,19 +68,16 @@ public:
   DataTy at(unsigned line, unsigned column) const {
     return m_matrice[line][column];
   }
-  const bool is_invertible() const { return determinant(*this) != 0; }
+
+  bool is_invertible() const { return determinant(*this) != 0; }
 
   // Editors
 
-  void set(const unsigned &line, const unsigned &column, const DataTy &value) {
+  void set(unsigned line, unsigned column, DataTy value) {
     m_matrice[line][column] = value;
   }
 
   // Operators
-
-  bool operator==(const RayTracerMatrice &rhs) const {
-    return m_matrice == rhs.m_matrice;
-  }
 
   bool approximatly_equal(const RayTracerMatrice &rhs) {
     for (unsigned row = 0; row < getNumLines(); row++)
@@ -88,6 +85,9 @@ public:
         if (!close_to_equal(at(row, column), rhs.at(row, column)))
           return false;
     return true;
+  }
+  bool operator==(const RayTracerMatrice &rhs) const {
+    return m_matrice == rhs.m_matrice;
   }
   bool operator!=(const RayTracerMatrice &rhs) const {
     return !operator==(rhs);
