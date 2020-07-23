@@ -27,10 +27,15 @@ public:
   // Accessors
   // =========
 
-  const float &red() const { return m_color[0]; }
-  const float &green() const { return m_color[1]; }
-  const float &blue() const { return m_color[2]; }
-  const float &alpha() const { return m_color[3]; }
+  ColorType &red() { return m_color[0]; }
+  ColorType &green() { return m_color[1]; }
+  ColorType &blue() { return m_color[2]; }
+  ColorType &alpha() { return m_color[3]; }
+
+  const ColorType &red() const { return m_color[0]; }
+  const ColorType &green() const { return m_color[1]; }
+  const ColorType &blue() const { return m_color[2]; }
+  const ColorType &alpha() const { return m_color[3]; }
 
   // Operators
   // =========
@@ -76,7 +81,7 @@ public:
 private:
   /** An array formated as following: Color(red, green, blue, alpha). Args type:
    * float. */
-  std::array<float, 4> m_color;
+  std::array<ColorType, 4> m_color;
 };
 
 // Other/External operators
