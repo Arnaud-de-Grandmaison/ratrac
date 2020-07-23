@@ -47,7 +47,7 @@ public:
   bool isPoint() const { return m_tuple[3] == 1.0; }
   bool isVector() const { return m_tuple[3] == 0.0; }
 
-  size_t size() const { return m_tuple.size();}
+  size_t size() const { return m_tuple.size(); }
 
   // Advanced vectors properties
   // ===========================
@@ -217,8 +217,6 @@ inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
 }
 // Renaming classes for external usage
 
-// using Point = RayTracerPoint<RayTracerDataType>;
-// using Vector = RayTracerVector<RayTracerDataType>;
 using Tuple = RayTracerTuple<RayTracerDataType>;
 
 } // namespace ratrac
