@@ -195,7 +195,7 @@ inline RayTracerMatrice<DataTy> transpose(const RayTracerMatrice<DataTy> &M) {
   // Extract column; M_column = future_line
   for (unsigned M_column = 0; M_column < M.getNumColumns(); M_column++) {
     future_matrice.push_back(std::vector<DataTy>());
-    for (int it_line = 0; it_line < M.getNumLines(); it_line++)
+    for (unsigned it_line = 0; it_line < M.getNumLines(); it_line++)
       future_matrice[M_column].push_back(M.matrice()[it_line][M_column]);
   }
   return RayTracerMatrice<DataTy>(std::move(future_matrice));
