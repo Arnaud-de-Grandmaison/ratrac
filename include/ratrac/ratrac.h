@@ -4,6 +4,8 @@
 
 namespace ratrac {
 
+using RayTracerDataType = double;
+
 // Cap a component to [0:MaxValue]
 template <class DataTy>
 inline unsigned cap(DataTy c, int MaxValue) {
