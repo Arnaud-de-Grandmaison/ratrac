@@ -177,12 +177,12 @@ TEST(RayTracerMatrice, other_stuff) {
   double value_f = -160;
   value_f /= 532;
   EXPECT_TRUE(
-      Matrice::close_to_equal(M2.at(3, 2), value_f)); // float(-160 / 532));
+      close_to_equal(M2.at(3, 2), value_f)); // float(-160 / 532));
   EXPECT_EQ(cofactor(M, 3, 2), 105);
   value_f = 105;
   value_f /= 532;
   EXPECT_TRUE(
-      Matrice::close_to_equal(M2.at(2, 3), value_f)); // float(105 / 532));
+      close_to_equal(M2.at(2, 3), value_f)); // float(105 / 532));
   EXPECT_TRUE(M2.approximatly_equal(Matrice(
       {{0.21805, 0.45113, 0.24060, -0.04511},
        {-0.80827, -1.45677, -0.44361, 0.52068},

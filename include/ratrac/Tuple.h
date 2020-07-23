@@ -117,13 +117,6 @@ private:
   /** An array formated as following: Tuple(x, y, z, w). Args type:
    * float/double. */
   std::array<DataTy, 4> m_tuple;
-
-  /** Tests if two coordinates are approximalty equal. The difference must be
-   * less than EPSILON. Currently, EPSILON = 0.00001. */
-  static bool close_to_equal(const DataTy &a, const DataTy &b) {
-    const DataTy EPSILON = 0.00001;
-    return std::fabs(a - b) < EPSILON;
-  }
 };
 
 /** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */

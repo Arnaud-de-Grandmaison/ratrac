@@ -93,11 +93,6 @@ public:
     return !operator==(rhs);
   }
 
-  static bool close_to_equal(const DataTy &a, const DataTy &b) {
-    const DataTy EPSILON = 0.00001;
-    return std::fabs(a - b) < EPSILON;
-  }
-
   /** Return an identity matrice being as following:
   Matrice {    1.0,    0.0,    0.0,    0.0},
           {    0.0,    1.0,    0.0,    0.0},

@@ -4,6 +4,8 @@
 #include <cmath>
 #include <ostream>
 
+#include "ratrac/ratrac.h"
+
 namespace ratrac {
 // Classes
 // =======
@@ -74,14 +76,7 @@ private:
   /** An array formated as following: Color(red, green, blue, alpha). Args type:
    * float. */
   std::array<float, 4> m_color;
-
-  /** Tests if two coordinates are approximalty equal. The difference must be
-   * less than EPSILON. Currently, EPSILON = 0.00001. */
-  static bool close_to_equal(const float &a, const float &b) {
-    const float EPSILON = 0.00001;
-    return std::fabs(a - b) < EPSILON;
-  }
-}; // namespace ratrac
+};
 
 // Other/External operators
 // ========================
