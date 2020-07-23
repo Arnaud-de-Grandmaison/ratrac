@@ -22,7 +22,11 @@ template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 /** A matrice of multiple forms. At the moment all types are supported. */
 template <class DataTy> class RayTracerMatrice {
 public:
+  // Constructors
+  // ============
+
   /** Not secured; every kind of matrices can be generated/exist. */
+  RayTracerMatrice(){};
   RayTracerMatrice(const RayTracerMatrice &) = default;
   RayTracerMatrice(const std::vector<std::vector<DataTy>> &M) : m_matrice(M) {}
   RayTracerMatrice(std::vector<std::vector<DataTy>> &&M)
@@ -35,6 +39,21 @@ public:
          it != il.end(); it++)
       m_matrice.push_back(*it);
   }
+
+  /** Return an identity matrice being as following:
+Matrice {    1.0,    0.0,    0.0,    0.0},
+      {    0.0,    1.0,    0.0,    0.0},
+      {    0.0,    0.0,    1.0,    0.0},
+      {    0.0,    0.0,    0.0,    1.0}}*/
+  static RayTracerMatrice identity_matrix() {
+    return RayTracerMatrice({{1., 0., 0., 0.},
+                             {0., 1., 0., 0.},
+                             {0., 0., 1., 0.},
+                             {0., 0., 0., 1.}});
+  }
+
+  // Special operators
+  // =================
 
   RayTracerMatrice &operator=(const RayTracerMatrice &) = default;
   RayTracerMatrice &operator=(RayTracerMatrice &&) = default;
@@ -51,6 +70,7 @@ public:
   typedef DataTy DataType;
 
   // Accessors
+  // =========
 
   /** Returns m_matrice. */
   std::vector<std::vector<DataTy>> matrice() const { return m_matrice; }
@@ -73,13 +93,11 @@ public:
 
   bool is_invertible() const { return determinant(*this) != 0; }
 
-  // Editors
-
-  void set(unsigned line, unsigned column, DataTy value) {
-    m_matrice[line][column] = value;
-  }
-
   // Operators
+  // =========
+  bool operator==(const RayTracerMatrice &rhs) const {
+    return m_matrice == rhs.m_matrice;
+  }
 
   bool approximatly_equal(const RayTracerMatrice &rhs) {
     for (unsigned row = 0; row < getNumLines(); row++)
@@ -88,23 +106,9 @@ public:
           return false;
     return true;
   }
-  bool operator==(const RayTracerMatrice &rhs) const {
-    return m_matrice == rhs.m_matrice;
-  }
+
   bool operator!=(const RayTracerMatrice &rhs) const {
     return !operator==(rhs);
-  }
-
-  /** Return an identity matrice being as following:
-  Matrice {    1.0,    0.0,    0.0,    0.0},
-          {    0.0,    1.0,    0.0,    0.0},
-          {    0.0,    0.0,    1.0,    0.0},
-          {    0.0,    0.0,    0.0,    1.0}}*/
-  static RayTracerMatrice identity_matrix() {
-    return RayTracerMatrice({{1., 0., 0., 0.},
-                             {0., 1., 0., 0.},
-                             {0., 0., 1., 0.},
-                             {0., 0., 0., 1.}});
   }
 
   // Both must be 4*4 matrices.
@@ -132,10 +136,32 @@ public:
     return *this;
   }
 
+  // Editors
+  // =======
+
+  void set(unsigned line, unsigned column, DataTy value) {
+    m_matrice[line][column] = value;
+  }
+
+  void rotate_x(DataTy radians) { this *= rotation_x(radians); }
+  void rotate_y(DataTy radians) { this *= rotation_y(radians); }
+  void rotate_z(DataTy radians) { this *= rotation_z(radians); }
+
+  void scale(DataTy x, DataTy y, DataTy z) { this *= scaling(x, y, z); }
+  /*
+  #help: Should be working...
+  void translate(DataTy x, DataTy y, DataTy z) {
+    //this = this * translation(x, y, z);
+    this *= translation(x, y, z);
+  }*/
+
 private:
   // #Help: Should it be an array as a matrice is of fixed size.
   std::vector<std::vector<DataTy>> m_matrice;
-};
+}; // namespace ratrac
+
+// Other operators
+// ===============
 
 template <class DataTy>
 inline RayTracerMatrice<DataTy> operator*(const RayTracerMatrice<DataTy> &lhs,
@@ -160,6 +186,8 @@ inline Tuple operator*(const RayTracerMatrice<DataTy> &lhs, const Tuple &rhs) {
 
   return future_tuple;
 }
+// Other chapter 3 stuff
+// =====================
 
 template <class DataTy>
 inline RayTracerMatrice<DataTy> transpose(const RayTracerMatrice<DataTy> &M) {
@@ -212,7 +240,7 @@ inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
  * */
 template <class DataTy>
 inline DataTy matrixminor(const RayTracerMatrice<DataTy> &M, unsigned line,
-                    unsigned column) {
+                          unsigned column) {
   return determinant(submatrix(M, line, column));
 }
 
@@ -238,6 +266,77 @@ inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
   } else
     assert(0 && "Matrice is not invertible.");
   return M2;
+}
+
+// Chapter 4 transformations
+// =========================
+
+// #ToDo: convert into RayTracerMatrice (v2/after rework)
+template <class DataTy>
+inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
+                                            const DataTy &z) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 3, x);
+  result.set(1, 3, y);
+  result.set(2, 3, z);
+  return result;
+}
+
+/** Refer at the top of p49 for visual explanations. */
+template <class DataTy>
+inline RayTracerMatrice<DataTy> scaling(const DataTy &x, const DataTy &y,
+                                        const DataTy &z) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 0, x);
+  result.set(1, 1, y);
+  result.set(2, 2, z);
+  return result;
+}
+/** Refer at the top of p50 for visual explanations. */
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(1, 1, std::cos(radians));
+  result.set(1, 2, -std::sin(radians));
+  result.set(2, 1, std::sin(radians));
+  result.set(2, 2, std::cos(radians));
+  return result;
+}
+
+/** Refer at the bottom of p50 for visual explanations. */
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_y(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 0, std::cos(radians));
+  result.set(0, 2, std::sin(radians));
+  result.set(2, 0, -std::sin(radians));
+  result.set(2, 2, std::cos(radians));
+  return result;
+}
+
+template <class DataTy>
+inline RayTracerMatrice<DataTy> rotation_z(const DataTy &radians) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 0, std::cos(radians));
+  result.set(0, 1, -std::sin(radians));
+  result.set(1, 0, std::sin(radians));
+  result.set(1, 1, std::cos(radians));
+  return result;
+}
+
+/** Function that moves points proportionnaly to an axis. See image p51 for more
+ * information.*/
+template <class DataTy>
+inline RayTracerMatrice<DataTy> shearing(DataTy Xy, DataTy Xz, DataTy Yx,
+                                         DataTy Yz, DataTy Zx, DataTy Zy) {
+  RayTracerMatrice<DataTy> result = Matrice::identity_matrix();
+  result.set(0, 1, Xy);
+  result.set(0, 2, Xz);
+  result.set(1, 0, Yx);
+  result.set(1, 2, Yz);
+  result.set(2, 0, Zx);
+  result.set(2, 1, Zy);
+  return result;
 }
 
 using Matrice = RayTracerMatrice<RayTracerDataType>;
