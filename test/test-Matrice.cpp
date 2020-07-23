@@ -135,13 +135,13 @@ TEST(RayTracerMatrice, other_stuff) {
   M = {{3, 5, 0}, {2, -1, -7}, {6, -1, 5}};
   Matrice M2 = submatrix(M, 1, 0);
   EXPECT_EQ(determinant(M2), 25);
-  EXPECT_EQ(minor(M, 1, 0), 25);
+  EXPECT_EQ(matrixminor(M, 1, 0), 25);
 
   // Calculating the cofactor of a 3*3 matrix
   M = {{3, 5, 0}, {2, -1, -7}, {6, -1, 5}};
-  EXPECT_EQ(minor(M, 0, 0), -12);
+  EXPECT_EQ(matrixminor(M, 0, 0), -12);
   EXPECT_EQ(cofactor(M, 0, 0), -12);
-  EXPECT_EQ(minor(M, 1, 0), 25);
+  EXPECT_EQ(matrixminor(M, 1, 0), 25);
   EXPECT_EQ(cofactor(M, 1, 0), -25);
 
   // Calculating the determinant of a 3*3 matrix

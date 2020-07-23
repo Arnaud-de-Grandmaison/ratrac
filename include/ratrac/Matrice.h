@@ -204,9 +204,12 @@ inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
 }
 
 /** Returns the determinant of a submatrice; " minor is easier to say than
- * determinant of a submatrice ". */
+ * determinant of a submatrice ".
+ * Note: we would prefer to nme it minor, but this fails with gcc that has a
+ * macro with the same name...
+ * */
 template <class DataTy>
-inline DataTy minor(const RayTracerMatrice<DataTy> &M, unsigned line,
+inline DataTy matrixminor(const RayTracerMatrice<DataTy> &M, unsigned line,
                     unsigned column) {
   return determinant(submatrix(M, line, column));
 }
@@ -215,7 +218,7 @@ inline DataTy minor(const RayTracerMatrice<DataTy> &M, unsigned line,
 template <class DataTy>
 inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
                        unsigned column) {
-  DataTy m = minor(M, line, column);
+  DataTy m = matrixminor(M, line, column);
 
   return ((line + column) % 2) != 0 ? -m : m;
 }
