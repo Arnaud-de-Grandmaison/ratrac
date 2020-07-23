@@ -6,7 +6,7 @@
     
 .. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
     :alt: Github last build status
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/runs/860837594
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions
 
 .. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
     :alt: Github size
