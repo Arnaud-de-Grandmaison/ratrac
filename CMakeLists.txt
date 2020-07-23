@@ -63,3 +63,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 # --------------------------------------------------------
 add_executable(tick-main main-tick.cpp)
 target_link_libraries(tick-main ratrac)
+add_executable(clock-main main-clock.cpp)
+target_link_libraries(clock-main ratrac)
