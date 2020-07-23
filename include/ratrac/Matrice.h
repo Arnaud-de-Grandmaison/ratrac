@@ -114,24 +114,14 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
 
   // Both must be 4*4 matrices.
   RayTracerMatrice &operator*=(const RayTracerMatrice &rhs) {
-    // Copy the current matrice to get the exact same size.
-    assert(shape() == rhs.shape() && "Matrices must have compatible shapes");
-    std::vector<std::vector<DataTy>> future_matrix = m_matrice;
-    std::vector<DataTy> added_rhs;
-    for (unsigned line = 0; line < getNumLines(); line++) {
-      for (unsigned column = 0; column < getNumColumns(); column++) {
-        // Make sure the value is 0
-        future_matrix[line][column] = 0;
-        // Extract column
-        added_rhs.clear();
-        for (unsigned it_line = 0; it_line < rhs.getNumLines(); it_line++)
-          added_rhs.push_back(rhs.m_matrice[it_line][column]);
-        // Do the specific operation
-        for (unsigned it = 0; it < getNumLines(); it++)
-          future_matrix[line][column] += m_matrice[line][it] * added_rhs[it];
-      }
-    }
-    m_matrice = future_matrix;
+    assert(getNumColumns() == rhs.getNumLines() && "Matrices must have compatible shapes");
+    // Create a zero filled matrix of the same size.
+    std::vector<std::vector<DataTy>> result(getNumLines(), std::vector<DataTy>(getNumColumns(), DataTy()));
+    for (unsigned line = 0; line < getNumLines(); line++)
+      for (unsigned column = 0; column < rhs.getNumColumns(); column++)
+        for (unsigned it = 0; it < getNumColumns(); it++)
+          result[line][column] += m_matrice[line][it]*rhs.m_matrice[it][column];
+    m_matrice = std::move(result);
     return *this;
   }
 
