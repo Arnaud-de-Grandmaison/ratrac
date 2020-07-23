@@ -11,7 +11,7 @@ template <class DataTy> inline unsigned cap(DataTy c, unsigned MaxValue) {
   int v = std::round(c);
   if (v < 0)
     return 0;
-  else if (v > MaxValue)
+  else if ((unsigned) v > MaxValue)
     return MaxValue;
   return v;
 }
