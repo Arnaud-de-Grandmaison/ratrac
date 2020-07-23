@@ -1,90 +1,132 @@
 #pragma once
 
-#include "ratrac/Tuple.h"
-
+#include <cassert>
 #include <cmath>
-#include <iostream>
+#include <initializer_list>
 #include <ostream>
 #include <tuple>
 #include <vector>
-// #help: Should float be a double or in a template ?
+
+#include "ratrac/Tuple.h"
+#include "ratrac/ratrac.h"
 
 namespace ratrac {
+
 // template/constructor/? of functions @compiler
-class Matrice;
-float cofactor(const Matrice &M, const unsigned &line, const unsigned &column);
-float determinant(const Matrice &M);
+template <class DataTy> class RayTracerMatrice;
+template <class DataTy>
+DataTy cofactor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
+                const unsigned &column);
+template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 
 /** A matrice of multiple forms. At the moment all types are supported. */
-class Matrice {
+template <class DataTy> class RayTracerMatrice {
 public:
   /** Not secured; every kind of matrices can be generated/exist. */
-  Matrice(std::vector<std::vector<float>> matrix) : m_matrice(matrix){};
+  RayTracerMatrice(const RayTracerMatrice &) = default;
+  RayTracerMatrice(const std::vector<std::vector<DataTy>> &M) : m_matrice(M) {}
+  RayTracerMatrice(std::vector<std::vector<DataTy>> &&M)
+      : m_matrice(std::move(M)) {}
+  RayTracerMatrice(RayTracerMatrice &&M) : m_matrice(std::move(M.m_matrice)) {}
+  RayTracerMatrice(std::initializer_list<std::initializer_list<DataTy>> il)
+      : m_matrice() {
+    for (typename std::initializer_list<std::initializer_list<DataTy>>::iterator
+             it = il.begin();
+         it != il.end(); it++)
+      m_matrice.push_back(*it);
+  }
+
+  RayTracerMatrice &operator=(const RayTracerMatrice &) = default;
+  RayTracerMatrice &operator=(RayTracerMatrice &&) = default;
+  RayTracerMatrice &
+  operator=(std::initializer_list<std::initializer_list<DataTy>> il) {
+    m_matrice.clear();
+    for (typename std::initializer_list<std::initializer_list<DataTy>>::iterator
+             it = il.begin();
+         it != il.end(); it++)
+      m_matrice.push_back(*it);
+    return *this;
+  }
 
   // Accessors
 
   /** Returns m_matrice. */
-  std::vector<std::vector<float>> matrice() const { return m_matrice; }
-  /** Returns the size as a tuple<int x, int, y>.
-  #help: should probably returns a int rather than a tuple. */
-  std::tuple<int, int> size() const {
+  std::vector<std::vector<DataTy>> matrice() const { return m_matrice; }
+
+  /** Returns the Matrice shape as a tuple<int x, int, y>. */
+  std::tuple<int, int> shape() const {
     return std::tuple<int, int>(m_matrice.size(), m_matrice[0].size());
-  };
+  }
+
+  /** Returns the Matrice number of rows. */
+  unsigned getNumLines() const { return m_matrice.size(); }
+
+  /** Returns the Matrice number of columns. */
+  unsigned getNumColumns() const { return m_matrice[0].size(); }
+
   /** Returns the corresponding value(float). */
-  float at(unsigned line, unsigned column) const {
+  DataTy at(unsigned line, unsigned column) const {
     return m_matrice[line][column];
-  };
+  }
   const bool is_invertible() const { return determinant(*this) != 0; }
 
   // Editors
 
-  void set(const unsigned &line, const unsigned &column, const float &value) {
+  void set(const unsigned &line, const unsigned &column, const DataTy &value) {
     m_matrice[line][column] = value;
   }
 
   // Operators
 
-  bool operator==(const Matrice &rhs) const {
+  bool operator==(const RayTracerMatrice &rhs) const {
     return m_matrice == rhs.m_matrice;
   }
 
-  bool approximatly_equal(const Matrice &rhs) {
-    for (int row(0); row < std::get<0>(size()); row++) {
-      for (int column(0); column < std::get<1>(size()); column++) {
-        if (!close_to_equal(at(row, column), rhs.at(row, column))) {
-          std::cout << row << column << at(row, column) << rhs.at(row, column)
-                    << std::endl;
+  bool approximatly_equal(const RayTracerMatrice &rhs) {
+    for (unsigned row = 0; row < getNumLines(); row++)
+      for (unsigned column = 0; column < getNumColumns(); column++)
+        if (!close_to_equal(at(row, column), rhs.at(row, column)))
           return false;
-        }
-      }
-    }
     return true;
   }
-  bool operator!=(const Matrice &rhs) const { return !operator==(rhs); }
-
-  static bool close_to_equal(const float &a, const float &b) {
-    const float EPSILON = 0.00001;
-    return std::abs(a - b) < EPSILON;
+  bool operator!=(const RayTracerMatrice &rhs) const {
+    return !operator==(rhs);
   }
+
+  static bool close_to_equal(const DataTy &a, const DataTy &b) {
+    const DataTy EPSILON = 0.00001;
+    return std::fabs(a - b) < EPSILON;
+  }
+
+  /** Return an identity matrice being as following:
+  Matrice {    1.0,    0.0,    0.0,    0.0},
+          {    0.0,    1.0,    0.0,    0.0},
+          {    0.0,    0.0,    1.0,    0.0},
+          {    0.0,    0.0,    0.0,    1.0}}*/
+  static RayTracerMatrice identity_matrix() {
+    return RayTracerMatrice({{1., 0., 0., 0.},
+                             {0., 1., 0., 0.},
+                             {0., 0., 1., 0.},
+                             {0., 0., 0., 1.}});
+  }
+
   // Both must be 4*4 matrices.
-  // #help: do we have to raise an error if matrices are not of size 4x4
-  //        Actually, it works for every case, except if both matrices have
-  //        a diferent size.
-  Matrice &operator*=(const Matrice &rhs) {
+  RayTracerMatrice &operator*=(const RayTracerMatrice &rhs) {
     // Copy the current matrice to get the exact same size.
-    std::vector<std::vector<float>> future_matrix = m_matrice;
-    std::vector<float> added_rhs;
-    for (unsigned line(0); line < std::get<0>(rhs.size()); line++) {
-      for (unsigned column(0); column < std::get<1>(rhs.size()); column++) {
+    assert(shape() == rhs.shape() && "Matrices must have compatible shapes");
+    std::vector<std::vector<DataTy>> future_matrix = m_matrice;
+    std::vector<DataTy> added_rhs;
+    for (unsigned line = 0; line < getNumLines(); line++) {
+      for (unsigned column = 0; column < getNumColumns(); column++) {
         // Make sure the value is 0
         future_matrix[line][column] = 0;
         // Extract column
         added_rhs.clear();
-        for (int it_line(0); it_line < rhs.m_matrice.size(); it_line++) {
+        for (int it_line(0); it_line < rhs.getNumLines(); it_line++) {
           added_rhs.push_back(rhs.m_matrice[it_line][column]);
         }
         // Do the specific operation
-        for (int it(0); it < m_matrice.size(); it++) {
+        for (int it(0); it < getNumLines(); it++) {
           future_matrix[line][column] += m_matrice[line][it] * added_rhs[it];
         }
       }
@@ -95,124 +137,113 @@ public:
 
 private:
   // #Help: Should it be an array as a matrice is of fixed size.
-  std::vector<std::vector<float>> m_matrice;
+  std::vector<std::vector<DataTy>> m_matrice;
 };
 
-// Operators
-// =========
+// Other operators
+// ===============
 
-inline Matrice operator*(const Matrice &lhs, const Matrice &rhs) {
-  Matrice tmp = lhs;
+template <class DataTy>
+inline RayTracerMatrice<DataTy> operator*(const RayTracerMatrice<DataTy> &lhs,
+                                          const RayTracerMatrice<DataTy> &rhs) {
+  RayTracerMatrice<DataTy> tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
 
-inline Tuple operator*(const Matrice &lhs, const Tuple &rhs) {
-  std::vector<float> future_tuple;
-  for (unsigned line(0); line < std::get<0>(lhs.size()); line++) {
-    future_tuple.push_back(0);
-    future_tuple[line] += lhs.at(line, 0) * rhs.x();
-    future_tuple[line] += lhs.at(line, 1) * rhs.y();
-    future_tuple[line] += lhs.at(line, 2) * rhs.z();
-    future_tuple[line] += lhs.at(line, 3) * rhs.w();
+template <class DataTy>
+inline Tuple operator*(const RayTracerMatrice<DataTy> &lhs, const Tuple &rhs) {
+  Tuple future_tuple;
+  assert(lhs.getNumLines() == lhs.getNumColumns() &&
+         lhs.getNumLines() == rhs.size() &&
+         "Incompatible number of rows and columns.");
+  for (unsigned line = 0; line < lhs.getNumLines(); line++) {
+    DataTy acc = 0.0;
+    for (unsigned column = 0; column < lhs.getNumColumns(); column++)
+      acc += lhs.at(line, column) * rhs[column];
+    future_tuple[line] = acc;
   }
-  return Tuple(future_tuple[0], future_tuple[1], future_tuple[2],
-               future_tuple[3]);
-}
 
+  return future_tuple;
+}
 // Other chapter 3 stuff
 // =====================
 
-/** Return an identity matrice being as following:
-Matrice {    1.0,    0.0,    0.0,    0.0},
-        {    0.0,    1.0,    0.0,    0.0},
-        {    0.0,    0.0,    1.0,    0.0},
-        {    0.0,    0.0,    0.0,    1.0}}*/
-inline Matrice identity_matrix() {
-  return Matrice(std::vector<std::vector<float>>(
-      {{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}));
-}
-
-inline Matrice transpose(const Matrice &M) {
-  std::vector<std::vector<float>> future_matrice;
+template <class DataTy>
+inline RayTracerMatrice<DataTy> transpose(const RayTracerMatrice<DataTy> &M) {
+  std::vector<std::vector<DataTy>> future_matrice;
 
   // Extract column; M_column = future_line
-  for (unsigned M_column(0); M_column < std::get<1>(M.size()); M_column++) {
-    future_matrice.push_back(std::vector<float>());
-    for (int it_line(0); it_line < std::get<0>(M.size()); it_line++) {
+  for (unsigned M_column = 0; M_column < M.getNumColumns(); M_column++) {
+    future_matrice.push_back(std::vector<DataTy>());
+    for (int it_line = 0; it_line < M.getNumLines(); it_line++)
       future_matrice[M_column].push_back(M.matrice()[it_line][M_column]);
-    }
   }
-  return Matrice(future_matrice);
+  return RayTracerMatrice<DataTy>(std::move(future_matrice));
 }
 
-/** Returns the determinant of a 2*2 matrice. */
-inline float determinant(const Matrice &M) {
-  if (M.size() == std::tuple<int, int>(2, 2))
+/** Returns the determinant of 2*2, 3*3 or 4*4 matrices. */
+template <class DataTy>
+inline DataTy determinant(const RayTracerMatrice<DataTy> &M) {
+  if (M.shape() == std::tuple<int, int>(2, 2))
     return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
-  else if (M.size() == std::tuple<int, int>(4, 4) ||
-           M.size() == std::tuple<int, int>(3, 3)) {
-    float result = 0;
-    for (int column(0); column < std::get<1>(M.size()); column++) {
+
+  DataTy result = 0.0;
+  if (M.shape() == std::tuple<int, int>(4, 4) ||
+      M.shape() == std::tuple<int, int>(3, 3)) {
+    for (unsigned column = 0; column < M.getNumColumns(); column++)
       result += M.at(0, column) * cofactor(M, 0, column);
-    }
-    return result;
-  }
+  } else
+    assert(0 && "Case not handled.");
+
+  return result;
 }
 
 /** Returns a submatrix(a matrice# with one row and column less). */
-inline Matrice submatrix(const Matrice &M, const unsigned line,
-                         const unsigned column) {
-  std::vector<std::vector<float>> current_matrix(M.matrice());
+template <class DataTy>
+inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
+                                          const unsigned line,
+                                          const unsigned column) {
+  assert(line < M.getNumLines() && "line out of Matrice bounds.");
+  assert(column < M.getNumColumns() && "column out of Matrice bounds.");
+  std::vector<std::vector<DataTy>> table = M.matrice();
+  table.erase(table.begin() + line);
+  for (std::vector<DataTy> &v : table)
+    v.erase(v.begin() + column);
 
-  std::vector<std::vector<float>> table;
-  std::vector<float> line_vec;
-  for (unsigned it_line(0); it_line < std::get<0>(M.size()); it_line++) {
-    if (it_line != line) {
-      for (unsigned it_column(0); it_column < std::get<1>(M.size());
-           it_column++) {
-        if (it_column != column) {
-          line_vec.push_back(current_matrix[it_line][it_column]);
-        }
-      }
-      table.push_back(line_vec);
-      line_vec.clear();
-    }
-  }
-  return Matrice(table);
+  return RayTracerMatrice<DataTy>(table);
 }
 
 /** Returns the determinant of a submatrice; " minor is easier to say than
  * determinant of a submatrice ". */
-inline float minor(const Matrice &M, const unsigned &line,
-                   const unsigned &column) {
+template <class DataTy>
+inline DataTy minor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
+                    const unsigned &column) {
   return determinant(submatrix(M, line, column));
 }
 
-/** Returns the cofactor of a 3*3 matrix.
-#help: can be optimised (& ?)*/
-inline float cofactor(const Matrice &M, const unsigned &line,
-                      const unsigned &column) {
-  if (((line + column) % 2) != 0) {
-    return -minor(M, line, column);
-  } else {
-    return minor(M, line, column);
-  }
+/** Returns the cofactor of a 3*3 matrix. */
+template <class DataTy>
+inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, const unsigned &line,
+                       const unsigned &column) {
+  DataTy m = minor(M, line, column);
+
+  return ((line + column) % 2) != 0 ? -m : m;
 }
 
 /* Returns an inversed matrix. */
-inline Matrice inverse(const Matrice &M) {
+template <class DataTy>
+inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
+  RayTracerMatrice<DataTy> M2 = M;
   if (M.is_invertible()) {
-    Matrice M2 = M;
-    float cofac;
-    for (int row(0); row < std::get<0>(M.size()); row++) {
-      for (int col(0); col < std::get<1>(M.size()); col++) {
-        cofac = cofactor(M, row, col);
+    for (unsigned row = 0; row < M.getNumLines(); row++)
+      for (unsigned col = 0; col < M.getNumColumns(); col++) {
+        DataTy cofac = cofactor(M, row, col);
         M2.set(col, row, cofac / determinant(M));
       }
-    }
-    return M2;
-  }
+  } else
+    assert(0 && "Matrice is not invertible.");
+  return M2;
 }
 
 // Chapter 4 transformations
@@ -245,12 +276,13 @@ inline Matrice rotation_x(const double &radians) {
   return result;
 }
 
+using Matrice = RayTracerMatrice<RayTracerDataType>;
 } // namespace ratrac
 
 /** Return something like :
-Matrice {    1.0,    1.0,    1.0,    1.0},
-        {    1.0,    1.0,    1.0,    1.0},
-        {    1.0,    1.0,    1.0,    1.0},
-        {    1.0,    1.0,    1.0,    1.0}}
-*/
+  Matrice {    1.0,    1.0,    1.0,    1.0},
+  {    1.0,    1.0,    1.0,    1.0},
+  {    1.0,    1.0,    1.0,    1.0},
+  {    1.0,    1.0,    1.0,    1.0}}
+  */
 std::ostream &operator<<(std::ostream &os, const ratrac::Matrice &M);

@@ -4,6 +4,8 @@
 #include <cmath>
 #include <ostream>
 
+#include "ratrac/ratrac.h"
+
 namespace ratrac {
 // Classes
 // =======
@@ -13,6 +15,7 @@ namespace ratrac {
 template <class DataTy> class RayTracerTuple {
 public:
   /** Initialise the Tuple/Vector4.*/
+  RayTracerTuple() {}
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
       : m_tuple{x, y, z, w} {}
 
@@ -34,8 +37,13 @@ public:
   const DataTy &z() const { return m_tuple[2]; }
   const DataTy &w() const { return m_tuple[3]; }
 
+  DataTy &operator[](size_t index) { return m_tuple[index]; }
+  const DataTy &operator[](size_t index) const { return m_tuple[index]; }
+
   bool isPoint() const { return m_tuple[3] == 1.0; }
   bool isVector() const { return m_tuple[3] == 0.0; }
+
+  size_t size() const { return m_tuple.size();}
 
   // Advanced vectors properties
   // ===========================
@@ -114,9 +122,9 @@ private:
    * less than EPSILON. Currently, EPSILON = 0.00001. */
   static bool close_to_equal(const DataTy &a, const DataTy &b) {
     const DataTy EPSILON = 0.00001;
-    return std::abs(a - b) < EPSILON;
+    return std::fabs(a - b) < EPSILON;
   }
-}; // namespace ratrac
+};
 
 /** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
 template <class DataTy>
@@ -212,9 +220,6 @@ inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
 }
 // Renaming classes for external usage
 
-/** Current supported types: double, float.
- * Note: Integers are not supported because of EPSILON. */
-using RayTracerDataType = double;
 // using Point = RayTracerPoint<RayTracerDataType>;
 // using Vector = RayTracerVector<RayTracerDataType>;
 using Tuple = RayTracerTuple<RayTracerDataType>;
