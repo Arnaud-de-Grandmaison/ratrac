@@ -17,33 +17,17 @@ using namespace ratrac;
 using namespace std;
 
 void clock_generator(const char *filename = "clock.ppm") {
-  Canvas C(100, 100);
+  Canvas C(200, 200);
+
   // Generate a centered point
-  Tuple temp_point;
-  Matrice temp_transform;
-  double temp_angle;
+  for (unsigned i = 0; i < 12; i++) {
+    Matrice temp_transform = Matrice::identity_matrix();
+    temp_transform *= rotation_y(double(i) * 2.0 * M_PI / double(12));
+    Tuple temp_point = translation(100.0, 0.0, 100.0) * temp_transform *
+                       Point<double>(50, 0, 0);
+    C.at(temp_point.x(), temp_point.z()) = Color(.5, .75, .5);
+  }
 
-  temp_transform = Matrice::identity_matrix();
-  temp_angle = M_PI * 2;
-  temp_transform *= rotation_z(temp_angle);
-  temp_transform *= translation(5., 5., 0.);
-  temp_point = temp_transform * Point<double>(0, 0, 0);
-  C.at(temp_point.x(), temp_point.y()) = Color(1, 1, 1);
-
-  /*
-  // Move the point
-  // --------------
-  for (unsigned rotation_angle(0); rotation_angle < 4; rotation_angle++) {
-    temp_transform = Matrice::identity_matrix();
-    temp_transform *= translation<double>(50., 0., 0.);
-    temp_angle = 0 + 2 * M_PI / 12 * rotation_angle;
-    temp_transform *= rotation_x(temp_angle);
-    // #help: Should be working ...
-    // temp_transform.rotate_x(0 + 2 * M_PI / 12 * rotation_angle);
-    // temp_transform.translate(50., 0., 0.);
-  temp_point = temp_transform * Point<double>(500, 500, 0);
-  C.at(temp_point.x(), temp_point.y()) = Color(1, 1, 1);
-}*/
   ofstream file(filename);
   C.to_ppm(file);
 }
