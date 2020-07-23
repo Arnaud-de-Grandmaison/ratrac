@@ -18,17 +18,19 @@ template <class DataTy> class RayTracerTuple {
 public:
   /** Initialise the Tuple/Vector4.*/
   RayTracerTuple() {}
-  RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
-      : m_tuple{x, y, z, w} {}
+  template <class XTy, class YTy, class ZTy, class WTy>
+  RayTracerTuple(XTy x, YTy y, ZTy z, WTy w)
+      : m_tuple{DataTy(x), DataTy(y), DataTy(z), DataTy(w)} {}
 
   /** Helpers to create points and vectors. */
-  static RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
-                                       const DataTy &z) {
-    return RayTracerTuple<DataTy>(x, y, z, 0.0);
+  template <class XTy, class YTy, class ZTy>
+  static RayTracerTuple Vector(XTy x, YTy y, ZTy z) {
+    return RayTracerTuple(x, y, z, RayTracerTuple::DataType(0.0));
   }
-  static RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
-                                      const DataTy &z) {
-    return RayTracerTuple<DataTy>(x, y, z, 1.0);
+
+  template <class XTy, class YTy, class ZTy>
+  static RayTracerTuple Point(XTy x, YTy y, ZTy z) {
+    return RayTracerTuple(x, y, z, RayTracerTuple::DataType(1.0));
   }
 
   typedef DataTy DataType;
@@ -123,20 +125,6 @@ private:
   std::array<DataTy, 4> m_tuple;
 };
 
-/** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
-template <class DataTy>
-inline RayTracerTuple<DataTy> Vector(const DataTy &x, const DataTy &y,
-                                     const DataTy &z) {
-  return RayTracerTuple<DataTy>::Vector(x, y, z);
-}
-
-/** Helper to create a Point, i.e. a Tuple with w = 1.0 */
-template <class DataTy>
-inline RayTracerTuple<DataTy> Point(const DataTy &x, const DataTy &y,
-                                    const DataTy &z) {
-  return RayTracerTuple<DataTy>::Point(x, y, z);
-}
-
 // Other/External operators
 // ========================
 
@@ -218,6 +206,18 @@ inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
 // Renaming classes for external usage
 
 using Tuple = RayTracerTuple<RayTracerDataType>;
+
+/** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
+template <class XTy, class YTy, class ZTy>
+inline Tuple Vector(XTy x, YTy y, ZTy z) {
+  return Tuple::Vector(x, y, z);
+}
+
+/** Helper to create a Point, i.e. a Tuple with w = 1.0 */
+template <class XTy, class YTy, class ZTy>
+inline Tuple Point(XTy x, YTy y, ZTy z) {
+  return Tuple::Point(x, y, z);
+}
 
 } // namespace ratrac
 
