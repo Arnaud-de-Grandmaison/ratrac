@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <ostream>
 
 namespace ratrac {
 // Classes
@@ -11,7 +12,6 @@ namespace ratrac {
  * vectors. */
 template <class DataTy> class RayTracerTuple {
 public:
-
   /** Initialise the Tuple/Vector4.*/
   RayTracerTuple(DataTy x, DataTy y, DataTy z, DataTy w)
       : m_tuple{x, y, z, w} {}
@@ -185,8 +185,7 @@ inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
 // Function like operators
 // =======================
 
-template <class DataTy>
-double magnitude(const RayTracerTuple<DataTy> &T) {
+template <class DataTy> double magnitude(const RayTracerTuple<DataTy> &T) {
   return T.magnitude();
 }
 
@@ -221,3 +220,5 @@ using RayTracerDataType = double;
 using Tuple = RayTracerTuple<RayTracerDataType>;
 
 } // namespace ratrac
+
+std::ostream &operator<<(std::ostream &os, const ratrac::Tuple &T);
