@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <ostream>
 #include <vector>
 
@@ -43,6 +44,8 @@ public:
 
   Color &at(unsigned x, unsigned y) { return m_canvas[y * m_width + x]; }
   const Color &at(unsigned x, unsigned y) const {
+    assert(x < m_width && "x is out of bounds.");
+    assert(y < m_height && "y is out of bounds.");
     return m_canvas[y * m_width + x];
   }
 
