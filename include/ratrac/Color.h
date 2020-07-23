@@ -63,9 +63,8 @@ public:
     return *this;
   }
   Color &operator*=(const Color &rhs) {
-    for (unsigned i = 0; i < m_color.size(); i++) {
+    for (unsigned i = 0; i < m_color.size(); i++)
       m_color[i] *= rhs.m_color[i];
-    }
     return *this;
   }
   Color &operator/=(const float &rhs) {
