@@ -174,7 +174,7 @@ TEST(RayTracerMatrice, other_stuff) {
   M2 = inverse(M);
   EXPECT_EQ(determinant(M), 532);
   EXPECT_EQ(cofactor(M, 2, 3), -160);
-  double value_f = -160;
+  Matrice::DataType value_f = -160;
   value_f /= 532;
   EXPECT_TRUE(
       close_to_equal(M2.at(3, 2), value_f)); // float(-160 / 532));

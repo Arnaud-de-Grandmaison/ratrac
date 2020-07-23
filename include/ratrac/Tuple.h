@@ -29,6 +29,8 @@ public:
     return RayTracerTuple<DataTy>(x, y, z, 1.0);
   }
 
+  typedef DataTy DataType;
+
   // Accessors
   // =========
 
@@ -48,8 +50,8 @@ public:
   // Advanced vectors properties
   // ===========================
 
-  double magnitude() const {
-    double result = 0.0;
+  DataTy magnitude() const {
+    DataTy result = 0.0;
     for (const DataTy &c : m_tuple)
       result += c * c;
     return std::sqrt(result);
@@ -186,7 +188,7 @@ inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
 // Function like operators
 // =======================
 
-template <class DataTy> double magnitude(const RayTracerTuple<DataTy> &T) {
+template <class DataTy> DataTy magnitude(const RayTracerTuple<DataTy> &T) {
   return T.magnitude();
 }
 

@@ -48,6 +48,8 @@ public:
     return *this;
   }
 
+  typedef DataTy DataType;
+
   // Accessors
 
   /** Returns m_matrice. */

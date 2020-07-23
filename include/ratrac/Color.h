@@ -22,6 +22,8 @@ public:
       : m_color{red, green, blue, alpha} {}
   Color() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
 
+  typedef float ColorType;
+
   // Accessors
   // =========
 
