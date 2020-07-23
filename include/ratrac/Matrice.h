@@ -2,6 +2,7 @@
 
 #include "ratrac/Tuple.h"
 
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <ostream>
@@ -140,18 +141,20 @@ inline Matrice transpose(const Matrice &M) {
   return Matrice(future_matrice);
 }
 
-/** Returns the determinant of a 2*2 matrice. */
+/** Returns the determinant of 2*2, 3*3 or 4*4 matrices. */
 inline float determinant(const Matrice &M) {
   if (M.size() == std::tuple<int, int>(2, 2))
     return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
-  else if (M.size() == std::tuple<int, int>(4, 4) ||
+
+  float result = 0;
+  if (M.size() == std::tuple<int, int>(4, 4) ||
            M.size() == std::tuple<int, int>(3, 3)) {
-    float result = 0;
-    for (int column(0); column < std::get<1>(M.size()); column++) {
+    for (int column(0); column < std::get<1>(M.size()); column++)
       result += M.at(0, column) * cofactor(M, 0, column);
-    }
-    return result;
-  }
+  } else
+    assert(0 && "Case not handled.");
+
+  return result;
 }
 
 /** Returns a submatrix(a matrice# with one row and column less). */
@@ -196,17 +199,16 @@ inline float cofactor(const Matrice &M, const unsigned &line,
 
 /* Returns an inversed matrix. */
 inline Matrice inverse(const Matrice &M) {
+  Matrice M2 = M;
   if (M.is_invertible()) {
-    Matrice M2 = M;
-    float cofac;
-    for (int row(0); row < std::get<0>(M.size()); row++) {
+    for (int row(0); row < std::get<0>(M.size()); row++)
       for (int col(0); col < std::get<1>(M.size()); col++) {
-        cofac = cofactor(M, row, col);
+        float cofac = cofactor(M, row, col);
         M2.set(col, row, cofac / determinant(M));
       }
-    }
-    return M2;
-  }
+  } else
+    assert(0 && "Matrice is not invertible.");
+  return M2;
 }
 
 } // namespace ratrac
