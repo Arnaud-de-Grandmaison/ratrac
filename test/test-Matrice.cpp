@@ -8,11 +8,6 @@
 #include <tuple>
 #include <vector>
 
-#define _USE_MATH_DEFINES
-#ifndef M_PI
-const double M_PI = 3.14159265;
-#endif // ! M_PI
-
 using namespace ratrac;
 using namespace testing;
 

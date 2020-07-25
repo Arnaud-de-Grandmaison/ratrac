@@ -13,9 +13,16 @@ function(append value)
   endforeach(variable)
 endfunction()
 
+# ========================================================
+# Configure compilation options.
+# --------------------------------------------------------
+
+
 if(WIN32)
   set(CMAKE_C_FLAGS "/Wall")
   set(CMAKE_CXX_FLAGS "/std:c++14 ${CMAKE_C_FLAGS}")
+  # This will make M_PI and other mathematical constants available.
+  add_compile_definitions(_USE_MATH_DEFINES)
 endif()
 
 if(UNIX)
