@@ -279,54 +279,54 @@ TEST(RayTracerMatrice, transformations) {
   // Y axis
 
   // Rotating a point around the y axis
-  p = Point<double>(0, 0, 1);
+  p = Point(0, 0, 1);
   half_quarter = rotation_y(M_PI / 4);
   full_quarter = rotation_y(M_PI / 2);
   EXPECT_EQ(half_quarter * p,
-            Point<double>(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
-  EXPECT_EQ(full_quarter * p, Point<double>(1, 0, 0));
+            Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+  EXPECT_EQ(full_quarter * p, Point(1, 0, 0));
   // Z axis
 
   // Rotating a point arround the z axis
-  p = Point<double>(0, 1, 0);
+  p = Point(0, 1, 0);
   half_quarter = rotation_z(M_PI / 4);
   full_quarter = rotation_z(M_PI / 2);
   EXPECT_EQ(half_quarter * p,
-            Point<double>(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
-  EXPECT_EQ(full_quarter * p, Point<double>(-1, 0, 0));
+            Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+  EXPECT_EQ(full_quarter * p, Point(-1, 0, 0));
 
   // Shearing
   // ========
 
   // A shearing transformation moves x in proportion to y
-  transform = shearing<double>(1, 0, 0, 0, 0, 0);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(5, 3, 4));
+  transform = shearing(1, 0, 0, 0, 0, 0);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(5, 3, 4));
 
   // A shearing transformation moves x in proportion to z
-  transform = shearing<double>(0, 1, 0, 0, 0, 0);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(6, 3, 4));
+  transform = shearing(0, 1, 0, 0, 0, 0);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(6, 3, 4));
 
   // A shearing transformation moves y in proportion to x
-  transform = shearing<double>(0, 0, 1, 0, 0, 0);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(2, 5, 4));
+  transform = shearing(0, 0, 1, 0, 0, 0);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(2, 5, 4));
 
   // A shearing transformation moves y in proportion to z
-  transform = shearing<double>(0, 0, 0, 1, 0, 0);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(2, 7, 4));
+  transform = shearing(0, 0, 0, 1, 0, 0);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(2, 7, 4));
 
   // A shearing transformation moves z in proportion to x
-  transform = shearing<double>(0, 0, 0, 0, 1, 0);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(2, 3, 6));
+  transform = shearing(0, 0, 0, 0, 1, 0);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(2, 3, 6));
 
   // A shearing transformation moves x in proportion to z
-  transform = shearing<double>(0, 0, 0, 0, 0, 1);
-  p = Point<double>(2, 3, 4);
-  EXPECT_EQ(transform * p, Point<double>(2, 3, 7));
+  transform = shearing(0, 0, 0, 0, 0, 1);
+  p = Point(2, 3, 4);
+  EXPECT_EQ(transform * p, Point(2, 3, 7));
 
   // Chaining transformations
   // ========================
@@ -334,29 +334,29 @@ TEST(RayTracerMatrice, transformations) {
   // Individual transformations are applied in sequence
   // --------------------------------------------------
 
-  p = Point<double>(1, 0, 1);
+  p = Point(1, 0, 1);
   Matrice A = rotation_x(M_PI / 2);
-  Matrice B = scaling<double>(5, 5, 5);
-  Matrice C = translation<double>(10, 5, 7);
+  Matrice B = scaling(5, 5, 5);
+  Matrice C = translation(10, 5, 7);
   // Apply rotation first
   Tuple p2 = A * p;
-  EXPECT_EQ(p2, Point<double>(1, -1, 0));
+  EXPECT_EQ(p2, Point(1, -1, 0));
   // Then apply scaling
   Tuple p3 = B * p2;
-  EXPECT_EQ(p3, Point<double>(5, -5, 0));
+  EXPECT_EQ(p3, Point(5, -5, 0));
   // Then apply translation
   Tuple p4 = C * p3;
-  EXPECT_EQ(p4, Point<double>(15, 0, 7));
+  EXPECT_EQ(p4, Point(15, 0, 7));
 
   // Chained transformations must be applied in reverse order
   // --------------------------------------------------------
 
-  p = Point<double>(1, 0, 1);
+  p = Point(1, 0, 1);
   A = rotation_x(M_PI / 2);
-  B = scaling<double>(5, 5, 5);
-  C = translation<double>(10, 5, 7);
+  B = scaling(5, 5, 5);
+  C = translation(10, 5, 7);
   Matrice T = C * B * A;
-  EXPECT_EQ(T * p, Point<double>(15, 0, 7));
+  EXPECT_EQ(T * p, Point(15, 0, 7));
 }
 
 int main(int argc, char **argv) {

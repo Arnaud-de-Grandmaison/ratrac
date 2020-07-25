@@ -262,14 +262,15 @@ inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
   return M2;
 }
 
+using Matrice = RayTracerMatrice<RayTracerDataType>;
+
 // Chapter 4 transformations
 // =========================
 
-// #ToDo: convert into RayTracerMatrice (v2/after rework)
-template <class DataTy>
-inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
-                                            const DataTy &z) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice translation(const Matrice::DataType &x,
+                           const Matrice::DataType &y,
+                           const Matrice::DataType &z) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 3, x);
   result.set(1, 3, y);
   result.set(2, 3, z);
@@ -277,19 +278,18 @@ inline RayTracerMatrice<DataTy> translation(const DataTy &x, const DataTy &y,
 }
 
 /** Refer at the top of p49 for visual explanations. */
-template <class DataTy>
-inline RayTracerMatrice<DataTy> scaling(const DataTy &x, const DataTy &y,
-                                        const DataTy &z) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice scaling(const Matrice::DataType &x, const Matrice::DataType &y,
+                       const Matrice::DataType &z) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 0, x);
   result.set(1, 1, y);
   result.set(2, 2, z);
   return result;
 }
+
 /** Refer at the top of p50 for visual explanations. */
-template <class DataTy>
-inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice rotation_x(const Matrice::DataType &radians) {
+  Matrice result = Matrice::identity_matrix();
   result.set(1, 1, std::cos(radians));
   result.set(1, 2, -std::sin(radians));
   result.set(2, 1, std::sin(radians));
@@ -298,9 +298,8 @@ inline RayTracerMatrice<DataTy> rotation_x(const DataTy &radians) {
 }
 
 /** Refer at the bottom of p50 for visual explanations. */
-template <class DataTy>
-inline RayTracerMatrice<DataTy> rotation_y(const DataTy &radians) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice rotation_y(const Matrice::DataType &radians) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 0, std::cos(radians));
   result.set(0, 2, std::sin(radians));
   result.set(2, 0, -std::sin(radians));
@@ -308,9 +307,8 @@ inline RayTracerMatrice<DataTy> rotation_y(const DataTy &radians) {
   return result;
 }
 
-template <class DataTy>
-inline RayTracerMatrice<DataTy> rotation_z(const DataTy &radians) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice rotation_z(const Matrice::DataType &radians) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 0, std::cos(radians));
   result.set(0, 1, -std::sin(radians));
   result.set(1, 0, std::sin(radians));
@@ -320,10 +318,11 @@ inline RayTracerMatrice<DataTy> rotation_z(const DataTy &radians) {
 
 /** Function that moves points proportionnaly to an axis. See image p51 for more
  * information.*/
-template <class DataTy>
-inline RayTracerMatrice<DataTy> shearing(DataTy Xy, DataTy Xz, DataTy Yx,
-                                         DataTy Yz, DataTy Zx, DataTy Zy) {
-  RayTracerMatrice<DataTy> result = RayTracerMatrice<DataTy>::identity_matrix();
+inline Matrice
+shearing(const Matrice::DataType &Xy, const Matrice::DataType &Xz,
+         const Matrice::DataType &Yx, const Matrice::DataType &Yz,
+         const Matrice::DataType &Zx, const Matrice::DataType &Zy) {
+  Matrice result = Matrice::identity_matrix();
   result.set(0, 1, Xy);
   result.set(0, 2, Xz);
   result.set(1, 0, Yx);
@@ -333,7 +332,6 @@ inline RayTracerMatrice<DataTy> shearing(DataTy Xy, DataTy Xz, DataTy Yx,
   return result;
 }
 
-using Matrice = RayTracerMatrice<RayTracerDataType>;
 } // namespace ratrac
 
 /** Return something like :
