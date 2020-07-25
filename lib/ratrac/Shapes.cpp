@@ -8,9 +8,10 @@ using std::sqrt;
 
 namespace ratrac {
 Intersections intersect(const Sphere &s, const Ray &r) {
-  Tuple sphere_to_ray = r.origin() - s.center();
-  RayTracerDataType a = dot(r.direction(), r.direction());
-  RayTracerDataType b = 2.0 * dot(r.direction(), sphere_to_ray);
+  Ray ray = transform(r, inverse(s.transform()));
+  Tuple sphere_to_ray = ray.origin() - s.center();
+  RayTracerDataType a = dot(ray.direction(), ray.direction());
+  RayTracerDataType b = 2.0 * dot(ray.direction(), sphere_to_ray);
   RayTracerDataType c = dot(sphere_to_ray, sphere_to_ray) - 1.0;
   RayTracerDataType discriminant = b * b - 4.0 * a * c;
   if (discriminant < 0.0)

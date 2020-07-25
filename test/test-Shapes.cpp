@@ -111,6 +111,21 @@ TEST(Shapes, intersections) {
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].object, &s);
   EXPECT_EQ(xs[1].object, &s);
+
+  // Intersecting a scaled sphere with a ray
+  r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  s = Sphere().transform(scaling(2, 2, 2));
+  xs = intersect(s, r);
+  EXPECT_EQ(xs.count(), 2);
+  EXPECT_EQ(xs[0].t, 3);
+  EXPECT_EQ(xs[1].t, 7);
+
+  // Intersecting a translated sphere with a ray
+  r = Ray(Point(0, 0, -5),Vector(0,0,1));
+  s = Sphere().transform(translation(5,0,0));
+  xs = intersect(s, r);
+  EXPECT_EQ(xs.count(), 0);
+  EXPECT_TRUE(xs.empty());
 }
 
 int main(int argc, char **argv) {
