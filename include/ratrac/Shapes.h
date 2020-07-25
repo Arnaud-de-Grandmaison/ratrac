@@ -10,12 +10,25 @@
 namespace ratrac {
 class Sphere {
 public:
-  Sphere() : m_center(Point(0, 0, 0)), m_radius(1.0) {}
+  Sphere()
+      : m_transform(Matrice::identity()), m_center(Point(0, 0, 0)),
+        m_radius(1.0) {}
 
+  const Matrice &transform() const { return m_transform; }
   const Tuple &center() const { return m_center; }
   const RayTracerDataType &radius() const { return m_radius; }
 
+  Sphere &transform(const Matrice &M) {
+    m_transform = M;
+    return *this;
+  }
+  Sphere &transform(Matrice &&M) {
+    m_transform = std::move(M);
+    return *this;
+  }
+
 private:
+  Matrice m_transform;
   Tuple m_center;
   RayTracerDataType m_radius;
 };
@@ -81,7 +94,9 @@ public:
   }
 
   const_iterator hit() const {
-    return std::find_if(begin(), end(), [&](const Intersection &x) -> bool { return x.t >= 0.0;});
+    return std::find_if(begin(), end(), [&](const Intersection &x) -> bool {
+      return x.t >= 0.0;
+    });
   }
 
 private:
