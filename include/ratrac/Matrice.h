@@ -133,8 +133,9 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
   // Editors
   // =======
 
-  void set(unsigned line, unsigned column, DataTy value) {
+  RayTracerMatrice &set(unsigned line, unsigned column, DataTy value) {
     m_matrice[line][column] = value;
+    return *this;
   }
 
   void rotate_x(DataTy radians) { this *= rotation_x(radians); }
