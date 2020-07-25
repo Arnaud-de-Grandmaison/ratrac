@@ -44,6 +44,37 @@ TEST(Intersections, intersection) {
   EXPECT_EQ(xs[1].t, 2);
 }
 
+TEST(Intersections, hit) {
+  // The hit, when all intersections have positive t
+  Sphere s;
+  Intersection i1(1, s);
+  Intersection i2(2, s);
+  Intersections xs(i1, i2);
+  EXPECT_EQ(*xs.hit(), i1);
+
+  // The hit, when some intersections have negative t
+  i1 = Intersection(-1, s);
+  i2 = Intersection(1, s);
+  EXPECT_EQ(*Intersections(i1, i2).hit(), i2);
+  EXPECT_EQ(*Intersections(i2, i1).hit(), i2);
+
+  // The hit, when all intersections have negative t
+  i1 = Intersection(-2, s);
+  i2 = Intersection(-1, s);
+  xs = Intersections(i1, i2);
+  EXPECT_EQ(xs.hit(), xs.end());
+  xs = Intersections(i2, i1);
+  EXPECT_EQ(xs.hit(), xs.end());
+
+  // The hit is always the lowest non negative intersection
+  i1 = Intersection(5, s);
+  i2 = Intersection(7, s);
+  Intersection i3(-3, s);
+  Intersection i4(2, s);
+  xs = Intersections(i1, i2).add(i3).add(i4);
+  EXPECT_EQ(*xs.hit(), i4);
+}
+
 TEST(Ray, intersections) {
   // A ray intersects a sphere at two points
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
@@ -64,6 +95,7 @@ TEST(Ray, intersections) {
   r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 0);
+  EXPECT_TRUE(xs.empty());
 
   // A ray intersects a sphere at a tangent
   r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
