@@ -1,3 +1,4 @@
+#include "ratrac/Matrice.h"
 #include "ratrac/Ray.h"
 #include "ratrac/Shapes.h"
 #include "ratrac/Tuple.h"
@@ -117,6 +118,22 @@ TEST(Ray, intersections) {
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].object, &s);
   EXPECT_EQ(xs[1].object, &s);
+}
+
+TEST(Ray, transform) {
+  // Translating a ray
+  Ray r(Point(1, 2, 3), Vector(0, 1, 0));
+  Matrice m = translation( 3, 4, 5);
+  Ray r2 = transform(r, m);
+  EXPECT_EQ(r2.origin(), Point(4, 6, 8));
+  EXPECT_EQ(r2.direction(), Vector(0, 1, 0));
+
+  // Scaling a ray
+  r = Ray(Point(1, 2, 3), Vector(0, 1, 0));
+  m = scaling(2, 3, 4);
+  r2 = transform(r, m);
+  EXPECT_EQ(r2.origin(), Point(2, 6, 12));
+  EXPECT_EQ(r2.direction(), Vector(0, 3, 0));
 }
 
 int main(int argc, char **argv) {

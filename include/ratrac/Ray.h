@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ratrac/Tuple.h"
+#include "ratrac/Matrice.h"
 #include "ratrac/ratrac.h"
 
 #include <cassert>
@@ -21,6 +22,10 @@ private:
 
 template <class DataTy> Tuple position(const Ray &ray, DataTy t) {
   return ray.origin() + ray.direction() * Tuple::DataType(t);
+}
+
+inline Ray transform(const Ray &ray, const Matrice &mat) {
+  return Ray(mat * ray.origin(), mat * ray.direction());
 }
 
 } // namespace ratrac
