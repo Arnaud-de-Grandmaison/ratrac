@@ -111,15 +111,15 @@ TEST(RayTracerMatrice, other_stuff) {
   // Identity matrice tests
 
   Matrice M({{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}});
-  EXPECT_EQ(M * Matrice::identity_matrix(), M);
+  EXPECT_EQ(M * Matrice::identity(), M);
   Tuple a(1., 2., 3., 4.);
-  EXPECT_EQ(Matrice::identity_matrix() * a, a);
+  EXPECT_EQ(Matrice::identity() * a, a);
 
   M = {{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}};
   EXPECT_EQ(transpose(M),
             Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
 
-  EXPECT_EQ(transpose(Matrice::identity_matrix()), Matrice::identity_matrix());
+  EXPECT_EQ(transpose(Matrice::identity()), Matrice::identity());
 
   // Inverting Matrices
   // ==================

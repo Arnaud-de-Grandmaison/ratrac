@@ -21,7 +21,7 @@ void clock_generator(const char *filename = "clock.ppm") {
 
   // Generate a centered point
   for (unsigned i = 0; i < 12; i++) {
-    Matrice temp_transform = Matrice::identity_matrix();
+    Matrice temp_transform = Matrice::identity();
     temp_transform *= rotation_y(double(i) * 2.0 * M_PI / double(12));
     Tuple temp_point =
         translation(100.0, 0.0, 100.0) * temp_transform * Point(50, 0, 0);
