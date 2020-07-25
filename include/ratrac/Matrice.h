@@ -220,12 +220,21 @@ inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
                                           unsigned line, unsigned column) {
   assert(line < M.getNumLines() && "line out of Matrice bounds.");
   assert(column < M.getNumColumns() && "column out of Matrice bounds.");
-  std::vector<std::vector<DataTy>> table = M.matrice();
-  table.erase(table.begin() + line);
-  for (std::vector<DataTy> &v : table)
-    v.erase(v.begin() + column);
+  std::vector<std::vector<DataTy>> table;
+  table.reserve(M.getNumLines() - 1);
+  for (unsigned l = 0; l < M.getNumLines(); l++) {
+    if (l != line) {
+      std::vector<DataTy> TheLine;
+      TheLine.reserve(M.getNumColumns() - 1);
+      for (unsigned c = 0; c < M.getNumColumns(); c++) {
+        if (c != column)
+          TheLine.push_back(M.at(l, c));
+      }
+      table.push_back(std::move(TheLine));
+    }
+  }
 
-  return RayTracerMatrice<DataTy>(table);
+  return RayTracerMatrice<DataTy>(std::move(table));
 }
 
 /** Returns the determinant of a submatrice; " minor is easier to say than
