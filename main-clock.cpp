@@ -5,8 +5,6 @@
 #include "ratrac/ratrac.h"
 
 #include <fstream>
-#include <iostream>
-#include <string>
 
 #define _USE_MATH_DEFINES
 #ifndef M_PI

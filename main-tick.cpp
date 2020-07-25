@@ -3,11 +3,9 @@
 #include "ratrac/Color.h"
 #include "ratrac/Canvas.h"
 
-#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <string>
 
 using namespace ratrac;
 using namespace std;
