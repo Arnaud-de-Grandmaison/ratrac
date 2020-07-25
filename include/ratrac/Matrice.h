@@ -21,7 +21,9 @@ template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
 
 /** A matrice of multiple forms. At the moment all types are supported. */
 template <class DataTy> class RayTracerMatrice {
-  static_assert(std::is_floating_point<DataTy>::value, "Matrice DataTy must be a floating point type.");
+  static_assert(std::is_floating_point<DataTy>::value,
+                "Matrice DataTy must be a floating point type.");
+
 public:
   // Constructors
   // ============
@@ -114,13 +116,16 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
 
   // Both must be 4*4 matrices.
   RayTracerMatrice &operator*=(const RayTracerMatrice &rhs) {
-    assert(getNumColumns() == rhs.getNumLines() && "Matrices must have compatible shapes");
+    assert(getNumColumns() == rhs.getNumLines() &&
+           "Matrices must have compatible shapes");
     // Create a zero filled matrix of the same size.
-    std::vector<std::vector<DataTy>> result(getNumLines(), std::vector<DataTy>(getNumColumns(), DataTy()));
+    std::vector<std::vector<DataTy>> result(
+        getNumLines(), std::vector<DataTy>(getNumColumns(), DataTy()));
     for (unsigned line = 0; line < getNumLines(); line++)
       for (unsigned column = 0; column < rhs.getNumColumns(); column++)
         for (unsigned it = 0; it < getNumColumns(); it++)
-          result[line][column] += m_matrice[line][it]*rhs.m_matrice[it][column];
+          result[line][column] +=
+              m_matrice[line][it] * rhs.m_matrice[it][column];
     m_matrice = std::move(result);
     return *this;
   }
