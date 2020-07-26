@@ -226,6 +226,7 @@ inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
                                           unsigned line, unsigned column) {
   assert(line < M.getNumLines() && "line out of Matrice bounds.");
   assert(column < M.getNumColumns() && "column out of Matrice bounds.");
+
   std::vector<std::vector<DataTy>> table;
   table.reserve(M.getNumLines() - 1);
   for (unsigned l = 0; l < M.getNumLines(); l++) {
@@ -267,12 +268,11 @@ inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
 template <class DataTy>
 inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
   RayTracerMatrice<DataTy> M2(M.getNumColumns(), M.getNumLines());
-  if (M.is_invertible()) {
+  DataTy det = determinant(M);
+  if (det != 0.0) { // Matrice is invertible
     for (unsigned row = 0; row < M.getNumLines(); row++)
-      for (unsigned col = 0; col < M.getNumColumns(); col++) {
-        DataTy cofac = cofactor(M, row, col);
-        M2.set(col, row, cofac / determinant(M));
-      }
+      for (unsigned col = 0; col < M.getNumColumns(); col++)
+        M2.set(col, row, cofactor(M, row, col) / det);
   } else
     assert(0 && "Matrice is not invertible.");
   return M2;
