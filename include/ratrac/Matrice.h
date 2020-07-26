@@ -42,6 +42,12 @@ public:
          it != il.end(); it++)
       m_matrice.push_back(*it);
   }
+  /** Allocate a lines x columns uninitialized matrice. */
+  RayTracerMatrice(unsigned lines, unsigned columns)
+      : m_matrice(lines, std::vector<DataTy>(columns)) {}
+  /** Allocate a lines x columns Val initialized matrice. */
+  RayTracerMatrice(unsigned lines, unsigned columns, DataTy Val)
+      : m_matrice(lines, std::vector<DataTy>(columns, Val)) {}
 
   /** Return an identity matrice being as following:
 Matrice {    1.0,    0.0,    0.0,    0.0},
@@ -260,7 +266,7 @@ inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
 /* Returns an inversed matrix. */
 template <class DataTy>
 inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
-  RayTracerMatrice<DataTy> M2 = M;
+  RayTracerMatrice<DataTy> M2(M.getNumColumns(), M.getNumLines());
   if (M.is_invertible()) {
     for (unsigned row = 0; row < M.getNumLines(); row++)
       for (unsigned col = 0; col < M.getNumColumns(); col++) {
