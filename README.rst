@@ -37,18 +37,29 @@ Ratrac:a ray tracer experiment
 Build
 =====
 
-Building on a Mac can be done from the command line with:
+Ratrac can be built from the command line with:
 
 .. code-block:: bash
 
   $ mkdir build
   $ cd build
   $ cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -G Ninja ..
+  $ ninja
 
 Test
 ====
+
+Ratrac testing relies on googletest_. The tests are run n the build directory with:
+
+.. code-block:: bash
+
+  $ cd build
+  $ ninja check
 
 Use
 ===
 
 Enjoy !
+
+.. _googletest: https://github.com/google/googletest
+
