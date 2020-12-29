@@ -128,6 +128,40 @@ TEST(Shapes, intersections) {
   EXPECT_TRUE(xs.empty());
 }
 
+TEST(Shapes, normal) {
+  Sphere s;
+
+  // The normal on a sphere at a point on the x axis.
+  Tuple n = s.normal_at(Point(1, 0, 0));
+  EXPECT_EQ(n, Vector(1, 0, 0));
+
+  // The normal on a sphere at a point on the y axis.
+  n = s.normal_at(Point(0, 1, 0));
+  EXPECT_EQ(n, Vector(0, 1, 0));
+
+  // The normal on a sphere at a point on the z axis.
+  n = s.normal_at(Point(0, 0, 1));
+  EXPECT_EQ(n, Vector(0, 0, 1));
+
+  // The normal on a sphere at a non axial point.
+  n = s.normal_at(Point(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
+  EXPECT_EQ(n, Vector(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
+
+  // The normal is a normalized vector.
+  n = s.normal_at(Point(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
+  EXPECT_EQ(n, normalize(n));
+
+  // Computing the normal on a translated sphere.
+  s = Sphere().transform(translation(0, 1, 0));
+  n = s.normal_at(Point(0, 1.70711, -0.70711));
+  EXPECT_EQ(n, Vector(0, 0.70711, -0.70711));
+
+  // Computing the normal on a transformed sphere.
+  s = Sphere().transform(scaling(1, 0.5, 1) * rotation_z(M_PI / 5.0));
+  n = s.normal_at(Point(0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0));
+  EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
+}
+
 int main(int argc, char **argv) {
   InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
