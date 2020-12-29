@@ -9,13 +9,13 @@ using namespace testing;
 
 TEST(Shapes, base) {
 
-  // Basic sphere creation
+  // Basic sphere creation.
   Sphere s;
   EXPECT_EQ(s.center(), Point(0, 0, 0));
   EXPECT_EQ(s.radius(), 1.0);
   EXPECT_EQ(s.transform(), Matrice::identity());
 
-  // Change a sphere's transformation
+  // Change a sphere's transformation.
   s = Sphere();
   Matrice t = translation(2, 3, 4);
   s.transform(t);
@@ -29,7 +29,7 @@ TEST(Intersections, intersection) {
   EXPECT_EQ(i.t, 3.5);
   EXPECT_EQ(i.object, &s);
 
-  // Agregating intersections
+  // Agregating intersections.
   Intersection i1(1, s);
   Intersection i2(2, s);
   Intersections xs(i1, i2);
@@ -39,20 +39,20 @@ TEST(Intersections, intersection) {
 }
 
 TEST(Intersections, hit) {
-  // The hit, when all intersections have positive t
+  // The hit, when all intersections have positive t.
   Sphere s;
   Intersection i1(1, s);
   Intersection i2(2, s);
   Intersections xs(i1, i2);
   EXPECT_EQ(*xs.hit(), i1);
 
-  // The hit, when some intersections have negative t
+  // The hit, when some intersections have negative t.
   i1 = Intersection(-1, s);
   i2 = Intersection(1, s);
   EXPECT_EQ(*Intersections(i1, i2).hit(), i2);
   EXPECT_EQ(*Intersections(i2, i1).hit(), i2);
 
-  // The hit, when all intersections have negative t
+  // The hit, when all intersections have negative t.
   i1 = Intersection(-2, s);
   i2 = Intersection(-1, s);
   xs = Intersections(i1, i2);
@@ -60,7 +60,7 @@ TEST(Intersections, hit) {
   xs = Intersections(i2, i1);
   EXPECT_EQ(xs.hit(), xs.end());
 
-  // The hit is always the lowest non negative intersection
+  // The hit is always the lowest non negative intersection.
   i1 = Intersection(5, s);
   i2 = Intersection(7, s);
   Intersection i3(-3, s);
@@ -70,7 +70,7 @@ TEST(Intersections, hit) {
 }
 
 TEST(Shapes, intersections) {
-  // A ray intersects a sphere at two points
+  // A ray intersects a sphere at two points.
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
   Sphere s;
   Intersections xs = intersect(s, r);
@@ -78,41 +78,41 @@ TEST(Shapes, intersections) {
   EXPECT_EQ(xs[0].t, 4.0);
   EXPECT_EQ(xs[1].t, 6.0);
 
-  // A ray intersects a sphere at a tangent
+  // A ray intersects a sphere at a tangent.
   r = Ray(Point(0, 1, -5), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].t, 5.0);
   EXPECT_EQ(xs[1].t, 5.0);
 
-  // A ray misses a sphere
+  // A ray misses a sphere.
   r = Ray(Point(0, 2, -5), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 0);
   EXPECT_TRUE(xs.empty());
 
-  // A ray intersects a sphere at a tangent
+  // A ray intersects a sphere at a tangent.
   r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].t, -1.0);
   EXPECT_EQ(xs[1].t, 1.0);
 
-  // A sphere is behind a ray
+  // A sphere is behind a ray.
   r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].t, -6.0);
   EXPECT_EQ(xs[1].t, -4.0);
 
-  // Intersect sets the object on the intersection
+  // Intersect sets the object on the intersection.
   r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].object, &s);
   EXPECT_EQ(xs[1].object, &s);
 
-  // Intersecting a scaled sphere with a ray
+  // Intersecting a scaled sphere with a ray.
   r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   s = Sphere().transform(scaling(2, 2, 2));
   xs = intersect(s, r);
@@ -120,7 +120,7 @@ TEST(Shapes, intersections) {
   EXPECT_EQ(xs[0].t, 3);
   EXPECT_EQ(xs[1].t, 7);
 
-  // Intersecting a translated sphere with a ray
+  // Intersecting a translated sphere with a ray.
   r = Ray(Point(0, 0, -5),Vector(0,0,1));
   s = Sphere().transform(translation(5,0,0));
   xs = intersect(s, r);
