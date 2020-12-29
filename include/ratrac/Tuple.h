@@ -207,7 +207,7 @@ inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
 
 using Tuple = RayTracerTuple<RayTracerDataType>;
 
-/** Helper to create a Vectore, i.e. a Tuple with w = 0.0 */
+/** Helper to create a Vector, i.e. a Tuple with w = 0.0 */
 template <class XTy, class YTy, class ZTy>
 inline Tuple Vector(XTy x, YTy y, ZTy z) {
   return Tuple::Vector(x, y, z);
