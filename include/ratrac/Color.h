@@ -19,7 +19,7 @@ template <class ColorTy> class RayTracerColor {
 public:
   /** Initialise the Color/Tuple/Vector4.*/
   RayTracerColor(const float &red, const float &green, const float &blue)
-      : m_color{red, green, blue, 1.0f} {} // Should it be Color(x, y, z, 1.0f)
+      : m_color{red, green, blue, 1.0f} {}
   RayTracerColor(const float &red, const float &green, const float &blue,
                  const float &alpha)
       : m_color{red, green, blue, alpha} {}
@@ -80,6 +80,9 @@ public:
       c /= rhs;
     return *this;
   }
+
+  // Color helpers.
+  static RayTracerColor black() { return RayTracerColor(); }
 
 private:
   /** An array formated as following: RayTracerColor(red, green, blue, alpha).
