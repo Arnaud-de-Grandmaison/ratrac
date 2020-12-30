@@ -28,6 +28,7 @@ TEST(Color, base) {
   // Multiplying a color by a scalar.
   c = Color(0.2, 0.3, 0.4);
   EXPECT_EQ(c * 2.0, Color(0.4, 0.6, 0.8));
+  EXPECT_EQ(2.0 * c, Color(0.4, 0.6, 0.8));
 
   // Multiplying colors.
   c1 = Color(1.0, 0.2, 0.4);
@@ -43,7 +44,6 @@ TEST(Color, helpers) {
   EXPECT_EQ(Color::RED(), Color(1, 0, 0));
   EXPECT_EQ(Color::GREEN(), Color(0, 1, 0));
   EXPECT_EQ(Color::BLUE(), Color(0, 0, 1));
-
 }
 
 int main(int argc, char **argv) {

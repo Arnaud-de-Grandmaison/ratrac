@@ -18,27 +18,24 @@ template <class ColorTy> class RayTracerColor {
 
 public:
   /** Initialise the Color/Tuple/Vector4.*/
-  RayTracerColor(const float &red, const float &green, const float &blue)
+  RayTracerColor(ColorTy red, ColorTy green, ColorTy blue)
       : m_color{red, green, blue, 1.0f} {}
-  RayTracerColor(const float &red, const float &green, const float &blue,
-                 const float &alpha)
+  RayTracerColor(ColorTy red, ColorTy green, ColorTy blue, ColorTy alpha)
       : m_color{red, green, blue, alpha} {}
   RayTracerColor() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
-
-  typedef float ColorType;
 
   // Accessors
   // =========
 
-  ColorType &red() { return m_color[0]; }
-  ColorType &green() { return m_color[1]; }
-  ColorType &blue() { return m_color[2]; }
-  ColorType &alpha() { return m_color[3]; }
+  ColorTy &red() { return m_color[0]; }
+  ColorTy &green() { return m_color[1]; }
+  ColorTy &blue() { return m_color[2]; }
+  ColorTy &alpha() { return m_color[3]; }
 
-  const ColorType &red() const { return m_color[0]; }
-  const ColorType &green() const { return m_color[1]; }
-  const ColorType &blue() const { return m_color[2]; }
-  const ColorType &alpha() const { return m_color[3]; }
+  const ColorTy &red() const { return m_color[0]; }
+  const ColorTy &green() const { return m_color[1]; }
+  const ColorTy &blue() const { return m_color[2]; }
+  const ColorTy &alpha() const { return m_color[3]; }
 
   // Operators
   // =========
@@ -65,7 +62,7 @@ public:
       m_color[i] -= rhs.m_color[i];
     return *this;
   }
-  RayTracerColor &operator*=(const float &rhs) {
+  RayTracerColor &operator*=(RayTracerColorType rhs) {
     for (unsigned i = 0; i < m_color.size() - 1; i++)
       m_color[i] *= rhs;
     return *this;
@@ -75,7 +72,7 @@ public:
       m_color[i] *= rhs.m_color[i];
     return *this;
   }
-  RayTracerColor &operator/=(const float &rhs) {
+  RayTracerColor &operator/=(RayTracerColorType rhs) {
     for (float &c : m_color)
       c /= rhs;
     return *this;
@@ -89,9 +86,8 @@ public:
   static RayTracerColor BLUE() { return RayTracerColor(0, 0, 1); }
 
 private:
-  /** An array formated as following: RayTracerColor(red, green, blue, alpha).
-   * Args type: float. */
-  std::array<ColorType, 4> m_color;
+  // An array formated as following: RayTracerColor(red, green, blue, alpha).
+  std::array<ColorTy, 4> m_color;
 };
 
 // Other/External operators
@@ -116,14 +112,14 @@ inline RayTracerColor<ColorTy> operator-(const RayTracerColor<ColorTy> &lhs,
 /** Scalar multiplication. */
 template <class ColorTy>
 inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
-                                         const float &rhs) {
+                                         RayTracerColorType rhs) {
   RayTracerColor<ColorTy> tmp(lhs);
   tmp *= rhs;
   return tmp;
 }
 /** Scalar multiplication reversed. */
 template <class ColorTy>
-inline RayTracerColor<ColorTy> operator*(const float &lhs,
+inline RayTracerColor<ColorTy> operator*(RayTracerColorType lhs,
                                          const RayTracerColor<ColorTy> &rhs) {
   RayTracerColor<ColorTy> tmp(rhs);
   tmp *= lhs;
@@ -140,7 +136,7 @@ inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
 /** Scalar division. */
 template <class ColorTy>
 inline RayTracerColor<ColorTy> operator/(const RayTracerColor<ColorTy> &lhs,
-                                         const float &rhs) {
+                                         RayTracerColorType rhs) {
   RayTracerColor<ColorTy> tmp(lhs);
   tmp /= rhs;
   return tmp;

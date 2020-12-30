@@ -74,7 +74,7 @@ public:
     /* light_dot_normal represents the cosine of the angle between the
      * light vector and the normal vector. A negative number means the
      * light is on the other side of the surface. */
-    RayTracerDataType light_dot_normal = dot(lightv, normalv);
+    RayTracerColorType light_dot_normal = dot(lightv, normalv);
     Color diffuse = Color::BLACK();
     Color specular = Color::BLACK();
     if (light_dot_normal >= 0.0) {
@@ -88,7 +88,7 @@ public:
       RayTracerDataType reflect_dot_eye = dot(reflectv, eyev);
       if (reflect_dot_eye > 0.0) {
         // Compute the specular contribution
-        RayTracerDataType factor = pow(reflect_dot_eye, m_shininess);
+        RayTracerColorType factor = pow(reflect_dot_eye, m_shininess);
         specular = light.intensity() * m_specular * factor;
       }
     }
