@@ -1,5 +1,6 @@
 #include "ratrac/Matrice.h"
 #include "ratrac/Shapes.h"
+#include "ratrac/Material.h"
 
 #include "gtest/gtest.h"
 
@@ -160,6 +161,19 @@ TEST(Shapes, normal) {
   s = Sphere().transform(scaling(1, 0.5, 1) * rotation_z(M_PI / 5.0));
   n = s.normal_at(Point(0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
+}
+
+TEST(Shapes, material) {
+  // A sphere has a default material.
+  Sphere s;
+  EXPECT_EQ(s.material(), Material());
+
+  // A sphere may be assigned a material.
+  Material m;
+  m.ambient(1);
+  s.material(m);
+  EXPECT_EQ(s.material(), m);
+
 }
 
 int main(int argc, char **argv) {

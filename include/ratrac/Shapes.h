@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ratrac/Material.h"
 #include "ratrac/Ray.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
@@ -11,12 +12,18 @@ namespace ratrac {
 class Sphere {
 public:
   Sphere()
-      : m_transform(Matrice::identity()), m_center(Point(0, 0, 0)),
-        m_radius(1.0) {}
+      : m_transform(Matrice::identity()), m_material(),
+        m_center(Point(0, 0, 0)), m_radius(1.0) {}
 
   const Matrice &transform() const { return m_transform; }
+  const Material &material() const { return m_material; }
   const Tuple &center() const { return m_center; }
   const RayTracerDataType &radius() const { return m_radius; }
+
+  Sphere &material(const Material &m) {
+    m_material = m;
+    return *this;
+  }
 
   Sphere &transform(const Matrice &M) {
     m_transform = M;
@@ -39,6 +46,7 @@ public:
 
 private:
   Matrice m_transform;
+  Material m_material;
   Tuple m_center;
   RayTracerDataType m_radius;
 };
