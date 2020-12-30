@@ -29,7 +29,9 @@ public:
 
   Tuple normal_at(const Tuple &world_point) const {
     Tuple object_point = inverse(m_transform) * world_point;
-    Tuple object_normal = Vector(object_point.x() - m_center.x(), object_point.y() - m_center.y(), object_point.z() - m_center.z());
+    Tuple object_normal =
+        Vector(object_point.x() - m_center.x(), object_point.y() - m_center.y(),
+               object_point.z() - m_center.z());
     Tuple world_normal = transpose(inverse(m_transform)) * object_normal;
     world_normal[3] = 0;
     return world_normal.normalize();

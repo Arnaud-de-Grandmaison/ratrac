@@ -13,7 +13,8 @@ namespace ratrac {
 /** RayTraceTuple represent the Tuples ratrac uses to manipulate point and
  * vectors. */
 template <class DataTy> class RayTracerTuple {
-  static_assert(std::is_floating_point<DataTy>::value, "Tuple DataTy must be a floating point type.");
+  static_assert(std::is_floating_point<DataTy>::value,
+                "Tuple DataTy must be a floating point type.");
 
 public:
   /** Initialise the Tuple/Vector4.*/
