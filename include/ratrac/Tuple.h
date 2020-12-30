@@ -197,6 +197,8 @@ inline DataTy dot(const RayTracerTuple<DataTy> &lhs,
   RayTracerTuple<DataTy> tmp = lhs;
   return tmp.dot(rhs);
 }
+
+/** Dot product. */
 template <class DataTy>
 inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
                                     const RayTracerTuple<DataTy> &rhs) {
