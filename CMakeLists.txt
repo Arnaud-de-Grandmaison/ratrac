@@ -58,6 +58,7 @@ add_library(ratrac STATIC
   ${RATRACLIB_SOURCE_DIR}/Matrice.cpp
   ${RATRACLIB_SOURCE_DIR}/Shapes.cpp
   ${RATRACLIB_SOURCE_DIR}/Tuple.cpp
+  ${RATRACLIB_SOURCE_DIR}/Light.cpp
 )
 target_include_directories(ratrac PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
