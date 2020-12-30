@@ -170,6 +170,22 @@ TEST(RayTracerTuple, operations) {
   EXPECT_EQ(cross(v2, v1), Vector(1.0, -2.0, 1.0));
 }
 
+TEST(RayTracerTuple, reflection) {
+  // Reflecting a vector approaching at 45°.
+  // =======================================
+  Tuple v = Vector(1, -1, 0);
+  Tuple n = Vector(0, 1, 0);
+  Tuple r = v.reflect(n);
+  EXPECT_EQ(r, Vector(1, 1, 0));
+
+  // Reflecting a vector off a slanted surface.
+  // ==========================================
+  v = Vector(0, -1, 0);
+  n = Vector(sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0);
+  r = v.reflect(n);
+  EXPECT_EQ(r, Vector(1, 0, 0));
+}
+
 int main(int argc, char **argv) {
   InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

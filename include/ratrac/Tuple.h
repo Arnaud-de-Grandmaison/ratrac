@@ -113,10 +113,15 @@ public:
     }
     return result;
   }
+
   RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &rhs) const {
     return Vector(m_tuple[1] * rhs.m_tuple[2] - m_tuple[2] * rhs.m_tuple[1],
                   m_tuple[2] * rhs.m_tuple[0] - m_tuple[0] * rhs.m_tuple[2],
                   m_tuple[0] * rhs.m_tuple[1] - m_tuple[1] * rhs.m_tuple[0]);
+  }
+
+  RayTracerTuple reflect(const RayTracerTuple &normal) const {
+    return *this - normal * 2.0 * dot(normal);
   }
 
 private:
@@ -205,6 +210,15 @@ inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
   RayTracerTuple<DataTy> tmp = lhs;
   return tmp.cross(rhs);
 }
+
+/** Reflect a vector. */
+template <class DataTy>
+inline RayTracerTuple<DataTy> reflect(const RayTracerTuple<DataTy> &in,
+                                      const RayTracerTuple<DataTy> &normal) {
+  RayTracerTuple<DataTy> tmp = in;
+  return tmp.reflect(normal);
+}
+
 // Renaming classes for external usage
 
 using Tuple = RayTracerTuple<RayTracerDataType>;
