@@ -5,7 +5,7 @@
 using namespace ratrac;
 using namespace testing;
 
-TEST(Color, colors) {
+TEST(Color, base) {
   // Testing same operations on colors.
   // ==================================
 
@@ -34,10 +34,16 @@ TEST(Color, colors) {
   c2 = Color(0.9, 1.0, 0.1);
   EXPECT_EQ(c1 * c2, Color(0.9, 0.2, 0.04));
 
-  // Color helpers.
-  EXPECT_EQ(Color::black(), Color(0, 0, 0));
-
   // Multiplying colors/Hadamard product/Schur product
+}
+
+TEST(Color, helpers) {
+  EXPECT_EQ(Color::BLACK(), Color(0, 0, 0));
+  EXPECT_EQ(Color::WHITE(), Color(1, 1, 1));
+  EXPECT_EQ(Color::RED(), Color(1, 0, 0));
+  EXPECT_EQ(Color::GREEN(), Color(0, 1, 0));
+  EXPECT_EQ(Color::BLUE(), Color(0, 0, 1));
+
 }
 
 int main(int argc, char **argv) {

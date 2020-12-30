@@ -19,8 +19,8 @@ TEST(Material, base) {
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.shininess(), 200.0));
 
   // Setters.
-  m.color(Color::black());
-  EXPECT_EQ(m.color(), Color::black());
+  m.color(Color::BLACK());
+  EXPECT_EQ(m.color(), Color::BLACK());
   m.ambient(0.5);
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.ambient(), 0.5));
   m.diffuse(0.5);

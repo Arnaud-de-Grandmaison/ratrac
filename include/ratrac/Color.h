@@ -82,7 +82,11 @@ public:
   }
 
   // Color helpers.
-  static RayTracerColor black() { return RayTracerColor(); }
+  static RayTracerColor BLACK() { return RayTracerColor(); }
+  static RayTracerColor WHITE() { return RayTracerColor(1, 1, 1); }
+  static RayTracerColor RED() { return RayTracerColor(1, 0, 0); }
+  static RayTracerColor GREEN() { return RayTracerColor(0, 1, 0); }
+  static RayTracerColor BLUE() { return RayTracerColor(0, 0, 1); }
 
 private:
   /** An array formated as following: RayTracerColor(red, green, blue, alpha).

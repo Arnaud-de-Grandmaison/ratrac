@@ -75,8 +75,8 @@ public:
      * light vector and the normal vector. A negative number means the
      * light is on the other side of the surface. */
     RayTracerDataType light_dot_normal = dot(lightv, normalv);
-    Color diffuse = Color::black();
-    Color specular = Color::black();
+    Color diffuse = Color::BLACK();
+    Color specular = Color::BLACK();
     if (light_dot_normal >= 0.0) {
       // Compute the diffuse contribution.
       diffuse = effective_color * m_diffuse * light_dot_normal;
