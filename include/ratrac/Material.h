@@ -26,9 +26,10 @@ public:
   Material &operator=(const Material &) = default;
 
   bool operator==(const Material &rhs) const {
-    return m_color == rhs.m_color && m_ambient == rhs.m_ambient &&
-           m_diffuse == rhs.m_diffuse && m_specular == rhs.m_specular &&
-           m_shininess == rhs.m_shininess;
+    return m_color == rhs.m_color && close_to_equal(m_ambient, rhs.m_ambient) &&
+           close_to_equal(m_diffuse, rhs.m_diffuse) &&
+           close_to_equal(m_specular, rhs.m_specular) &&
+           close_to_equal(m_shininess, rhs.m_shininess);
   }
 
   // Getters.
