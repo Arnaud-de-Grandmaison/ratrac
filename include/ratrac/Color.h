@@ -24,6 +24,8 @@ public:
       : m_color{red, green, blue, alpha} {}
   RayTracerColor() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
 
+  typedef ColorTy ColorType;
+
   // Accessors
   // =========
 
@@ -90,59 +92,47 @@ private:
   std::array<ColorTy, 4> m_color;
 };
 
+using Color = RayTracerColor<RayTracerColorType>;
+
 // Other/External operators
 // ========================
 
 /** Adding two Colors. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator+(const RayTracerColor<ColorTy> &lhs,
-                                         const RayTracerColor<ColorTy> &rhs) {
-  RayTracerColor<ColorTy> tmp(lhs);
+inline Color operator+(const Color &lhs, const Color &rhs) {
+  Color tmp(lhs);
   tmp += rhs;
   return tmp;
 }
 /** Subtracting two Colors. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator-(const RayTracerColor<ColorTy> &lhs,
-                                         const RayTracerColor<ColorTy> &rhs) {
-  RayTracerColor<ColorTy> tmp(lhs);
+inline Color operator-(const Color &lhs, const Color &rhs) {
+  Color tmp(lhs);
   tmp -= rhs;
   return tmp;
 }
 /** Scalar multiplication. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
-                                         RayTracerColorType rhs) {
-  RayTracerColor<ColorTy> tmp(lhs);
+inline Color operator*(const Color &lhs, Color::ColorType rhs) {
+  Color tmp(lhs);
   tmp *= rhs;
   return tmp;
 }
 /** Scalar multiplication reversed. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator*(RayTracerColorType lhs,
-                                         const RayTracerColor<ColorTy> &rhs) {
-  RayTracerColor<ColorTy> tmp(rhs);
+inline Color operator*(Color::ColorType lhs, const Color &rhs) {
+  Color tmp(rhs);
   tmp *= lhs;
   return tmp;
 }
 /** Colors multiplication. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator*(const RayTracerColor<ColorTy> &lhs,
-                                         const RayTracerColor<ColorTy> &rhs) {
-  RayTracerColor<ColorTy> tmp(rhs);
+inline Color operator*(const Color &lhs, const Color &rhs) {
+  Color tmp(rhs);
   tmp *= lhs;
   return tmp;
 }
 /** Scalar division. */
-template <class ColorTy>
-inline RayTracerColor<ColorTy> operator/(const RayTracerColor<ColorTy> &lhs,
-                                         RayTracerColorType rhs) {
-  RayTracerColor<ColorTy> tmp(lhs);
+inline Color operator/(const Color &lhs, Color::ColorType rhs) {
+  Color tmp(lhs);
   tmp /= rhs;
   return tmp;
 }
-
-using Color = RayTracerColor<RayTracerColorType>;
 
 } // namespace ratrac
 
