@@ -73,8 +73,8 @@ public:
     return *this;
   }
   RayTracerColor &operator/=(RayTracerColorType rhs) {
-    for (float &c : m_color)
-      c /= rhs;
+    for (unsigned i = 0; i < m_color.size() - 1; i++)
+      m_color[i] /= rhs;
     return *this;
   }
 

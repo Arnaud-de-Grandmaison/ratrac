@@ -30,6 +30,10 @@ TEST(Color, base) {
   EXPECT_EQ(c * 2.0, Color(0.4, 0.6, 0.8));
   EXPECT_EQ(2.0 * c, Color(0.4, 0.6, 0.8));
 
+  // Dividing a color by a scalar.
+  c = Color(0.4, 0.6, 0.8);
+  EXPECT_EQ(c / 2.0, Color(0.2, 0.3, 0.4));
+
   // Multiplying colors.
   c1 = Color(1.0, 0.2, 0.4);
   c2 = Color(0.9, 1.0, 0.1);
