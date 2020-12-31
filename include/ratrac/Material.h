@@ -106,6 +106,12 @@ private:
   RayTracerColorType m_shininess;
 };
 
+inline Color lighting(const Material &material, const LightPoint &light,
+                      const Tuple &position, const Tuple &eyev,
+                      const Tuple &normalv) {
+  return material.lighting(light, position, eyev, normalv);
+}
+
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Material &M);
