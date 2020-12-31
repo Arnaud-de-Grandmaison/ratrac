@@ -283,9 +283,8 @@ using Matrice = RayTracerMatrice<RayTracerDataType>;
 // Chapter 4 transformations
 // =========================
 
-inline Matrice translation(const Matrice::DataType &x,
-                           const Matrice::DataType &y,
-                           const Matrice::DataType &z) {
+inline Matrice translation(Matrice::DataType x, Matrice::DataType y,
+                           Matrice::DataType z) {
   Matrice result = Matrice::identity();
   result.set(0, 3, x);
   result.set(1, 3, y);
@@ -294,8 +293,8 @@ inline Matrice translation(const Matrice::DataType &x,
 }
 
 /** Refer at the top of p49 for visual explanations. */
-inline Matrice scaling(const Matrice::DataType &x, const Matrice::DataType &y,
-                       const Matrice::DataType &z) {
+inline Matrice scaling(Matrice::DataType x, Matrice::DataType y,
+                       Matrice::DataType z) {
   Matrice result = Matrice::identity();
   result.set(0, 0, x);
   result.set(1, 1, y);
@@ -304,7 +303,7 @@ inline Matrice scaling(const Matrice::DataType &x, const Matrice::DataType &y,
 }
 
 /** Refer at the top of p50 for visual explanations. */
-inline Matrice rotation_x(const Matrice::DataType &radians) {
+inline Matrice rotation_x(Matrice::DataType radians) {
   Matrice result = Matrice::identity();
   result.set(1, 1, std::cos(radians));
   result.set(1, 2, -std::sin(radians));
@@ -314,7 +313,7 @@ inline Matrice rotation_x(const Matrice::DataType &radians) {
 }
 
 /** Refer at the bottom of p50 for visual explanations. */
-inline Matrice rotation_y(const Matrice::DataType &radians) {
+inline Matrice rotation_y(Matrice::DataType radians) {
   Matrice result = Matrice::identity();
   result.set(0, 0, std::cos(radians));
   result.set(0, 2, std::sin(radians));
@@ -323,7 +322,7 @@ inline Matrice rotation_y(const Matrice::DataType &radians) {
   return result;
 }
 
-inline Matrice rotation_z(const Matrice::DataType &radians) {
+inline Matrice rotation_z(Matrice::DataType radians) {
   Matrice result = Matrice::identity();
   result.set(0, 0, std::cos(radians));
   result.set(0, 1, -std::sin(radians));
@@ -334,10 +333,9 @@ inline Matrice rotation_z(const Matrice::DataType &radians) {
 
 /** Function that moves points proportionnaly to an axis. See image p51 for more
  * information.*/
-inline Matrice
-shearing(const Matrice::DataType &Xy, const Matrice::DataType &Xz,
-         const Matrice::DataType &Yx, const Matrice::DataType &Yz,
-         const Matrice::DataType &Zx, const Matrice::DataType &Zy) {
+inline Matrice shearing(Matrice::DataType Xy, Matrice::DataType Xz,
+                        Matrice::DataType Yx, Matrice::DataType Yz,
+                        Matrice::DataType Zx, Matrice::DataType Zy) {
   Matrice result = Matrice::identity();
   result.set(0, 1, Xy);
   result.set(0, 2, Xz);
