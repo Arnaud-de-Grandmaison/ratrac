@@ -62,52 +62,49 @@ public:
     return std::sqrt(result);
   }
 
-  RayTracerTuple<DataTy> normalize() const { return *this / magnitude(); }
+  RayTracerTuple normalize() const { return *this / magnitude(); }
 
   // Operators
   // =========
 
   // equal/not equal
 
-  bool operator==(const RayTracerTuple<DataTy> &rhs) const {
+  bool operator==(const RayTracerTuple &rhs) const {
     return close_to_equal(x(), rhs.x()) && close_to_equal(y(), rhs.y()) &&
            close_to_equal(z(), rhs.z()) && close_to_equal(w(), rhs.w());
   }
-  bool operator!=(const RayTracerTuple<DataTy> &rhs) const {
-    return !operator==(rhs);
-  }
+  bool operator!=(const RayTracerTuple &rhs) const { return !operator==(rhs); }
 
   // operations
 
-  RayTracerTuple<DataTy> &operator+=(const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple &operator+=(const RayTracerTuple &rhs) {
     for (unsigned i = 0; i < m_tuple.size(); i++)
       m_tuple[i] += rhs.m_tuple[i];
     return *this;
   }
-  RayTracerTuple<DataTy> &operator-=(const RayTracerTuple<DataTy> &rhs) {
+  RayTracerTuple &operator-=(const RayTracerTuple &rhs) {
     for (unsigned i = 0; i < m_tuple.size(); i++)
       m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
-  RayTracerTuple<DataTy> &operator*=(DataTy rhs) {
+  RayTracerTuple &operator*=(DataTy rhs) {
     for (DataTy &c : m_tuple)
       c *= rhs;
     return *this;
   }
-  RayTracerTuple<DataTy> &operator/=(DataTy rhs) {
+  RayTracerTuple &operator/=(DataTy rhs) {
     for (DataTy &c : m_tuple)
       c /= rhs;
     return *this;
   }
 
-  RayTracerTuple<DataTy> operator-() const {
-    return RayTracerTuple<DataTy>(-m_tuple[0], -m_tuple[1], -m_tuple[2],
-                                  -m_tuple[3]);
+  RayTracerTuple operator-() const {
+    return RayTracerTuple(-m_tuple[0], -m_tuple[1], -m_tuple[2], -m_tuple[3]);
   }
 
   // Advanced operations
 
-  DataTy dot(const RayTracerTuple<DataTy> &rhs) const {
+  DataTy dot(const RayTracerTuple &rhs) const {
     DataTy result = 0;
     for (unsigned i = 0; i < m_tuple.size(); i++) {
       result += m_tuple[i] * rhs.m_tuple[i];
@@ -115,7 +112,7 @@ public:
     return result;
   }
 
-  RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &rhs) const {
+  RayTracerTuple cross(const RayTracerTuple &rhs) const {
     return Vector(m_tuple[1] * rhs.m_tuple[2] - m_tuple[2] * rhs.m_tuple[1],
                   m_tuple[2] * rhs.m_tuple[0] - m_tuple[0] * rhs.m_tuple[2],
                   m_tuple[0] * rhs.m_tuple[1] - m_tuple[1] * rhs.m_tuple[0]);
@@ -165,7 +162,7 @@ inline RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
   return tmp;
 }
 template <class DataTy>
-inline RayTracerTuple<DataTy> operator*(DataTy lhs,
+inline RayTracerTuple<DataTy> operator*(RayTracerDataType lhs,
                                         const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = rhs;
   tmp *= lhs;
