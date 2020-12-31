@@ -89,12 +89,12 @@ public:
       m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
-  RayTracerTuple<DataTy> &operator*=(const DataTy &rhs) {
+  RayTracerTuple<DataTy> &operator*=(DataTy rhs) {
     for (DataTy &c : m_tuple)
       c *= rhs;
     return *this;
   }
-  RayTracerTuple<DataTy> &operator/=(const DataTy &rhs) {
+  RayTracerTuple<DataTy> &operator/=(DataTy rhs) {
     for (DataTy &c : m_tuple)
       c /= rhs;
     return *this;
@@ -159,13 +159,13 @@ inline RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
 /** Scalar multiplication. */
 template <class DataTy>
 inline RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
-                                        const DataTy &rhs) {
+                                        DataTy rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
 template <class DataTy>
-inline RayTracerTuple<DataTy> operator*(const DataTy &lhs,
+inline RayTracerTuple<DataTy> operator*(DataTy lhs,
                                         const RayTracerTuple<DataTy> &rhs) {
   RayTracerTuple<DataTy> tmp = rhs;
   tmp *= lhs;
@@ -175,7 +175,7 @@ inline RayTracerTuple<DataTy> operator*(const DataTy &lhs,
 /** Scalar division. */
 template <class DataTy>
 inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
-                                        const DataTy &rhs) {
+                                        DataTy rhs) {
   RayTracerTuple<DataTy> tmp = lhs;
   tmp /= rhs;
   return tmp;
