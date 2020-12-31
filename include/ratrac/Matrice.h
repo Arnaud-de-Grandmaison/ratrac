@@ -12,13 +12,6 @@
 
 namespace ratrac {
 
-// template/constructor/? of functions @compiler
-template <class DataTy> class RayTracerMatrice;
-template <class DataTy>
-DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
-                unsigned column);
-template <class DataTy> DataTy determinant(const RayTracerMatrice<DataTy> &M);
-
 /** A matrice of multiple forms. At the moment all types are supported. */
 template <class DataTy> class RayTracerMatrice {
   static_assert(std::is_floating_point<DataTy>::value,
@@ -82,7 +75,7 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
   // =========
 
   /** Returns m_matrice. */
-  std::vector<std::vector<DataTy>> matrice() const { return m_matrice; }
+  const std::vector<std::vector<DataTy>> &matrice() const { return m_matrice; }
 
   /** Returns the Matrice shape as a tuple<int x, int, y>. */
   std::tuple<int, int> shape() const {
@@ -159,27 +152,26 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
 private:
   // #Help: Should it be an array as a matrice is of fixed size.
   std::vector<std::vector<DataTy>> m_matrice;
-}; // namespace ratrac
+};
+
+using Matrice = RayTracerMatrice<RayTracerDataType>;
 
 // Other operators
 // ===============
 
-template <class DataTy>
-inline RayTracerMatrice<DataTy> operator*(const RayTracerMatrice<DataTy> &lhs,
-                                          const RayTracerMatrice<DataTy> &rhs) {
-  RayTracerMatrice<DataTy> tmp = lhs;
+inline Matrice operator*(const Matrice &lhs, const Matrice &rhs) {
+  Matrice tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
 
-template <class DataTy>
-inline Tuple operator*(const RayTracerMatrice<DataTy> &lhs, const Tuple &rhs) {
+inline Tuple operator*(const Matrice &lhs, const Tuple &rhs) {
   Tuple future_tuple;
   assert(lhs.getNumLines() == lhs.getNumColumns() &&
          lhs.getNumLines() == rhs.size() &&
          "Incompatible number of rows and columns.");
   for (unsigned line = 0; line < lhs.getNumLines(); line++) {
-    DataTy acc = 0.0;
+    Matrice::DataType acc = 0.0;
     for (unsigned column = 0; column < lhs.getNumColumns(); column++)
       acc += lhs.at(line, column) * rhs[column];
     future_tuple[line] = acc;
@@ -190,26 +182,66 @@ inline Tuple operator*(const RayTracerMatrice<DataTy> &lhs, const Tuple &rhs) {
 // Other chapter 3 stuff
 // =====================
 
-template <class DataTy>
-inline RayTracerMatrice<DataTy> transpose(const RayTracerMatrice<DataTy> &M) {
-  std::vector<std::vector<DataTy>> future_matrice;
+Matrice::DataType determinant(const Matrice &M);
+
+/** Returns a submatrix(a matrice# with one row and column less). */
+inline Matrice submatrix(const Matrice &M, unsigned line, unsigned column) {
+  assert(line < M.getNumLines() && "line out of Matrice bounds.");
+  assert(column < M.getNumColumns() && "column out of Matrice bounds.");
+
+  std::vector<std::vector<Matrice::DataType>> table;
+  table.reserve(M.getNumLines() - 1);
+  for (unsigned l = 0; l < M.getNumLines(); l++) {
+    if (l != line) {
+      std::vector<Matrice::DataType> TheLine;
+      TheLine.reserve(M.getNumColumns() - 1);
+      for (unsigned c = 0; c < M.getNumColumns(); c++) {
+        if (c != column)
+          TheLine.push_back(M.at(l, c));
+      }
+      table.push_back(std::move(TheLine));
+    }
+  }
+
+  return Matrice(std::move(table));
+}
+
+/** Returns the determinant of a submatrice; " minor is easier to say than
+ * determinant of a submatrice ".
+ * Note: we would prefer to nme it minor, but this fails with gcc that has a
+ * macro with the same name...
+ * */
+inline Matrice::DataType matrixminor(const Matrice &M, unsigned line,
+                                     unsigned column) {
+  return determinant(submatrix(M, line, column));
+}
+
+/** Returns the cofactor of a 3*3 matrix. */
+inline Matrice::DataType cofactor(const Matrice &M, unsigned line,
+                                  unsigned column) {
+  Matrice::DataType m = matrixminor(M, line, column);
+
+  return ((line + column) % 2) != 0 ? -m : m;
+}
+
+inline Matrice transpose(const Matrice &M) {
+  std::vector<std::vector<Matrice::DataType>> future_matrice;
 
   // Extract column; M_column = future_line
   for (unsigned M_column = 0; M_column < M.getNumColumns(); M_column++) {
-    future_matrice.push_back(std::vector<DataTy>());
+    future_matrice.push_back(std::vector<Matrice::DataType>());
     for (unsigned it_line = 0; it_line < M.getNumLines(); it_line++)
       future_matrice[M_column].push_back(M.matrice()[it_line][M_column]);
   }
-  return RayTracerMatrice<DataTy>(std::move(future_matrice));
+  return Matrice(std::move(future_matrice));
 }
 
 /** Returns the determinant of 2*2, 3*3 or 4*4 matrices. */
-template <class DataTy>
-inline DataTy determinant(const RayTracerMatrice<DataTy> &M) {
+inline Matrice::DataType determinant(const Matrice &M) {
   if (M.shape() == std::tuple<int, int>(2, 2))
     return M.at(0, 0) * M.at(1, 1) - M.at(0, 1) * M.at(1, 0);
 
-  DataTy result = 0.0;
+  Matrice::DataType result = 0.0;
   if (M.shape() == std::tuple<int, int>(4, 4) ||
       M.shape() == std::tuple<int, int>(3, 3)) {
     for (unsigned column = 0; column < M.getNumColumns(); column++)
@@ -220,55 +252,10 @@ inline DataTy determinant(const RayTracerMatrice<DataTy> &M) {
   return result;
 }
 
-/** Returns a submatrix(a matrice# with one row and column less). */
-template <class DataTy>
-inline RayTracerMatrice<DataTy> submatrix(const RayTracerMatrice<DataTy> &M,
-                                          unsigned line, unsigned column) {
-  assert(line < M.getNumLines() && "line out of Matrice bounds.");
-  assert(column < M.getNumColumns() && "column out of Matrice bounds.");
-
-  std::vector<std::vector<DataTy>> table;
-  table.reserve(M.getNumLines() - 1);
-  for (unsigned l = 0; l < M.getNumLines(); l++) {
-    if (l != line) {
-      std::vector<DataTy> TheLine;
-      TheLine.reserve(M.getNumColumns() - 1);
-      for (unsigned c = 0; c < M.getNumColumns(); c++) {
-        if (c != column)
-          TheLine.push_back(M.at(l, c));
-      }
-      table.push_back(std::move(TheLine));
-    }
-  }
-
-  return RayTracerMatrice<DataTy>(std::move(table));
-}
-
-/** Returns the determinant of a submatrice; " minor is easier to say than
- * determinant of a submatrice ".
- * Note: we would prefer to nme it minor, but this fails with gcc that has a
- * macro with the same name...
- * */
-template <class DataTy>
-inline DataTy matrixminor(const RayTracerMatrice<DataTy> &M, unsigned line,
-                          unsigned column) {
-  return determinant(submatrix(M, line, column));
-}
-
-/** Returns the cofactor of a 3*3 matrix. */
-template <class DataTy>
-inline DataTy cofactor(const RayTracerMatrice<DataTy> &M, unsigned line,
-                       unsigned column) {
-  DataTy m = matrixminor(M, line, column);
-
-  return ((line + column) % 2) != 0 ? -m : m;
-}
-
 /* Returns an inversed matrix. */
-template <class DataTy>
-inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
-  RayTracerMatrice<DataTy> M2(M.getNumColumns(), M.getNumLines());
-  DataTy det = determinant(M);
+inline Matrice inverse(const Matrice &M) {
+  Matrice M2(M.getNumColumns(), M.getNumLines());
+  Matrice::DataType det = determinant(M);
   if (det != 0.0) { // Matrice is invertible
     for (unsigned row = 0; row < M.getNumLines(); row++)
       for (unsigned col = 0; col < M.getNumColumns(); col++)
@@ -277,8 +264,6 @@ inline RayTracerMatrice<DataTy> inverse(const RayTracerMatrice<DataTy> &M) {
     assert(0 && "Matrice is not invertible.");
   return M2;
 }
-
-using Matrice = RayTracerMatrice<RayTracerDataType>;
 
 // Chapter 4 transformations
 // =========================
