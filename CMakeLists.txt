@@ -58,6 +58,7 @@ add_library(ratrac STATIC
   ${RATRACLIB_SOURCE_DIR}/Matrice.cpp
   ${RATRACLIB_SOURCE_DIR}/Shapes.cpp
   ${RATRACLIB_SOURCE_DIR}/Tuple.cpp
+  ${RATRACLIB_SOURCE_DIR}/Ray.cpp
   ${RATRACLIB_SOURCE_DIR}/Light.cpp
   ${RATRACLIB_SOURCE_DIR}/Material.cpp
 )

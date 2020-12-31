@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ratrac/Tuple.h"
 #include "ratrac/Matrice.h"
+#include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
-#include <cassert>
+#include <ostream>
 
 namespace ratrac {
 class Ray {
@@ -29,3 +29,5 @@ inline Ray transform(const Ray &ray, const Matrice &mat) {
 }
 
 } // namespace ratrac
+
+std::ostream &operator<<(std::ostream &os, const ratrac::Ray &ray);
