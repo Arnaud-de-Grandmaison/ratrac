@@ -128,16 +128,18 @@ private:
   std::array<DataTy, 4> m_tuple;
 };
 
+// Renaming classes for external usage
+
+using Tuple = RayTracerTuple<RayTracerDataType>;
+
 // Other/External operators
 // ========================
 
 // Adding two Tuples/Points/Vector returns repectively a Tuple, a Point or a
 // Vector.
 /** Adding two Tuples/Vector4.*/
-template <class DataTy>
-inline RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
-                                        const RayTracerTuple<DataTy> &rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple operator+(const Tuple &lhs, const Tuple &rhs) {
+  Tuple tmp = lhs;
   tmp += rhs;
   return tmp;
 }
@@ -145,35 +147,27 @@ inline RayTracerTuple<DataTy> operator+(const RayTracerTuple<DataTy> &lhs,
 /** Substracting two Tuples/Vectors returns respectively a Tuple or a Vector.
  * Subtracting two Points returns a Vector.
  * Subtracting a Vector from a Point returns a Point. */
-template <class DataTy>
-inline RayTracerTuple<DataTy> operator-(const RayTracerTuple<DataTy> &lhs,
-                                        const RayTracerTuple<DataTy> &rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple operator-(const Tuple &lhs, const Tuple &rhs) {
+  Tuple tmp = lhs;
   tmp -= rhs;
   return tmp;
 }
 
 /** Scalar multiplication. */
-template <class DataTy>
-inline RayTracerTuple<DataTy> operator*(const RayTracerTuple<DataTy> &lhs,
-                                        DataTy rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple operator*(const Tuple &lhs, Tuple::DataType rhs) {
+  Tuple tmp = lhs;
   tmp *= rhs;
   return tmp;
 }
-template <class DataTy>
-inline RayTracerTuple<DataTy> operator*(RayTracerDataType lhs,
-                                        const RayTracerTuple<DataTy> &rhs) {
-  RayTracerTuple<DataTy> tmp = rhs;
+inline Tuple operator*(Tuple::DataType lhs, const Tuple &rhs) {
+  Tuple tmp = rhs;
   tmp *= lhs;
   return tmp;
 }
 
 /** Scalar division. */
-template <class DataTy>
-inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
-                                        DataTy rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple operator/(const Tuple &lhs, Tuple::DataType rhs) {
+  Tuple tmp = lhs;
   tmp /= rhs;
   return tmp;
 }
@@ -181,45 +175,30 @@ inline RayTracerTuple<DataTy> operator/(const RayTracerTuple<DataTy> &lhs,
 // Function like operators
 // =======================
 
-template <class DataTy> DataTy magnitude(const RayTracerTuple<DataTy> &T) {
-  return T.magnitude();
-}
+inline Tuple::DataType magnitude(const Tuple &T) { return T.magnitude(); }
 
-template <class DataTy>
-RayTracerTuple<DataTy> normalize(const RayTracerTuple<DataTy> &T) {
-  return T.normalize();
-}
+inline Tuple normalize(const Tuple &T) { return T.normalize(); }
 
 // Advanced operations
 // ===================
 
 /** Dot product. */
-template <class DataTy>
-inline DataTy dot(const RayTracerTuple<DataTy> &lhs,
-                  const RayTracerTuple<DataTy> &rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple::DataType dot(const Tuple &lhs, const Tuple &rhs) {
+  Tuple tmp = lhs;
   return tmp.dot(rhs);
 }
 
 /** Dot product. */
-template <class DataTy>
-inline RayTracerTuple<DataTy> cross(const RayTracerTuple<DataTy> &lhs,
-                                    const RayTracerTuple<DataTy> &rhs) {
-  RayTracerTuple<DataTy> tmp = lhs;
+inline Tuple cross(const Tuple &lhs, const Tuple &rhs) {
+  Tuple tmp = lhs;
   return tmp.cross(rhs);
 }
 
 /** Reflect a vector. */
-template <class DataTy>
-inline RayTracerTuple<DataTy> reflect(const RayTracerTuple<DataTy> &in,
-                                      const RayTracerTuple<DataTy> &normal) {
-  RayTracerTuple<DataTy> tmp = in;
+inline Tuple reflect(const Tuple &in, const Tuple &normal) {
+  Tuple tmp = in;
   return tmp.reflect(normal);
 }
-
-// Renaming classes for external usage
-
-using Tuple = RayTracerTuple<RayTracerDataType>;
 
 /** Helper to create a Vector, i.e. a Tuple with w = 0.0 */
 template <class XTy, class YTy, class ZTy>
