@@ -19,6 +19,13 @@ public:
 
   LightPoint &operator=(const LightPoint &) = default;
 
+  bool operator==(const LightPoint &rhs) const {
+    return m_intensity == rhs.m_intensity && m_position == rhs.m_position;
+  }
+  bool operator!=(const LightPoint &rhs) const {
+    return !(*this == rhs);
+  }
+
   const Color &intensity() const { return m_intensity; }
   const Tuple &position() const { return m_position; }
 
