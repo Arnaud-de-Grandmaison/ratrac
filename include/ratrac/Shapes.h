@@ -20,6 +20,14 @@ public:
   const Tuple &center() const { return m_center; }
   const RayTracerDataType &radius() const { return m_radius; }
 
+  bool operator==(const Sphere &rhs) const {
+    return m_transform == rhs.m_transform && m_material == rhs.m_material &&
+           m_center == rhs.m_center && m_radius == rhs.m_radius;
+  }
+  bool operator!=(const Sphere &rhs) const {
+    return !(*this == rhs);
+  }
+
   Sphere &material(const Material &m) {
     m_material = m;
     return *this;

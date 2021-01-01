@@ -21,6 +21,19 @@ TEST(Shapes, base) {
   Matrice t = translation(2, 3, 4);
   s.transform(t);
   EXPECT_EQ(s.transform(), t);
+
+  // Equality and inequality.
+  s = Sphere();
+  EXPECT_TRUE(s == Sphere());
+  EXPECT_FALSE(s != Sphere());
+  Sphere s2 = Sphere().transform(translation(1, 2, 3));
+  EXPECT_FALSE(s == s2);
+  EXPECT_TRUE(s != s2);
+  s2 = Sphere().material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
+                                  /* diffuse: */ 0.7, /* specular: */ 0.2,
+                                  /* shininess: */ 200.0));
+  EXPECT_FALSE(s == s2);
+  EXPECT_TRUE(s != s2);
 }
 
 TEST(Intersections, intersection) {
