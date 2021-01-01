@@ -1,6 +1,6 @@
+#include "ratrac/Material.h"
 #include "ratrac/Matrice.h"
 #include "ratrac/Shapes.h"
-#include "ratrac/Material.h"
 
 #include "gtest/gtest.h"
 
@@ -122,8 +122,8 @@ TEST(Shapes, intersections) {
   EXPECT_EQ(xs[1].t, 7);
 
   // Intersecting a translated sphere with a ray.
-  r = Ray(Point(0, 0, -5),Vector(0,0,1));
-  s = Sphere().transform(translation(5,0,0));
+  r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  s = Sphere().transform(translation(5, 0, 0));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 0);
   EXPECT_TRUE(xs.empty());
@@ -145,11 +145,11 @@ TEST(Shapes, normal) {
   EXPECT_EQ(n, Vector(0, 0, 1));
 
   // The normal on a sphere at a non axial point.
-  n = s.normal_at(Point(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
-  EXPECT_EQ(n, Vector(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
+  n = s.normal_at(Point(sqrt(3.0) / 3.0, sqrt(3.0) / 3.0, sqrt(3.0) / 3.0));
+  EXPECT_EQ(n, Vector(sqrt(3.0) / 3.0, sqrt(3.0) / 3.0, sqrt(3.0) / 3.0));
 
   // The normal is a normalized vector.
-  n = s.normal_at(Point(sqrt(3.0)/3.0, sqrt(3.0)/3.0, sqrt(3.0)/3.0));
+  n = s.normal_at(Point(sqrt(3.0) / 3.0, sqrt(3.0) / 3.0, sqrt(3.0) / 3.0));
   EXPECT_EQ(n, normalize(n));
 
   // Computing the normal on a translated sphere.
@@ -159,7 +159,7 @@ TEST(Shapes, normal) {
 
   // Computing the normal on a transformed sphere.
   s = Sphere().transform(scaling(1, 0.5, 1) * rotation_z(M_PI / 5.0));
-  n = s.normal_at(Point(0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0));
+  n = s.normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
 }
 
@@ -173,7 +173,6 @@ TEST(Shapes, material) {
   m.ambient(1);
   s.material(m);
   EXPECT_EQ(s.material(), m);
-
 }
 
 int main(int argc, char **argv) {
