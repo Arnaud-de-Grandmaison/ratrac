@@ -1,13 +1,6 @@
-#include "ratrac/Tuple.h"
-
-#include "gtest/gtest.h"
-
 #include <cmath>
 
-using namespace ratrac;
-using namespace testing;
-
-TEST(RayTracerTuple, init) {
+TEST(Tuple, init) {
   // Tuple initialisation.
   Tuple rtt(4.3, -4.2, 3.1, 1.0);
   EXPECT_EQ(rtt.x(), 4.3);
@@ -36,7 +29,7 @@ TEST(RayTracerTuple, init) {
   EXPECT_FALSE(v != Tuple(4.0, -4.0, 3.0, 0.0));
 }
 
-TEST(RayTracerTuple, operations) {
+TEST(Tuple, operations) {
   // Sum.
   // ====
 
@@ -170,7 +163,7 @@ TEST(RayTracerTuple, operations) {
   EXPECT_EQ(cross(v2, v1), Vector(1.0, -2.0, 1.0));
 }
 
-TEST(RayTracerTuple, reflection) {
+TEST(Tuple, reflection) {
   // Reflecting a vector approaching at 45°.
   // =======================================
   Tuple v = Vector(1, -1, 0);
@@ -184,9 +177,4 @@ TEST(RayTracerTuple, reflection) {
   n = Vector(sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0);
   r = v.reflect(n);
   EXPECT_EQ(r, Vector(1, 0, 0));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

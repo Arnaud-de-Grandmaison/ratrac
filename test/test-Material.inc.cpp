@@ -1,12 +1,3 @@
-#include "ratrac/ratrac.h"
-#include "ratrac/Light.h"
-#include "ratrac/Material.h"
-
-#include "gtest/gtest.h"
-
-using namespace ratrac;
-using namespace testing;
-
 TEST(Material, base) {
   // Default material
   Material m;
@@ -79,9 +70,4 @@ TEST(Material, lighting) {
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
   result = lighting(m, light, position, eyev, normalv);
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

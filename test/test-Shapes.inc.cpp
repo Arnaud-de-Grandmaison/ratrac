@@ -1,14 +1,3 @@
-#include "ratrac/Material.h"
-#include "ratrac/Matrice.h"
-#include "ratrac/Shapes.h"
-#include "ratrac/Intersections.h"
-
-#include "gtest/gtest.h"
-
-using namespace std;
-using namespace ratrac;
-using namespace testing;
-
 TEST(Shapes, base) {
 
   // Basic sphere creation.
@@ -189,7 +178,3 @@ TEST(Shapes, material) {
   EXPECT_EQ(s.material(), m);
 }
 
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

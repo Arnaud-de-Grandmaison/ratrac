@@ -1,13 +1,5 @@
 #include <sstream>
 
-#include "ratrac/Canvas.h"
-
-#include "gtest/gtest.h"
-
-using namespace std;
-using namespace ratrac;
-using namespace testing;
-
 TEST(Canvas, canvas) {
   // Testing canvas
   // ==============
@@ -26,7 +18,7 @@ TEST(Canvas, canvas) {
   // =============
 
   // Constructing the PPM header
-  ostringstream sstr;
+  std::ostringstream sstr;
   C = Canvas(5, 3);
   C.to_ppm(sstr);
   EXPECT_EQ(sstr.str(),
@@ -64,9 +56,4 @@ TEST(Canvas, canvas) {
   C.to_ppm(sstr);
   std::string s = sstr.str();
   EXPECT_EQ(s[s.size() - 1], '\n');
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

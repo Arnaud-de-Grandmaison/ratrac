@@ -1,10 +1,3 @@
-#include "ratrac/Color.h"
-
-#include "gtest/gtest.h"
-
-using namespace ratrac;
-using namespace testing;
-
 TEST(Color, base) {
   // Testing same operations on colors.
   // ==================================
@@ -48,9 +41,4 @@ TEST(Color, helpers) {
   EXPECT_EQ(Color::RED(), Color(1, 0, 0));
   EXPECT_EQ(Color::GREEN(), Color(0, 1, 0));
   EXPECT_EQ(Color::BLUE(), Color(0, 0, 1));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

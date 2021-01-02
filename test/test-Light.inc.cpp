@@ -1,10 +1,3 @@
-#include "ratrac/Light.h"
-
-#include "gtest/gtest.h"
-
-using namespace ratrac;
-using namespace testing;
-
 TEST(Light, base) {
   // A point of light has a position and intensity.
   Color intensity(1, 1, 1);
@@ -23,9 +16,4 @@ TEST(Light, base) {
   EXPECT_FALSE(lp != LightPoint(position, intensity));
   EXPECT_TRUE(lp != LightPoint(Point(1, 1, 1), intensity));
   EXPECT_TRUE(lp != LightPoint(position, Color(0.5, 0.5, 0.5)));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

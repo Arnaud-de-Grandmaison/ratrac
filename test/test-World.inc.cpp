@@ -1,13 +1,3 @@
-#include "ratrac/Ray.h"
-#include "ratrac/Shapes.h"
-#include "ratrac/Intersections.h"
-#include "ratrac/World.h"
-
-#include "gtest/gtest.h"
-
-using namespace ratrac;
-using namespace testing;
-
 TEST(World, base) {
   // Creating an (empty) world.
   World w;
@@ -39,9 +29,4 @@ TEST(World, intersection) {
   EXPECT_EQ(xs[1].t, 4.5);
   EXPECT_EQ(xs[2].t, 5.5);
   EXPECT_EQ(xs[3].t, 6);
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

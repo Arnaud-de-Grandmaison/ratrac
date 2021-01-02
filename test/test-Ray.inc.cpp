@@ -1,13 +1,3 @@
-#include "ratrac/Matrice.h"
-#include "ratrac/Ray.h"
-#include "ratrac/Tuple.h"
-
-#include "gtest/gtest.h"
-
-using namespace std;
-using namespace ratrac;
-using namespace testing;
-
 TEST(Ray, base) {
   // Testing Ray
   // ===========
@@ -41,9 +31,4 @@ TEST(Ray, transform) {
   r2 = transform(r, m);
   EXPECT_EQ(r2.origin(), Point(2, 6, 12));
   EXPECT_EQ(r2.direction(), Vector(0, 3, 0));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -1,17 +1,9 @@
-#include "ratrac/Matrice.h"
-#include "ratrac/Tuple.h"
-
-#include "gtest/gtest.h"
-
 #include <cmath>
 #include <sstream>
 #include <tuple>
 #include <vector>
 
-using namespace ratrac;
-using namespace testing;
-
-TEST(RayTracerMatrice, init) {
+TEST(Matrice, init) {
   // init Tests
   // ==========
 
@@ -57,7 +49,7 @@ TEST(RayTracerMatrice, init) {
   EXPECT_EQ(M.getNumLines(), 2);
 }
 
-TEST(RayTracerMatrice, operators) {
+TEST(Matrice, operators) {
   // << operator Test
   Matrice M({{1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
@@ -102,7 +94,7 @@ TEST(RayTracerMatrice, operators) {
   EXPECT_EQ(M * b, Tuple(18., 24., 33., 1.));
 }
 
-TEST(RayTracerMatrice, other_stuff) {
+TEST(Matrice, other_stuff) {
   // Identity matrice tests
 
   Matrice M({{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}});
@@ -210,7 +202,7 @@ TEST(RayTracerMatrice, other_stuff) {
   EXPECT_TRUE((M3 * inverse(M2)).approximatly_equal(M));
 }
 
-TEST(RayTracerMatrice, transformations) {
+TEST(Matrice, transformations) {
   // Translation matrix
   // ==================
 
@@ -352,9 +344,4 @@ TEST(RayTracerMatrice, transformations) {
   C = translation(10, 5, 7);
   Matrice T = C * B * A;
   EXPECT_EQ(T * p, Point(15, 0, 7));
-}
-
-int main(int argc, char **argv) {
-  InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }
