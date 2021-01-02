@@ -1,6 +1,7 @@
 #include "ratrac/Material.h"
 #include "ratrac/Matrice.h"
 #include "ratrac/Shapes.h"
+#include "ratrac/Intersections.h"
 
 #include "gtest/gtest.h"
 

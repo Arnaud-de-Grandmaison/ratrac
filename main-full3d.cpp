@@ -1,5 +1,6 @@
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
+#include "ratrac/Intersections.h"
 #include "ratrac/Matrice.h"
 #include "ratrac/Ray.h"
 #include "ratrac/Shapes.h"
