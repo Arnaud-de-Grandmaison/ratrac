@@ -5,6 +5,7 @@
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
+#include <ostream>
 
 namespace ratrac {
 class Sphere {
@@ -58,3 +59,5 @@ private:
 };
 
 } // namespace ratrac
+
+std::ostream &operator<<(std::ostream &os, const ratrac::Sphere &s);
