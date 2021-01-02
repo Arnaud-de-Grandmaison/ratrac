@@ -2,6 +2,7 @@
 
 #include "ratrac/Shapes.h"
 #include "ratrac/Ray.h"
+#include "ratrac/World.h"
 #include "ratrac/ratrac.h"
 
 #include <algorithm>
@@ -55,10 +56,16 @@ public:
   const_iterator begin() const { return m_xs.begin(); }
   const_iterator end() const { return m_xs.end(); }
 
-  Intersections &add(Intersection &x) {
+  Intersections &add(const Intersection &x) {
     // Keep our list sorted upon insertion of a new Intersection.
     iterator it = std::lower_bound(begin(), end(), x);
     m_xs.insert(it, x);
+    return *this;
+  }
+
+  Intersections &add(const Intersections &xs) {
+    for (const Intersection &i: xs.m_xs)
+      add(i);
     return *this;
   }
 
@@ -85,5 +92,6 @@ private:
 };
 
 Intersections intersect(const Sphere &s, const Ray &r);
+Intersections intersect(const World &w, const Ray &r);
 
 } // namespace ratrac

@@ -25,4 +25,13 @@ Intersections intersect(const Sphere &s, const Ray &r) {
   return Intersections(Intersection(t1, &s), Intersection(t2, &s));
 }
 
+Intersections intersect(const World &w, const Ray &r) {
+  Intersections xs;
+
+  for (const Sphere &o : w.objects())
+    xs.add(intersect(o, r));
+
+  return xs;
+}
+
 } // namespace ratrac

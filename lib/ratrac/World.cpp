@@ -1,6 +1,7 @@
 #include "ratrac/World.h"
 
 #include "ratrac/Color.h"
+#include "ratrac/Intersections.h"
 #include "ratrac/Light.h"
 #include "ratrac/Material.h"
 #include "ratrac/Shapes.h"
@@ -27,4 +28,5 @@ World World::get_default() {
   w.objects().push_back(Sphere().transform(scaling(0.5, 0.5, 0.5)));
   return w;
 }
+
 } // namespace ratrac

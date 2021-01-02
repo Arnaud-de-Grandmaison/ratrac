@@ -1,3 +1,6 @@
+#include "ratrac/Ray.h"
+#include "ratrac/Shapes.h"
+#include "ratrac/Intersections.h"
 #include "ratrac/World.h"
 
 #include "gtest/gtest.h"
@@ -25,6 +28,17 @@ TEST(World, base) {
   Sphere s2 = Sphere().transform(scaling(0.5, 0.5, 0.5));
   EXPECT_EQ(w.objects()[0], s1);
   EXPECT_EQ(w.objects()[1], s2);
+}
+
+TEST(World, intersection) {
+  World w = World::get_default();
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Intersections xs = intersect(w, r);
+  EXPECT_EQ(xs.count(), 4);
+  EXPECT_EQ(xs[0].t, 4);
+  EXPECT_EQ(xs[1].t, 4.5);
+  EXPECT_EQ(xs[2].t, 5.5);
+  EXPECT_EQ(xs[3].t, 6);
 }
 
 int main(int argc, char **argv) {
