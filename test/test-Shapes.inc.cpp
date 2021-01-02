@@ -190,4 +190,3 @@ TEST(Shapes, material) {
   s.material(m);
   EXPECT_EQ(s.material(), m);
 }
-

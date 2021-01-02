@@ -179,7 +179,7 @@ TEST(Tuple, reflection) {
   // Reflecting a vector off a slanted surface.
   // ==========================================
   v = Vector(0, -1, 0);
-  n = Vector(sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0);
+  n = Vector(sqrt(2.0) / 2.0, sqrt(2.0) / 2.0, 0);
   r = v.reflect(n);
   EXPECT_EQ(r, Vector(1, 0, 0));
 }

@@ -266,8 +266,7 @@ TEST(Matrice, transformations) {
   p = Point(0, 0, 1);
   half_quarter = rotation_y(M_PI / 4);
   full_quarter = rotation_y(M_PI / 2);
-  EXPECT_EQ(half_quarter * p,
-            Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+  EXPECT_EQ(half_quarter * p, Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
   EXPECT_EQ(full_quarter * p, Point(1, 0, 0));
   // Z axis
 
@@ -275,8 +274,7 @@ TEST(Matrice, transformations) {
   p = Point(0, 1, 0);
   half_quarter = rotation_z(M_PI / 4);
   full_quarter = rotation_z(M_PI / 2);
-  EXPECT_EQ(half_quarter * p,
-            Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+  EXPECT_EQ(half_quarter * p, Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
   EXPECT_EQ(full_quarter * p, Point(-1, 0, 0));
 
   // Shearing

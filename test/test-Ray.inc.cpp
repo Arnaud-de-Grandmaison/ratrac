@@ -29,7 +29,7 @@ TEST(Ray, output) {
 TEST(Ray, transform) {
   // Translating a ray
   Ray r(Point(1, 2, 3), Vector(0, 1, 0));
-  Matrice m = translation( 3, 4, 5);
+  Matrice m = translation(3, 4, 5);
   Ray r2 = transform(r, m);
   EXPECT_EQ(r2.origin(), Point(4, 6, 8));
   EXPECT_EQ(r2.direction(), Vector(0, 1, 0));

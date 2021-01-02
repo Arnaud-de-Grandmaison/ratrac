@@ -45,7 +45,7 @@ TEST(Material, lighting) {
   EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
 
   // Lighting with the eye between light and surface, eye offset 45°.
-  eyev = Vector(0, sqrt(2.0)/2.0, -sqrt(2.0)/2.0);
+  eyev = Vector(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 0, -10), Color(1, 1, 1));
   result = m.lighting(light, position, eyev, normalv);
@@ -63,7 +63,7 @@ TEST(Material, lighting) {
   EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 
   // Lighting with eye in the path of the reflection vector.
-  eyev = Vector(0, -sqrt(2.0)/2.0, -sqrt(2.0)/2.0);
+  eyev = Vector(0, -sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 10, -10), Color(1, 1, 1));
   result = m.lighting(light, position, eyev, normalv);
