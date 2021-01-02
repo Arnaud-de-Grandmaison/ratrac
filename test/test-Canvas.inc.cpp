@@ -1,5 +1,3 @@
-#include <sstream>
-
 TEST(Canvas, canvas) {
   // Testing canvas
   // ==============

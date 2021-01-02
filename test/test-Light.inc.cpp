@@ -17,3 +17,12 @@ TEST(Light, base) {
   EXPECT_TRUE(lp != LightPoint(Point(1, 1, 1), intensity));
   EXPECT_TRUE(lp != LightPoint(position, Color(0.5, 0.5, 0.5)));
 }
+
+TEST(Light, output) {
+  LightPoint lp(Point(0, 0, 0), Color(1, 1, 1));
+  std::ostringstream string_stream;
+  string_stream << lp;
+  EXPECT_EQ(string_stream.str(),
+            "LightPoint { intensity: Color { red:1, green:1, blue:1, alpha:1}, "
+            "position: Tuple { 0, 0, 0, 1}}");
+}

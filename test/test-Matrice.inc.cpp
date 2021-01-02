@@ -1,8 +1,3 @@
-#include <cmath>
-#include <sstream>
-#include <tuple>
-#include <vector>
-
 TEST(Matrice, init) {
   // init Tests
   // ==========
@@ -49,7 +44,7 @@ TEST(Matrice, init) {
   EXPECT_EQ(M.getNumLines(), 2);
 }
 
-TEST(Matrice, operators) {
+TEST(Matrice, output) {
   // << operator Test
   Matrice M({{1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
@@ -62,8 +57,10 @@ TEST(Matrice, operators) {
                                  "\t{    1.0,    1.0,    1.0,    1.0},\n"
                                  "\t{    1.0,    1.0,    1.0,    1.0},\n"
                                  "\t{    1.0,    1.0,    1.0,    1.0}}\n");
+}
 
-  // Equity test
+TEST(Matrice, operators) {
+  // Equality test
 
   Matrice M1({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
   Matrice M2({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
@@ -89,7 +86,7 @@ TEST(Matrice, operators) {
 
   // Multiply a Matrice by a Tuple
 
-  M = {{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}};
+  Matrice M = {{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}};
   Tuple b(1., 2., 3., 1.);
   EXPECT_EQ(M * b, Tuple(18., 24., 33., 1.));
 }

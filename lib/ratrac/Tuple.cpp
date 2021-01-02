@@ -2,6 +2,6 @@
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Tuple &T) {
   os << "Tuple { " << T.x() << ", " << T.y() << ", " << T.z() << ", " << T.w()
-     << "};\n";
+     << "}";
   return os;
 }

@@ -1,5 +1,3 @@
-#include <cmath>
-
 TEST(Tuple, init) {
   // Tuple initialisation.
   Tuple rtt(4.3, -4.2, 3.1, 1.0);
@@ -27,6 +25,13 @@ TEST(Tuple, init) {
   Tuple v = Vector(4, -4, 3);
   EXPECT_TRUE(v == Tuple(4.0, -4.0, 3.0, 0.0));
   EXPECT_FALSE(v != Tuple(4.0, -4.0, 3.0, 0.0));
+}
+
+TEST(Tuple, output) {
+  Tuple t(4.3, -4.2, 3.1, 1.0);
+  std::ostringstream string_stream;
+  string_stream << t;
+  EXPECT_EQ(string_stream.str(), "Tuple { 4.3, -4.2, 3.1, 1}");
 }
 
 TEST(Tuple, operations) {

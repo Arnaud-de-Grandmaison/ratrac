@@ -35,6 +35,20 @@ TEST(Color, base) {
   // Multiplying colors/Hadamard product/Schur product
 }
 
+TEST(Color, output) {
+  Color c1(0.9, 0.6, 0.75);
+  std::ostringstream string_stream;
+  string_stream << c1;
+  EXPECT_EQ(string_stream.str(),
+            "Color { red:0.9, green:0.6, blue:0.75, alpha:1}");
+
+  string_stream.str("");
+  Color c2(0.7, 0.1, 0.25, 0.5);
+  string_stream << c2;
+  EXPECT_EQ(string_stream.str(),
+            "Color { red:0.7, green:0.1, blue:0.25, alpha:0.5}");
+}
+
 TEST(Color, helpers) {
   EXPECT_EQ(Color::BLACK(), Color(0, 0, 0));
   EXPECT_EQ(Color::WHITE(), Color(1, 1, 1));

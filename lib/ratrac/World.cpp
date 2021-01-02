@@ -7,12 +7,28 @@
 #include "ratrac/Shapes.h"
 #include "ratrac/Tuple.h"
 
+#include <string>
+
 std::ostream &operator<<(std::ostream &os, const ratrac::World &world) {
-  os << "World {\n";
-  os << "  lights: [\n";
-  os << "  ],\n";
-  os << "  objects: [\n";
-  os << "  ]\n";
+  os << "World {";
+  os << "  lights: [";
+
+  std::string sep = "";
+  for (const auto &l : world.lights()) {
+    os << sep << l;
+    sep = ", ";
+  }
+
+  os << "  ],";
+  os << "  objects: [";
+
+  sep = "";
+  for (const auto &o : world.objects()) {
+    os << sep << o;
+    sep = ", ";
+  }
+
+  os << "  ]";
   os << "}";
   return os;
 }

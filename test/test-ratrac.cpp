@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 
-using namespace testing;
-
 #include "ratrac/ratrac.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
@@ -14,7 +12,13 @@ using namespace testing;
 #include "ratrac/Tuple.h"
 #include "ratrac/World.h"
 
+#include <cmath>
+#include <sstream>
+#include <tuple>
+#include <vector>
+
 using namespace ratrac;
+using namespace testing;
 
 #include "test-Canvas.inc.cpp"
 #include "test-Color.inc.cpp"

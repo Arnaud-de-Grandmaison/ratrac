@@ -17,6 +17,15 @@ TEST(Ray, base) {
   EXPECT_EQ(position(ray, 2.5), Point(4.5, 3, 4));
 }
 
+TEST(Ray, output) {
+  Ray ray(Point(1, 2, 3), Vector(4, 5, 6));
+  std::ostringstream string_stream;
+  string_stream << ray;
+  EXPECT_EQ(
+      string_stream.str(),
+      "Ray { origin: Tuple { 1, 2, 3, 1}, direction: Tuple { 4, 5, 6, 0}}");
+}
+
 TEST(Ray, transform) {
   // Translating a ray
   Ray r(Point(1, 2, 3), Vector(0, 1, 0));
