@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ratrac/Shapes.h"
 #include "ratrac/Ray.h"
+#include "ratrac/Shapes.h"
+#include "ratrac/Tuple.h"
 #include "ratrac/World.h"
 #include "ratrac/ratrac.h"
 
@@ -93,5 +94,21 @@ private:
 
 Intersections intersect(const Sphere &s, const Ray &r);
 Intersections intersect(const World &w, const Ray &r);
+
+struct Computations {
+  Computations() : t(), object(nullptr), point(), eyev(), normalv() {}
+  Computations(const Computations &) = default;
+
+  Computations(const Intersection &x, const Ray &ray)
+      : t(x.t), object(x.object), point(position(ray, x.t)),
+        eyev(-ray.direction()), normalv(object->normal_at(point)) {}
+  Computations &operator=(const Computations &) = default;
+
+  RayTracerDataType t;
+  const Sphere *object;
+  Tuple point;
+  Tuple eyev;
+  Tuple normalv;
+};
 
 } // namespace ratrac

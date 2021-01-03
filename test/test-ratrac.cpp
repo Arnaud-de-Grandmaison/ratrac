@@ -22,6 +22,7 @@ using namespace testing;
 
 #include "test-Canvas.inc.cpp"
 #include "test-Color.inc.cpp"
+#include "test-Intersections.inc.cpp"
 #include "test-Light.inc.cpp"
 #include "test-Material.inc.cpp"
 #include "test-Matrice.inc.cpp"
