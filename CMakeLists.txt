@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 3.16)
 project(ratrac)
 
+option(RATRAC_USES_ASAN "Use address sanitizer" OFF)
+
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
     set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
@@ -28,6 +30,9 @@ endif()
 if(UNIX)
   # -pthread is needed for the testing framework.
   set(CMAKE_C_FLAGS "-Wall -pthread")
+  if(RATRAC_USES_ASAN)
+    append("-fsanitize=address" CMAKE_C_FLAGS)
+  endif(RATRAC_USES_ASAN)
   set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_C_FLAGS}")
   set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG")
   set(CMAKE_C_FLAGS_DEBUG "-O1 -g -DDEBUG")
