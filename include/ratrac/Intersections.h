@@ -65,7 +65,7 @@ public:
   }
 
   Intersections &add(const Intersections &xs) {
-    for (const Intersection &i: xs.m_xs)
+    for (const Intersection &i : xs.m_xs)
       add(i);
     return *this;
   }
@@ -96,12 +96,20 @@ Intersections intersect(const Sphere &s, const Ray &r);
 Intersections intersect(const World &w, const Ray &r);
 
 struct Computations {
-  Computations() : t(), object(nullptr), point(), eyev(), normalv() {}
+  Computations()
+      : t(), object(nullptr), point(), eyev(), normalv(), inside(false) {}
   Computations(const Computations &) = default;
 
   Computations(const Intersection &x, const Ray &ray)
       : t(x.t), object(x.object), point(position(ray, x.t)),
-        eyev(-ray.direction()), normalv(object->normal_at(point)) {}
+        eyev(-ray.direction()), normalv(object->normal_at(point)),
+        inside(false) {
+    if (dot(normalv, eyev) < 0.0) {
+      inside = true;
+      normalv = -normalv;
+    }
+  }
+
   Computations &operator=(const Computations &) = default;
 
   RayTracerDataType t;
@@ -109,6 +117,10 @@ struct Computations {
   Tuple point;
   Tuple eyev;
   Tuple normalv;
+  bool inside;
 };
+
+Color shade_hit(const World &world, const Computations &comps);
+Color color_at(const World &world, const Ray &ray);
 
 } // namespace ratrac

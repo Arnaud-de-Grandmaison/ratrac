@@ -14,18 +14,24 @@ public:
       : m_transform(Matrice::identity()), m_material(),
         m_center(Point(0, 0, 0)), m_radius(1.0) {}
 
+  Sphere(const Sphere &) = default;
+  Sphere(Sphere &&) = default;
+
+  Sphere &operator=(const Sphere &) = default;
+  Sphere &operator=(Sphere &&) = default;
+
   const Matrice &transform() const { return m_transform; }
   const Material &material() const { return m_material; }
   const Tuple &center() const { return m_center; }
   const RayTracerDataType &radius() const { return m_radius; }
 
+  Material &material() { return m_material; }
+
   bool operator==(const Sphere &rhs) const {
     return m_transform == rhs.m_transform && m_material == rhs.m_material &&
            m_center == rhs.m_center && m_radius == rhs.m_radius;
   }
-  bool operator!=(const Sphere &rhs) const {
-    return !(*this == rhs);
-  }
+  bool operator!=(const Sphere &rhs) const { return !(*this == rhs); }
 
   Sphere &material(const Material &m) {
     m_material = m;

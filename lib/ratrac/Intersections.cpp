@@ -1,7 +1,4 @@
-#include "ratrac/Shapes.h"
-
 #include "ratrac/Intersections.h"
-#include "ratrac/Ray.h"
 #include "ratrac/ratrac.h"
 
 #include <cmath>
@@ -34,4 +31,22 @@ Intersections intersect(const World &w, const Ray &r) {
   return xs;
 }
 
+Color shade_hit(const World &world, const Computations &comps) {
+  Color col;
+  for (const auto &light : world.lights()) {
+    col += lighting(comps.object->material(), light, comps.point, comps.eyev,
+                    comps.normalv);
+  }
+  return col;
+}
+
+Color color_at(const World &world, const Ray &ray) {
+  Intersections xs = intersect(world, ray);
+  if (xs.empty())
+    return Color::BLACK();
+
+  Computations comps(*xs.hit(), ray);
+
+  return shade_hit(world, comps);
+}
 } // namespace ratrac

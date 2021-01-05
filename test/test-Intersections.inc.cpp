@@ -55,4 +55,21 @@ TEST(Intersections, computations) {
   EXPECT_EQ(c.point , Point(0, 0, -1));
   EXPECT_EQ(c.eyev , Vector(0, 0, -1));
   EXPECT_EQ(c.normalv , Vector(0, 0, -1));
+
+  // The hit, when an intersection occurs on the outside.
+  s = Sphere();
+  r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  i = Intersection(4, s);
+  c = Computations(i, r);
+  EXPECT_FALSE(c.inside);
+
+  // The hit, when an intersection occurs on the inside.
+  s = Sphere();
+  r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
+  i = Intersection(1, s);
+  c = Computations(i, r);
+  EXPECT_EQ(c.point , Point(0, 0, 1));
+  EXPECT_EQ(c.eyev , Vector(0, 0, -1));
+  EXPECT_EQ(c.normalv , Vector(0, 0, -1));
+  EXPECT_TRUE(c.inside);
 }
