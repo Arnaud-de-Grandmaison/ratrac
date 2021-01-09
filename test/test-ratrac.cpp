@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "ratrac/ratrac.h"
+#include "ratrac/Camera.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
 #include "ratrac/Intersections.h"
@@ -20,6 +21,7 @@
 using namespace ratrac;
 using namespace testing;
 
+#include "test-Camera.inc.cpp"
 #include "test-Canvas.inc.cpp"
 #include "test-Color.inc.cpp"
 #include "test-Intersections.inc.cpp"
