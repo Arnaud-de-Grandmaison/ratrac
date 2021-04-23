@@ -93,4 +93,39 @@ TEST(World, shading) {
   r = Ray(Point(0, 0, 0.75), Vector(0, 0, -1));
   c = color_at(w, r);
   EXPECT_EQ(c, inner->material().color());
+
+  // shade_hit() is given an intersection in shadow.
+  w = World();
+  w.lights().push_back(LightPoint(Point(0, 0, -10), Color::WHITE()));
+  Sphere s1 = Sphere();
+  Sphere s2 = Sphere().transform(Matrice::translation(0, 0, 10));
+  w.objects().push_back(s1);
+  w.objects().push_back(s2);
+  r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
+  i = Intersection(4, s2);
+  comps = Computations(i, r);
+  c = shade_hit(w, comps);
+  EXPECT_EQ(c, Color(0.1, 0.1, 0.1));
+}
+
+TEST(World, shadow) {
+  // There is no shadow when nothing is collinear with point and light.
+  World world = World::get_default();
+  Tuple point = Tuple::Point(0, 10, 0);
+  EXPECT_FALSE(is_shadowed(world, point, 0));
+
+  // There is a shadow when there is an object between the point and light.
+  world = World::get_default();
+  point = Tuple::Point(10, -10, 10);
+  EXPECT_TRUE(is_shadowed(world, point, 0));
+
+  // There is no shadow when an object is behind the light.
+  world = World::get_default();
+  point = Tuple::Point(-20, 20, -20);
+  EXPECT_FALSE(is_shadowed(world, point, 0));
+
+  // There is no shadow when an object is behind the point.
+  world = World::get_default();
+  point = Tuple::Point(-2, 2, -2);
+  EXPECT_FALSE(is_shadowed(world, point, 0));
 }

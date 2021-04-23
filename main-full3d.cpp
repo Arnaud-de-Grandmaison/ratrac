@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         Tuple point = position(r, xs.hit()->t);
         Tuple normal = xs.hit()->object->normal_at(point);
         Tuple eye = -r.direction();
-        Color color = xs.hit()->object->material().lighting(light, point, eye, normal);
+        Color color = xs.hit()->object->material().lighting(light, point, eye, normal, false);
         C.at(x, y) = color;
       }
     }

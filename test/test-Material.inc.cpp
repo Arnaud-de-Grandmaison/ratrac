@@ -34,49 +34,60 @@ TEST(Material, output) {
 TEST(Material, lighting) {
   Tuple position = Point(0, 0, 0);
   Material m;
+  bool in_shadow = false;
 
   // Lighting with the eye between the light and the surface.
   Tuple eyev = Vector(0, 0, -1);
   Tuple normalv = Vector(0, 0, -1);
   LightPoint light(Point(0, 0, -10), Color(1, 1, 1));
-  Color result = m.lighting(light, position, eyev, normalv);
+  Color result = m.lighting(light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
-  result = lighting(m, light, position, eyev, normalv);
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.9, 1.9, 1.9));
 
   // Lighting with the eye between light and surface, eye offset 45°.
   eyev = Vector(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 0, -10), Color(1, 1, 1));
-  result = m.lighting(light, position, eyev, normalv);
+  result = m.lighting(light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.0, 1.0, 1.0));
-  result = lighting(m, light, position, eyev, normalv);
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.0, 1.0, 1.0));
 
   // Lighting with eye opposite surface, light offset 45°.
   eyev = Vector(0, 0, -1);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 10, -10), Color(1, 1, 1));
-  result = m.lighting(light, position, eyev, normalv);
+  result = m.lighting(light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
-  result = lighting(m, light, position, eyev, normalv);
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(0.7364, 0.7364, 0.7364));
 
   // Lighting with eye in the path of the reflection vector.
   eyev = Vector(0, -sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 10, -10), Color(1, 1, 1));
-  result = m.lighting(light, position, eyev, normalv);
+  result = m.lighting(light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.6364, 1.6364, 1.6364));
-  result = lighting(m, light, position, eyev, normalv);
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(1.6364, 1.6364, 1.6364));
 
   // Lighting with the light behind the surface.
   eyev = Vector(0, 0, -1);
   normalv = Vector(0, 0, -1);
   light = LightPoint(Point(0, 0, 10), Color(1, 1, 1));
-  result = m.lighting(light, position, eyev, normalv);
+  result = m.lighting(light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
-  result = lighting(m, light, position, eyev, normalv);
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
+  EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
+
+  // Lighting with the surface in shadow.
+  in_shadow = true;
+  eyev = Vector(0, 0, -1);
+  normalv = Vector(0, 0, -1);
+  light = LightPoint(Point(0, 0, -10), Color(1, 1, 1));
+  result = m.lighting(light, position, eyev, normalv, in_shadow);
+  EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
+  result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
 }

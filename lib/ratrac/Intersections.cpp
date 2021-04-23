@@ -33,9 +33,10 @@ Intersections intersect(const World &w, const Ray &r) {
 
 Color shade_hit(const World &world, const Computations &comps) {
   Color col;
-  for (const auto &light : world.lights()) {
-    col += lighting(comps.object->material(), light, comps.point, comps.eyev,
-                    comps.normalv);
+  for (unsigned i = 0; i < world.lights().size(); i++) {
+    bool in_shadow = is_shadowed(world, comps.over_point, i);
+    col += lighting(comps.object->material(), *world.light(i), comps.over_point,
+                    comps.eyev, comps.normalv, in_shadow);
   }
   return col;
 }
@@ -48,5 +49,20 @@ Color color_at(const World &world, const Ray &ray) {
   Computations comps(*xs.hit(), ray);
 
   return shade_hit(world, comps);
+}
+
+bool is_shadowed(const World &world, const Tuple &point, unsigned i) {
+  Tuple v = world.light(i)->position() - point;
+  Tuple::DataType distance = magnitude(v);
+  Tuple direction = normalize(v);
+
+  Ray r = Ray(point, direction);
+  Intersections intersections = intersect(world, r);
+
+  Intersections::const_iterator h = intersections.hit();
+  if (h != intersections.end() && h->t < distance)
+    return true;
+
+  return false;
 }
 } // namespace ratrac

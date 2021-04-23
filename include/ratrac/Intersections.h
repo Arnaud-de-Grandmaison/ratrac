@@ -97,17 +97,19 @@ Intersections intersect(const World &w, const Ray &r);
 
 struct Computations {
   Computations()
-      : t(), object(nullptr), point(), eyev(), normalv(), inside(false) {}
+      : t(), object(nullptr), point(), over_point(), eyev(), normalv(),
+        inside(false) {}
   Computations(const Computations &) = default;
 
   Computations(const Intersection &x, const Ray &ray)
-      : t(x.t), object(x.object), point(position(ray, x.t)),
+      : t(x.t), object(x.object), point(position(ray, x.t)), over_point(),
         eyev(-ray.direction()), normalv(object->normal_at(point)),
         inside(false) {
     if (dot(normalv, eyev) < 0.0) {
       inside = true;
       normalv = -normalv;
     }
+    over_point = point + normalv * EPSILON<Tuple::DataType>();
   }
 
   Computations &operator=(const Computations &) = default;
@@ -115,6 +117,7 @@ struct Computations {
   RayTracerDataType t;
   const Sphere *object;
   Tuple point;
+  Tuple over_point;
   Tuple eyev;
   Tuple normalv;
   bool inside;
@@ -122,5 +125,8 @@ struct Computations {
 
 Color shade_hit(const World &world, const Computations &comps);
 Color color_at(const World &world, const Ray &ray);
+
+// Is point in shadow of light source i ?
+bool is_shadowed(const World &world, const Tuple &point, unsigned i);
 
 } // namespace ratrac

@@ -17,9 +17,12 @@ template <class DataTy> inline unsigned cap(DataTy c, unsigned MaxValue) {
   return v;
 }
 
+template <class DataTy> inline DataTy EPSILON() {
+  return DataTy(0.00001);
+}
+
 template <class DataTy> inline bool close_to_equal(DataTy a, DataTy b) {
-  const DataTy EPSILON = 0.00001;
-  return std::fabs(a - b) < EPSILON;
+  return std::fabs(a - b) < EPSILON<DataTy>();
 }
 
 } // namespace ratrac

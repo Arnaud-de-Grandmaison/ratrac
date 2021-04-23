@@ -62,7 +62,7 @@ public:
   }
 
   Color lighting(const LightPoint &light, const Tuple &position,
-                 const Tuple &eyev, const Tuple &normalv) const {
+                 const Tuple &eyev, const Tuple &normalv, bool shadow) const {
     // Combine the surface color with the light's color/intensity.
     Color effective_color = m_color * light.intensity();
 
@@ -78,7 +78,7 @@ public:
     RayTracerColorType light_dot_normal = dot(lightv, normalv);
     Color diffuse = Color::BLACK();
     Color specular = Color::BLACK();
-    if (light_dot_normal >= 0.0) {
+    if (!shadow && light_dot_normal >= 0.0) {
       // Compute the diffuse contribution.
       diffuse = effective_color * m_diffuse * light_dot_normal;
 
@@ -108,8 +108,8 @@ private:
 
 inline Color lighting(const Material &material, const LightPoint &light,
                       const Tuple &position, const Tuple &eyev,
-                      const Tuple &normalv) {
-  return material.lighting(light, position, eyev, normalv);
+                      const Tuple &normalv, bool shadow) {
+  return material.lighting(light, position, eyev, normalv, shadow);
 }
 
 } // namespace ratrac
