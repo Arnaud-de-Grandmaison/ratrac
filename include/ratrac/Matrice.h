@@ -192,6 +192,36 @@ static Matrice shearing(DataType Xy, DataType Xz,
     return ((line + column) % 2) != 0 ? -m : m;
   }
 
+  /** Transpose this matrix in place. */
+  Matrice &transpose() {
+    std::vector<std::vector<Matrice::DataType>> future_matrice;
+
+    // Extract column; M_column = future_line
+    for (unsigned M_column = 0; M_column < getNumColumns(); M_column++) {
+      future_matrice.push_back(std::vector<Matrice::DataType>());
+      for (unsigned it_line = 0; it_line < getNumLines(); it_line++)
+        future_matrice[M_column].push_back(matrice()[it_line][M_column]);
+    }
+
+    m_matrice = std::move(future_matrice);
+    return *this;
+  }
+
+  /** Invert this Matrix in place. */
+  Matrice &inverse() {
+    Matrice M2(getNumColumns(), getNumLines());
+    Matrice::DataType det = determinant();
+    if (det != 0.0) { // Matrice is invertible
+      for (unsigned row = 0; row < getNumLines(); row++)
+        for (unsigned col = 0; col < getNumColumns(); col++)
+          M2.set(col, row, cofactor(row, col) / det);
+    } else
+      assert(0 && "Matrice is not invertible.");
+
+    *this = std::move(M2);
+    return *this;
+  }
+
   // Accessors
   // =========
 
@@ -331,28 +361,14 @@ inline bool is_invertible(const Matrice &M) {
 }
 
 inline Matrice transpose(const Matrice &M) {
-  std::vector<std::vector<Matrice::DataType>> future_matrice;
-
-  // Extract column; M_column = future_line
-  for (unsigned M_column = 0; M_column < M.getNumColumns(); M_column++) {
-    future_matrice.push_back(std::vector<Matrice::DataType>());
-    for (unsigned it_line = 0; it_line < M.getNumLines(); it_line++)
-      future_matrice[M_column].push_back(M.matrice()[it_line][M_column]);
-  }
-  return Matrice(std::move(future_matrice));
+  Matrice tmp = M;
+  return tmp.transpose();
 }
 
 /* Returns an inversed matrix. */
 inline Matrice inverse(const Matrice &M) {
-  Matrice M2(M.getNumColumns(), M.getNumLines());
-  Matrice::DataType det = determinant(M);
-  if (det != 0.0) { // Matrice is invertible
-    for (unsigned row = 0; row < M.getNumLines(); row++)
-      for (unsigned col = 0; col < M.getNumColumns(); col++)
-        M2.set(col, row, cofactor(M, row, col) / det);
-  } else
-    assert(0 && "Matrice is not invertible.");
-  return M2;
+    Matrice tmp = M;
+  return tmp.inverse();
 }
 
 } // namespace ratrac

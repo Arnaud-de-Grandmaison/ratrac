@@ -102,8 +102,12 @@ TEST(Matrice, other_stuff) {
   M = {{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}};
   EXPECT_EQ(transpose(M),
             Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
+  M.transpose();
+  EXPECT_EQ(M,
+            Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
 
   EXPECT_EQ(transpose(Matrice::identity()), Matrice::identity());
+  EXPECT_EQ(Matrice::identity().transpose(), Matrice::identity());
 
   // Inverting Matrices
   // ==================
@@ -212,9 +216,21 @@ TEST(Matrice, other_stuff) {
                {0.35897, 0.35897, 0.43590, 0.92308},
                {-0.69231, -0.69231, -0.76923, -1.92308}})));
 
+  EXPECT_TRUE(M.inverse().approximatly_equal(
+      Matrice({{-0.15385, -0.15385, -0.28205, -0.53846},
+               {-0.07692, 0.12308, 0.02564, 0.03077},
+               {0.35897, 0.35897, 0.43590, 0.92308},
+               {-0.69231, -0.69231, -0.76923, -1.92308}})));
+
   // Calculating the invert of a third matrix
   M = {{9, 3, 0, 9}, {-5, -2, -6, -3}, {-4, 9, 6, 4}, {-7, 6, 6, 2}};
   EXPECT_TRUE(inverse(M).approximatly_equal(
+      Matrice({{-0.04074, -0.07778, 0.14444, -0.22222},
+               {-0.07778, 0.03333, 0.36667, -0.33333},
+               {-0.02901, -0.14630, -0.10926, 0.12963},
+               {0.17778, 0.06667, -0.26667, 0.33333}})));
+
+  EXPECT_TRUE(M.inverse().approximatly_equal(
       Matrice({{-0.04074, -0.07778, 0.14444, -0.22222},
                {-0.07778, 0.03333, 0.36667, -0.33333},
                {-0.02901, -0.14630, -0.10926, 0.12963},
@@ -225,6 +241,7 @@ TEST(Matrice, other_stuff) {
   M2 = {{8, 2, 2, 2}, {3, -1, 7, 0}, {7, 0, 5, 4}, {6, -2, 0, 5}};
   Matrice M3 = M * M2;
   EXPECT_TRUE((M3 * inverse(M2)).approximatly_equal(M));
+  EXPECT_TRUE((M3 * M2.inverse()).approximatly_equal(M));
 }
 
 TEST(Matrice, transformations) {
