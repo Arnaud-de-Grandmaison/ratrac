@@ -15,7 +15,7 @@ TEST(World, base) {
       Sphere().material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
                                  /* diffuse: */ 0.7, /* specular: */ 0.2,
                                  /* shininess: */ 200.0));
-  Sphere s2 = Sphere().transform(scaling(0.5, 0.5, 0.5));
+  Sphere s2 = Sphere().transform(Matrice::scaling(0.5, 0.5, 0.5));
   EXPECT_EQ(w.objects()[0], s1);
   EXPECT_EQ(w.objects()[1], s2);
 }

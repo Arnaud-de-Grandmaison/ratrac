@@ -13,14 +13,14 @@ TEST(Camera, view_transform) {
   to = Point(0, 0, 1);
   up = Vector(0, 1, 0);
   t = view_transform(from, to, up);
-  EXPECT_EQ(t, scaling(-1, 1, -1));
+  EXPECT_EQ(t, Matrice::scaling(-1, 1, -1));
 
   // The view transformation moves the world.
   from = Point(0, 0, 8);
   to = Point(0, 0, 0);
   up = Vector(0, 1, 0);
   t = view_transform(from, to, up);
-  EXPECT_EQ(t, translation(0, 0, -8));
+  EXPECT_EQ(t, Matrice::translation(0, 0, -8));
 
   // An arbitrary view transformation.
   from = Point(1, 3, 2);
@@ -69,7 +69,7 @@ TEST(Camera, ray_construct) {
 
   // Constructing a ray when the camera is transformed
   c = Camera(201, 101, M_PI / 2.0);
-  c.transform(rotation_y(M_PI / 4.0) * translation(0, -2, 5));
+  c.transform(Matrice::rotation_y(M_PI / 4.0) * Matrice::translation(0, -2, 5));
   r = c.ray_for_pixel(100, 50);
   EXPECT_EQ(r.origin(), Point(0, 2, -5));
   EXPECT_EQ(r.direction(), Vector(sqrt(2.0) / 2.0, 0, -sqrt(2.0) / 2.0));

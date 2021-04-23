@@ -65,7 +65,7 @@ Matrice view_transform(const Tuple &from, const Tuple &to, const Tuple &up) {
                              {true_up.x(), true_up.y(), true_up.z(), 0.},
                              {-forward.x(), -forward.y(), -forward.z(), 0.},
                              {0., 0., 0., 1.}});
-  return orientation * translation(-from.x(), -from.y(), -from.z());
+  return orientation * Matrice::translation(-from.x(), -from.y(), -from.z());
 }
 
 } // namespace ratrac

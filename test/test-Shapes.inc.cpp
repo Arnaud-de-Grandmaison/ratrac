@@ -8,7 +8,7 @@ TEST(Shapes, base) {
 
   // Change a sphere's transformation.
   s = Sphere();
-  Matrice t = translation(2, 3, 4);
+  Matrice t = Matrice::translation(2, 3, 4);
   s.transform(t);
   EXPECT_EQ(s.transform(), t);
 
@@ -16,7 +16,7 @@ TEST(Shapes, base) {
   s = Sphere();
   EXPECT_TRUE(s == Sphere());
   EXPECT_FALSE(s != Sphere());
-  Sphere s2 = Sphere().transform(translation(1, 2, 3));
+  Sphere s2 = Sphere().transform(Matrice::translation(1, 2, 3));
   EXPECT_FALSE(s == s2);
   EXPECT_TRUE(s != s2);
   s2 = Sphere().material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
@@ -84,7 +84,7 @@ TEST(Shapes, intersections) {
 
   // Intersecting a scaled sphere with a ray.
   r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  s = Sphere().transform(scaling(2, 2, 2));
+  s = Sphere().transform(Matrice::scaling(2, 2, 2));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].t, 3);
@@ -92,7 +92,7 @@ TEST(Shapes, intersections) {
 
   // Intersecting a translated sphere with a ray.
   r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  s = Sphere().transform(translation(5, 0, 0));
+  s = Sphere().transform(Matrice::translation(5, 0, 0));
   xs = intersect(s, r);
   EXPECT_EQ(xs.count(), 0);
   EXPECT_TRUE(xs.empty());
@@ -122,12 +122,12 @@ TEST(Shapes, normal) {
   EXPECT_EQ(n, normalize(n));
 
   // Computing the normal on a translated sphere.
-  s = Sphere().transform(translation(0, 1, 0));
+  s = Sphere().transform(Matrice::translation(0, 1, 0));
   n = s.normal_at(Point(0, 1.70711, -0.70711));
   EXPECT_EQ(n, Vector(0, 0.70711, -0.70711));
 
   // Computing the normal on a transformed sphere.
-  s = Sphere().transform(scaling(1, 0.5, 1) * rotation_z(M_PI / 5.0));
+  s = Sphere().transform(Matrice::scaling(1, 0.5, 1) * Matrice::rotation_z(M_PI / 5.0));
   n = s.normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
 }
