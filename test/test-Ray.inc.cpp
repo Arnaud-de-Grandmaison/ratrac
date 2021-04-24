@@ -2,10 +2,18 @@ TEST(Ray, base) {
   // Testing Ray
   // ===========
 
+  // Create a default Ray.
+  Ray r;
+
   // Creating and querying a Ray
   Tuple origin = Point(1, 2, 3);
   Tuple direction = Vector(4, 5, 6);
   Ray ray(origin, direction);
+  EXPECT_EQ(ray.origin(), origin);
+  EXPECT_EQ(ray.direction(), direction);
+
+  // Assign a Ray.
+  r = ray;
   EXPECT_EQ(ray.origin(), origin);
   EXPECT_EQ(ray.direction(), direction);
 

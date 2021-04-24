@@ -9,8 +9,11 @@
 namespace ratrac {
 class Ray {
 public:
+  Ray() : m_origin(), m_direction() {}
   Ray(const Tuple &origin, const Tuple &direction)
       : m_origin(origin), m_direction(direction) {}
+  Ray(const Ray &other)
+      : m_origin(other.m_origin), m_direction(other.m_direction) {}
 
   const Tuple &origin() const { return m_origin; }
   const Tuple &direction() const { return m_direction; }
