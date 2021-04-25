@@ -6,6 +6,7 @@
 #include "ratrac/Tuple.h"
 
 #include <fstream>
+#include <memory>
 
 using namespace ratrac;
 using namespace std;
@@ -22,14 +23,14 @@ int main(int argc, char *argv[]) {
 
   Color red(1, 0, 0);
 
-  Sphere s;
+  unique_ptr<Sphere> s(new Sphere());
 
   for (unsigned y = 0; y < C.height(); y++) {
     Matrice::DataType world_y = half - pixel_size * y;
     for (unsigned x = 0; x < C.width(); x++) {
       Matrice::DataType world_x = half - pixel_size * x;
       Ray r = Ray(ray_origin, normalize(Point(world_x, world_y, wall_z)));
-      Intersections xs = intersect(s, r);
+      Intersections xs = s->intersect(r);
       if (xs.hit() != xs.end())
         C.at(x, y) = red;
     }

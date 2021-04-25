@@ -9,6 +9,7 @@
 #include "ratrac/Tuple.h"
 
 #include <fstream>
+#include <memory>
 
 using namespace ratrac;
 using namespace std;
@@ -26,8 +27,8 @@ int main(int argc, char *argv[]) {
   Material m;
   m.color(Color(1, 0.2, 1));
 
-  Sphere s;
-  s.material(m);
+  unique_ptr<Sphere> s(new Sphere());
+  s->material(m);
 
   LightPoint light(Point(-10, 10, -10), Color(1, 1, 1));
 
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
     for (unsigned x = 0; x < C.width(); x++) {
       Matrice::DataType world_x = half - pixel_size * x;
       Ray r = Ray(ray_origin, normalize(Point(world_x, world_y, wall_z)));
-      Intersections xs = intersect(s, r);
+      Intersections xs = s->intersect(r);
       if (xs.hit() != xs.end()) {
         Tuple point = position(r, xs.hit()->t);
         Tuple normal = xs.hit()->object->normal_at(point);

@@ -16,38 +16,39 @@ TEST(Intersections, intersection) {
 
 TEST(Intersections, hit) {
   // The hit, when all intersections have positive t.
-  Sphere s;
-  Intersection i1(1, s);
-  Intersection i2(2, s);
+  std::unique_ptr<Sphere> s(new Sphere());
+  Intersection i1(1, *s.get());
+  Intersection i2(2, *s.get());
   Intersections xs(i1, i2);
   EXPECT_EQ(*xs.hit(), i1);
 
   // The hit, when some intersections have negative t.
-  i1 = Intersection(-1, s);
-  i2 = Intersection(1, s);
+  i1 = Intersection(-1, *s.get());
+  i2 = Intersection(1, *s.get());
   EXPECT_EQ(*Intersections(i1, i2).hit(), i2);
   EXPECT_EQ(*Intersections(i2, i1).hit(), i2);
 
   // The hit, when all intersections have negative t.
-  i1 = Intersection(-2, s);
-  i2 = Intersection(-1, s);
+  i1 = Intersection(-2, *s.get());
+  i2 = Intersection(-1, *s.get());
   xs = Intersections(i1, i2);
   EXPECT_EQ(xs.hit(), xs.end());
   xs = Intersections(i2, i1);
   EXPECT_EQ(xs.hit(), xs.end());
 
   // The hit is always the lowest non negative intersection.
-  i1 = Intersection(5, s);
-  i2 = Intersection(7, s);
-  Intersection i3(-3, s);
-  Intersection i4(2, s);
+  i1 = Intersection(5, *s.get());
+  i2 = Intersection(7, *s.get());
+  Intersection i3(-3, *s.get());
+  Intersection i4(2, *s.get());
   xs = Intersections(i1, i2).add(i3).add(i4);
   EXPECT_EQ(*xs.hit(), i4);
 
   // The hit sould offset the point.
   Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  s = Sphere().transform(Matrice::translation(0, 0, 1));
-  Intersection i = Intersection(5, s);
+  s.reset(new Sphere());
+  s->transform(Matrice::translation(0, 0, 1));
+  Intersection i = Intersection(5, *s.get());
   Computations comps(i, r);
   EXPECT_LT(comps.over_point.z(), -EPSILON<Tuple::DataType>()/2);
   EXPECT_GT(comps.point.z(), comps.over_point.z());
@@ -55,8 +56,8 @@ TEST(Intersections, hit) {
 
 TEST(Intersections, computations) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-  Sphere s;
-  Intersection i(4, s);
+  std::unique_ptr<Sphere> s(new Sphere());
+  Intersection i(4, *s.get());
   Computations c(i, r);
   EXPECT_EQ(c.t , i.t);
   EXPECT_EQ(c.object , i.object);
@@ -65,16 +66,16 @@ TEST(Intersections, computations) {
   EXPECT_EQ(c.normalv , Vector(0, 0, -1));
 
   // The hit, when an intersection occurs on the outside.
-  s = Sphere();
+  s.reset(new Sphere());
   r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  i = Intersection(4, s);
+  i = Intersection(4, *s.get());
   c = Computations(i, r);
   EXPECT_FALSE(c.inside);
 
   // The hit, when an intersection occurs on the inside.
-  s = Sphere();
+  s.reset(new Sphere());
   r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  i = Intersection(1, s);
+  i = Intersection(1, *s.get());
   c = Computations(i, r);
   EXPECT_EQ(c.point , Point(0, 0, 1));
   EXPECT_EQ(c.eyev , Vector(0, 0, -1));

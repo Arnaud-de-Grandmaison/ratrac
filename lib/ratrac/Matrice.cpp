@@ -2,14 +2,15 @@
 
 #include <iomanip>
 
-#define FIXED_FLOAT(x) std::fixed << std::setprecision(1) << (x)
-
 std::ostream &operator<<(std::ostream &os, const ratrac::Matrice &M) {
+  std::ios_base::fmtflags f(os.flags());
+  os << std::fixed << std::setprecision(1); // Use fixed precision.
+
   os << "Matrice { ";
   for (unsigned x = 0; x < M.getNumLines(); x++) {
     for (unsigned y = 0; y < M.getNumColumns(); y++) {
       os << std::setw(6) << std::setfill(' ');
-      os << FIXED_FLOAT(M.at(x, y));
+      os << M.at(x, y);
       if (y != M.getNumColumns() - 1)
         os << ", ";
     }
@@ -17,5 +18,8 @@ std::ostream &operator<<(std::ostream &os, const ratrac::Matrice &M) {
       os << "},\n\t{ ";
   }
   os << "}}\n";
+
+  os.flags(f); // Restore flags.
+
   return os;
 }

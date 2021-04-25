@@ -11,13 +11,14 @@ TEST(World, base) {
   EXPECT_EQ(w.lights()[0], LightPoint(Point(-10, 10, -10), Color::WHITE()));
 
   EXPECT_EQ(w.objects().size(), 2);
-  Sphere s1 =
-      Sphere().material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
-                                 /* diffuse: */ 0.7, /* specular: */ 0.2,
-                                 /* shininess: */ 200.0));
-  Sphere s2 = Sphere().transform(Matrice::scaling(0.5, 0.5, 0.5));
-  EXPECT_EQ(w.objects()[0], s1);
-  EXPECT_EQ(w.objects()[1], s2);
+  Sphere *s1 = new Sphere();
+  s1->material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
+                        /* diffuse: */ 0.7, /* specular: */ 0.2,
+                        /* shininess: */ 200.0));
+  Sphere *s2 = new Sphere();
+  s2->transform(Matrice::scaling(0.5, 0.5, 0.5));
+  EXPECT_EQ(*w.objects()[0], *s1);
+  EXPECT_EQ(*w.objects()[1], *s2);
 }
 
 TEST(World, output) {
@@ -28,23 +29,24 @@ TEST(World, output) {
       string_stream.str(),
       "World {  lights: [LightPoint { intensity: Color { red:1, green:1, "
       "blue:1, alpha:1}, position: Tuple { -10, 10, -10, 1}}  ],  objects: "
-      "[Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: Matrice {  "
+      "[Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: "
+      "Matrice {  "
       "  1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    "
       "0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
       "0.0,    1.0}}\n, material: Material { color: Color { red:0.8, "
-      "green:1.0, blue:0.6, alpha:1.0}, ambient: 0.1, diffuse: 0.7, specular: "
-      "0.2, shininess: 200.0}}, Sphere { center: Tuple { 0.0, 0.0, 0.0, 1.0}, "
-      "radius: 1.0, transform: Matrice {    0.5,    0.0,    0.0,    0.0},\n\t{ "
+      "green:1, blue:0.6, alpha:1}, ambient: 0.1, diffuse: 0.7, specular: "
+      "0.2, shininess: 200.0}}, Sphere { center: Tuple { 0, 0, 0, 1}, "
+      "radius: 1, transform: Matrice {    0.5,    0.0,    0.0,    0.0},\n\t{ "
       "   0.0,    0.5,    0.0,    0.0},\n\t{    0.0,    0.0,    0.5,    "
       "0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n, material: Material { "
-      "color: Color { red:1.0, green:1.0, blue:1.0, alpha:1.0}, ambient: 0.1, "
+      "color: Color { red:1, green:1, blue:1, alpha:1}, ambient: 0.1, "
       "diffuse: 0.9, specular: 0.9, shininess: 200.0}}  ]}");
 }
 
 TEST(World, intersection) {
   World w = World::get_default();
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-  Intersections xs = intersect(w, r);
+  Intersections xs = w.intersect(r);
   EXPECT_EQ(xs.count(), 4);
   EXPECT_EQ(xs[0].t, 4);
   EXPECT_EQ(xs[1].t, 4.5);
@@ -56,7 +58,7 @@ TEST(World, shading) {
   // Shading an intersection.
   World w = World::get_default();
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-  Sphere *s = w.object(0);
+  Sphere *s = dynamic_cast<Sphere *>(w.object(0));
   Intersection i(4, s);
   Computations comps(i, r);
   Color c = shade_hit(w, comps);
@@ -66,7 +68,7 @@ TEST(World, shading) {
   w = World::get_default();
   *w.light(0) = LightPoint(Point(0, 0.25, 0), Color::WHITE());
   r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
-  s = w.object(1);
+  s = dynamic_cast<Sphere *>(w.object(1));
   i = Intersection(0.5, s);
   comps = Computations(i, r);
   c = shade_hit(w, comps);
@@ -86,9 +88,9 @@ TEST(World, shading) {
 
   // The color with an intersection behind the ray.
   w = World::get_default();
-  Sphere *outer = w.object(0);
+  Sphere *outer = dynamic_cast<Sphere *>(w.object(0));
   outer->material().ambient(1);
-  Sphere *inner = w.object(1);
+  Sphere *inner = dynamic_cast<Sphere *>(w.object(1));
   inner->material().ambient(1);
   r = Ray(Point(0, 0, 0.75), Vector(0, 0, -1));
   c = color_at(w, r);
@@ -97,10 +99,11 @@ TEST(World, shading) {
   // shade_hit() is given an intersection in shadow.
   w = World();
   w.lights().push_back(LightPoint(Point(0, 0, -10), Color::WHITE()));
-  Sphere s1 = Sphere();
-  Sphere s2 = Sphere().transform(Matrice::translation(0, 0, 10));
-  w.objects().push_back(s1);
-  w.objects().push_back(s2);
+  Sphere *s1 = new Sphere();
+  Sphere *s2 = new Sphere();
+  s2->transform(Matrice::translation(0, 0, 10));
+  w.objects().push_back(std::unique_ptr<Shape>(s1));
+  w.objects().push_back(std::unique_ptr<Shape>(s2));
   r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   i = Intersection(4, s2);
   comps = Computations(i, r);

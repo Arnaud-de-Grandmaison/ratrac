@@ -1,22 +1,25 @@
 #pragma once
 
-#include "ratrac/Ray.h"
-#include "ratrac/Shapes.h"
+#include "ratrac/Color.h"
 #include "ratrac/Tuple.h"
-#include "ratrac/World.h"
 #include "ratrac/ratrac.h"
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 namespace ratrac {
 
+class Ray;
+class Shape;
+class World;
+
 struct Intersection {
   Intersection() : t(RayTracerDataType()), object(nullptr) {}
   Intersection(const Intersection &) = default;
-  Intersection(RayTracerDataType t, const Sphere *object)
+  Intersection(RayTracerDataType t, const Shape *object)
       : t(t), object(object) {}
-  Intersection(RayTracerDataType t, const Sphere &object)
+  Intersection(RayTracerDataType t, const Shape &object)
       : t(t), object(&object) {}
 
   Intersection &operator=(const Intersection &) = default;
@@ -31,7 +34,7 @@ struct Intersection {
   }
 
   RayTracerDataType t;
-  const Sphere *object;
+  const Shape *object;
 };
 
 class Intersections {
@@ -92,30 +95,18 @@ private:
   std::vector<Intersection> m_xs;
 };
 
-Intersections intersect(const Sphere &s, const Ray &r);
-Intersections intersect(const World &w, const Ray &r);
-
 struct Computations {
   Computations()
       : t(), object(nullptr), point(), over_point(), eyev(), normalv(),
         inside(false) {}
   Computations(const Computations &) = default;
 
-  Computations(const Intersection &x, const Ray &ray)
-      : t(x.t), object(x.object), point(position(ray, x.t)), over_point(),
-        eyev(-ray.direction()), normalv(object->normal_at(point)),
-        inside(false) {
-    if (dot(normalv, eyev) < 0.0) {
-      inside = true;
-      normalv = -normalv;
-    }
-    over_point = point + normalv * EPSILON<Tuple::DataType>();
-  }
+  Computations(const Intersection &x, const Ray &ray);
 
   Computations &operator=(const Computations &) = default;
 
-  RayTracerDataType t;
-  const Sphere *object;
+  Tuple::DataType t;
+  const Shape *object;
   Tuple point;
   Tuple over_point;
   Tuple eyev;
