@@ -45,6 +45,12 @@ public:
     return m_objects[i].get();
   }
 
+  // Add Shape s to our World, taking ownership of the pointer.
+  World &append(Shape *s) {
+    m_objects.push_back(std::unique_ptr<Shape>(s));
+    return *this;
+  }
+
   Intersections intersect(const Ray &r) const;
 
   // Get a default World, with a light and some objects.

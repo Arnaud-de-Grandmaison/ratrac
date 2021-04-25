@@ -102,8 +102,8 @@ TEST(World, shading) {
   Sphere *s1 = new Sphere();
   Sphere *s2 = new Sphere();
   s2->transform(Matrice::translation(0, 0, 10));
-  w.objects().push_back(std::unique_ptr<Shape>(s1));
-  w.objects().push_back(std::unique_ptr<Shape>(s2));
+  w.append(s1);
+  w.append(s2);
   r = Ray(Point(0, 0, 5), Vector(0, 0, 1));
   i = Intersection(4, s2);
   comps = Computations(i, r);
