@@ -90,6 +90,19 @@ TEST(Shapes, sphere) {
   EXPECT_TRUE(*s != *s2);
 }
 
+TEST(Shapes, plane) {
+  // Basic plane creation.
+  std::unique_ptr<Plane> p(new Plane());
+
+  EXPECT_EQ(p->transform(), Matrice::identity());
+  EXPECT_EQ(p->material(), Material());
+
+  // Equality and inequality.
+  std::unique_ptr<Plane> p2(new Plane());
+  EXPECT_TRUE(*p == *p2);
+  EXPECT_FALSE(*p != *p2);
+}
+
 TEST(Shapes, output) {
   Sphere s;
   std::ostringstream string_stream;
@@ -178,6 +191,38 @@ TEST(Shapes, intersections) {
   xs = s->intersect(r);
   EXPECT_EQ(xs.count(), 0);
   EXPECT_TRUE(xs.empty());
+
+  // Intersecting with a ray parallel to the plane.
+  std::unique_ptr<Plane> p(new Plane());
+  r = Ray(Point(0, 10, 0), Vector(0, 0, 1));
+  xs = p->local_intersect(r);
+  EXPECT_EQ(xs.count(), 0);
+  EXPECT_TRUE(xs.empty());
+
+  // Intersecting with a coplanar ray.
+  p.reset(new Plane());
+  r = Ray(Point(0, 0, 0), Vector(0, 0, 1));
+  xs = p->local_intersect(r);
+  EXPECT_EQ(xs.count(), 0);
+  EXPECT_TRUE(xs.empty());
+
+  // A ray intersecting a plane from above.
+  p.reset(new Plane());
+  r = Ray(Point(0, 1, 0), Vector(0, -1, 0));
+  xs = p->local_intersect(r);
+  EXPECT_EQ(xs.count(), 1);
+  EXPECT_FALSE(xs.empty());
+  EXPECT_EQ(xs[0].t, 1);
+  EXPECT_EQ(xs[0].object, p.get());
+
+  // A ray intersecting a plane from below.
+  p.reset(new Plane());
+  r = Ray(Point(0, -1, 0), Vector(0, 1, 0));
+  xs = p->local_intersect(r);
+  EXPECT_EQ(xs.count(), 1);
+  EXPECT_FALSE(xs.empty());
+  EXPECT_EQ(xs[0].t, 1);
+  EXPECT_EQ(xs[0].object, p.get());
 }
 
 TEST(Shapes, normal) {
@@ -226,4 +271,14 @@ TEST(Shapes, normal) {
   s->transform(Matrice::scaling(1, 0.5, 1) * Matrice::rotation_z(M_PI / 5.0));
   n = s->normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
+
+  std::unique_ptr<Plane> p(new Plane());
+
+  // The normal of  plane is constant everywhere.
+  Tuple n1 = p->local_normal_at(Point(0, 0, 0));
+  Tuple n2 = p->local_normal_at(Point(10, 0, -10));
+  Tuple n3 = p->local_normal_at(Point(-5, 0, 150));
+  EXPECT_EQ(n1, Vector(0, 1, 0));
+  EXPECT_EQ(n2, Vector(0, 1, 0));
+  EXPECT_EQ(n3, Vector(0, 1, 0));
 }

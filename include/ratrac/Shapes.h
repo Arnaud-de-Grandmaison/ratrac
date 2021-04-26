@@ -40,7 +40,7 @@ public:
   }
 
  Intersections intersect(const Ray &world_ray) const {
-   Ray local_ray = ratrac::transform(world_ray, inverse(transform()));
+   Ray local_ray = ratrac::transform(world_ray, inverse(m_transform));
   return local_intersect(local_ray);
  }
 
@@ -98,6 +98,31 @@ public:
 private:
   Tuple m_center;
   RayTracerDataType m_radius;
+};
+
+// An XZ plane.
+class Plane: public Shape {
+public:
+  Plane() : Shape() {}
+
+  Plane(const Plane &) = default;
+  Plane(Plane &&) = default;
+
+  Plane &operator=(const Plane &) = default;
+  Plane &operator=(Plane &&) = default;
+
+  bool operator==(const Plane &rhs) const {
+    return true;
+  }
+  bool operator!=(const Plane &rhs) const { return false; }
+
+  virtual Intersections local_intersect(const Ray &r) const override;
+
+  virtual Tuple local_normal_at(const Tuple &local_point) const override {
+    return Vector(0, 1, 0);
+  }
+
+  virtual explicit operator std::string() const override;
 };
 
 } // namespace ratrac

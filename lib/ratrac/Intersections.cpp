@@ -35,8 +35,11 @@ Color color_at(const World &world, const Ray &ray) {
   if (xs.empty())
     return Color::BLACK();
 
-  Computations comps(*xs.hit(), ray);
+  Intersections::const_iterator i = xs.hit();
+  if (i == xs.end())
+    return Color::BLACK();
 
+  Computations comps(*i, ray);
   return shade_hit(world, comps);
 }
 

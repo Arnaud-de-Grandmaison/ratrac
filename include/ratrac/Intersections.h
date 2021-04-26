@@ -62,14 +62,18 @@ public:
 
   Intersections &add(const Intersection &x) {
     // Keep our list sorted upon insertion of a new Intersection.
-    iterator it = std::lower_bound(begin(), end(), x);
-    m_xs.insert(it, x);
+    if (m_xs.empty())
+      m_xs.push_back(x);
+    else {
+      const_iterator it = std::lower_bound(m_xs.begin(), m_xs.end(), x);
+      m_xs.insert(it, x);
+    }
     return *this;
   }
 
   Intersections &add(const Intersections &xs) {
-    for (const Intersection &i : xs.m_xs)
-      add(i);
+    for (const Intersection &x : xs)
+      add(x);
     return *this;
   }
 

@@ -367,7 +367,7 @@ inline Matrice transpose(const Matrice &M) {
 
 /* Returns an inversed matrix. */
 inline Matrice inverse(const Matrice &M) {
-    Matrice tmp = M;
+  Matrice tmp = M;
   return tmp.inverse();
 }
 

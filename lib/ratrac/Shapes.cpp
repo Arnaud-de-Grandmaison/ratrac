@@ -1,7 +1,9 @@
 #include "ratrac/Shapes.h"
+#include "ratrac/Intersections.h"
+#include "ratrac/ratrac.h"
 
+//#include <iomanip>
 #include <sstream>
-#include <iomanip>
 
 namespace ratrac {
 Shape::~Shape() {}
@@ -26,6 +28,24 @@ Sphere::operator std::string() const {
   os << " center: " << center();
   os << ", radius: " << radius();
   os << ", transform: " << transform();
+  os << ", material: " << material();
+  os << "}";
+  return os.str();
+}
+
+Intersections Plane::local_intersect(const Ray &r) const {
+  // If the ray is parallel to the plane, then there is no intersection.
+  if (std::fabs(r.direction().y()) < EPSILON<Tuple::DataType>())
+    return Intersections();
+
+  Tuple::DataType t = -r.origin().y() / r.direction().y();
+  return Intersections(Intersection(t, this));
+}
+
+Plane::operator std::string() const {
+  std::ostringstream os;
+  os << "Plane {";
+  os << " transform: " << transform();
   os << ", material: " << material();
   os << "}";
   return os.str();
