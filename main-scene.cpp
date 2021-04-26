@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
   Material m;
   m.color(Color(1, 0.9, 0.9));
   m.specular(0);
-  floor->material() = m;
+  floor->material(m);
   world.append(floor);
 
   // The left Wall.
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   left_wall->transform(
       Matrice::translation(0, 0, 5) * Matrice::rotation_y(-M_PI / 4.) *
       Matrice::rotation_x(M_PI / 2.) * Matrice::scaling(10, 0.01, 10));
-  left_wall->material() = floor->material();
+  left_wall->material(floor->material());
   world.append(left_wall);
 
   // The right Wall.
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   right_wall->transform(
       Matrice::translation(0, 0, 5) * Matrice::rotation_y(M_PI / 4.) *
       Matrice::rotation_x(M_PI / 2.) * Matrice::scaling(10, 0.01, 10));
-  right_wall->material() = floor->material();
+  right_wall->material(floor->material());
   world.append(right_wall);
 
   // The middle sphere.
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
   m2.color(Color(0.1, 1, 0.5));
   m2.diffuse(0.7);
   m2.specular(0.3);
-  middle->material() = m2;
+  middle->material(m2);
   world.append(middle);
 
   // The right sphere.
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   m3.color(Color(0.5, 1, 0.1));
   m3.diffuse(0.7);
   m3.specular(0.3);
-  right->material() = m3;
+  right->material(m3);
   world.append(right);
 
   // The left sphere.
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
   m4.color(Color(1, 0.8, 0.1));
   m4.diffuse(0.7);
   m4.specular(0.3);
-  left->material() = m4;
+  left->material(m4);
   world.append(left);
 
   // The light source is white, shining from above and to the left:
