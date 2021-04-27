@@ -39,36 +39,32 @@ public:
     return *this;
   }
 
- Intersections intersect(const Ray &world_ray) const {
-   Ray local_ray = ratrac::transform(world_ray, inverse(m_transform));
-  return local_intersect(local_ray);
- }
+  Intersections intersect(const Ray &world_ray) const {
+    Ray local_ray = ratrac::transform(world_ray, inverse(m_transform));
+    return local_intersect(local_ray);
+  }
 
- Tuple normal_at(const Tuple &world_point) const {
+  Tuple normal_at(const Tuple &world_point) const {
     Tuple local_point = inverse(m_transform) * world_point;
     Tuple local_normal = local_normal_at(local_point);
     Tuple world_normal = transpose(inverse(m_transform)) * local_normal;
     world_normal[3] = 0;
     return world_normal.normalize();
-    }
+  }
 
   virtual Intersections local_intersect(const Ray &ray) const = 0;
   virtual Tuple local_normal_at(const Tuple &point) const = 0;
 
-  virtual explicit operator std::string() const {
-    return std::string();
-  }
+  virtual explicit operator std::string() const { return std::string(); }
 
 private:
   Matrice m_transform;
   Material m_material;
 };
 
-class Sphere: public Shape {
+class Sphere : public Shape {
 public:
-  Sphere()
-      : Shape(),
-        m_center(Point(0, 0, 0)), m_radius(1.0) {}
+  Sphere() : Shape(), m_center(Point(0, 0, 0)), m_radius(1.0) {}
 
   Sphere(const Sphere &) = default;
   Sphere(Sphere &&) = default;
@@ -101,7 +97,7 @@ private:
 };
 
 // An XZ plane.
-class Plane: public Shape {
+class Plane : public Shape {
 public:
   Plane() : Shape() {}
 
@@ -111,9 +107,7 @@ public:
   Plane &operator=(const Plane &) = default;
   Plane &operator=(Plane &&) = default;
 
-  bool operator==(const Plane &rhs) const {
-    return true;
-  }
+  bool operator==(const Plane &rhs) const { return true; }
   bool operator!=(const Plane &rhs) const { return false; }
 
   virtual Intersections local_intersect(const Ray &r) const override;
