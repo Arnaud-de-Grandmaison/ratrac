@@ -2,8 +2,8 @@
 
 #include <array>
 #include <cmath>
-#include <string>
 #include <ostream>
+#include <string>
 
 #include "ratrac/ratrac.h"
 
@@ -21,11 +21,12 @@ public:
   typedef ratrac::RayTracerColorType ColorType;
 
   /** Initialise the Color/Tuple/Vector4.*/
-  Color(ColorType red, ColorType green, ColorType blue)
+  constexpr Color(ColorType red, ColorType green, ColorType blue)
       : m_color{red, green, blue, 1.0f} {}
-  Color(ColorType red, ColorType green, ColorType blue, ColorType alpha)
+  constexpr Color(ColorType red, ColorType green, ColorType blue,
+                  ColorType alpha)
       : m_color{red, green, blue, alpha} {}
-  Color() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
+  constexpr Color() : m_color{0.0f, 0.0f, 0.0f, 1.0f} {}
 
   // Accessors
   // =========
@@ -82,11 +83,11 @@ public:
   }
 
   // Color helpers.
-  static Color BLACK() { return Color(); }
-  static Color WHITE() { return Color(1, 1, 1); }
-  static Color RED() { return Color(1, 0, 0); }
-  static Color GREEN() { return Color(0, 1, 0); }
-  static Color BLUE() { return Color(0, 0, 1); }
+  constexpr static Color BLACK() { return Color(0, 0, 0); }
+  constexpr static Color WHITE() { return Color(1, 1, 1); }
+  constexpr static Color RED() { return Color(1, 0, 0); }
+  constexpr static Color GREEN() { return Color(0, 1, 0); }
+  constexpr static Color BLUE() { return Color(0, 0, 1); }
 
   explicit operator std::string() const;
 
