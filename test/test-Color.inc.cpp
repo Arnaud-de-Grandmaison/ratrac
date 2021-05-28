@@ -37,6 +37,8 @@ TEST(Color, base) {
 
 TEST(Color, output) {
   Color c1(0.9, 0.6, 0.75);
+  EXPECT_EQ(std::string(c1),
+            "Color { red:0.9, green:0.6, blue:0.75, alpha:1}");
   std::ostringstream string_stream;
   string_stream << c1;
   EXPECT_EQ(string_stream.str(),
@@ -44,6 +46,8 @@ TEST(Color, output) {
 
   string_stream.str("");
   Color c2(0.7, 0.1, 0.25, 0.5);
+  EXPECT_EQ(std::string(c2),
+            "Color { red:0.7, green:0.1, blue:0.25, alpha:0.5}");
   string_stream << c2;
   EXPECT_EQ(string_stream.str(),
             "Color { red:0.7, green:0.1, blue:0.25, alpha:0.5}");

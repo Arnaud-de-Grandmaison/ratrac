@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cmath>
+#include <string>
 #include <ostream>
 
 #include "ratrac/ratrac.h"
@@ -86,6 +87,8 @@ public:
   static Color RED() { return Color(1, 0, 0); }
   static Color GREEN() { return Color(0, 1, 0); }
   static Color BLUE() { return Color(0, 0, 1); }
+
+  explicit operator std::string() const;
 
 private:
   // An array formated as following: RayTracerColor(red, green, blue, alpha).
