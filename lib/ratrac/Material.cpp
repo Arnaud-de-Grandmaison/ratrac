@@ -6,6 +6,10 @@ std::ostream &operator<<(std::ostream &os, const ratrac::Material &M) {
   std::ios_base::fmtflags f(os.flags());
   os << "Material {";
   os << " color: " << M.color();
+  if (M.pattern())
+      os << ", pattern: " << std::string(*M.pattern());
+  else
+      os << ", pattern: Pattern {}";
   os << std::fixed << std::setprecision(1); // Use fixed precision.
   os << ", ambient: " << M.ambient();
   os << ", diffuse: " << M.diffuse();

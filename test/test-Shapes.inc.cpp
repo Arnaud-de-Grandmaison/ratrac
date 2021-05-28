@@ -84,8 +84,8 @@ TEST(Shapes, sphere) {
   EXPECT_TRUE(*s != *s2);
   s2.reset(new Sphere());
   s2->material(Material(Color(0.8, 1.0, 0.6), /* ambient: */ 0.1,
-                                  /* diffuse: */ 0.7, /* specular: */ 0.2,
-                                  /* shininess: */ 200.0));
+                        /* diffuse: */ 0.7, /* specular: */ 0.2,
+                        /* shininess: */ 200.0));
   EXPECT_FALSE(*s == *s2);
   EXPECT_TRUE(*s != *s2);
 }
@@ -112,8 +112,8 @@ TEST(Shapes, output) {
             "Matrice {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,   "
             " 0.0,    0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0, "
             "   0.0,    0.0,    1.0}}\n, material: Material { color: Color { "
-            "red:1, green:1, blue:1, alpha:1}, ambient: 0.1, diffuse: "
-            "0.9, specular: 0.9, shininess: 200.0}}");
+            "red:1, green:1, blue:1, alpha:1}, pattern: Pattern {}, ambient: "
+            "0.1, diffuse: 0.9, specular: 0.9, shininess: 200.0}}");
 }
 
 TEST(Shapes, intersections) {
@@ -134,7 +134,7 @@ TEST(Shapes, intersections) {
   EXPECT_EQ(shape->saved_ray.direction(), Vector(0, 0, 1));
 
   // A ray intersects a sphere at two points.
-  r= Ray(Point(0, 0, -5), Vector(0, 0, 1));
+  r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   std::unique_ptr<Sphere> s(new Sphere());
   xs = s->intersect(r);
   EXPECT_EQ(xs.count(), 2);
@@ -234,7 +234,8 @@ TEST(Shapes, normal) {
 
   // Computing the normal on a transformed Shape.
   shape.reset(new TestShape());
-  shape->transform(Matrice::scaling(1, 0.5, 1) * Matrice::rotation_z(M_PI / 5.0));
+  shape->transform(Matrice::scaling(1, 0.5, 1) *
+                   Matrice::rotation_z(M_PI / 5.0));
   n = shape->normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
 

@@ -4,7 +4,7 @@ namespace ratrac {
   Pattern::~Pattern() {}
 
   Stripes::operator std::string() const {
-    return "Stripes { a:" + std::string(a) + ", b:" + std::string(b) + "}";
+    return "Stripes { a: " + std::string(a) + ", b: " + std::string(b) + "}";
   }
 }
 

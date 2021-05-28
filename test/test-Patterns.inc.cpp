@@ -8,12 +8,12 @@ TEST(Patterns, base) {
 TEST(Patterns, output) {
   Stripes s = Stripes(Color::WHITE(), Color::BLACK());
   EXPECT_EQ(std::string(s),
-            "Stripes { a:Color { red:1, green:1, blue:1, alpha:1}, b:Color { "
+            "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
             "red:0, green:0, blue:0, alpha:1}}");
   std::ostringstream string_stream;
   string_stream << s;
   EXPECT_EQ(string_stream.str(),
-            "Stripes { a:Color { red:1, green:1, blue:1, alpha:1}, b:Color { "
+            "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
             "red:0, green:0, blue:0, alpha:1}}");
 }
 

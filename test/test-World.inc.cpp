@@ -30,17 +30,17 @@ TEST(World, output) {
       "World {  lights: [LightPoint { intensity: Color { red:1, green:1, "
       "blue:1, alpha:1}, position: Tuple { -10, 10, -10, 1}}  ],  objects: "
       "[Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: "
-      "Matrice {  "
-      "  1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    "
-      "0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
+      "Matrice {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+      "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
       "0.0,    1.0}}\n, material: Material { color: Color { red:0.8, "
-      "green:1, blue:0.6, alpha:1}, ambient: 0.1, diffuse: 0.7, specular: "
-      "0.2, shininess: 200.0}}, Sphere { center: Tuple { 0, 0, 0, 1}, "
-      "radius: 1, transform: Matrice {    0.5,    0.0,    0.0,    0.0},\n\t{ "
-      "   0.0,    0.5,    0.0,    0.0},\n\t{    0.0,    0.0,    0.5,    "
-      "0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n, material: Material { "
-      "color: Color { red:1, green:1, blue:1, alpha:1}, ambient: 0.1, "
-      "diffuse: 0.9, specular: 0.9, shininess: 200.0}}  ]}");
+      "green:1, blue:0.6, alpha:1}, pattern: Pattern {}, ambient: 0.1, "
+      "diffuse: 0.7, specular: 0.2, shininess: 200.0}}, Sphere { center: Tuple "
+      "{ 0, 0, 0, 1}, radius: 1, transform: Matrice {    0.5,    0.0,    0.0,  "
+      "  0.0},\n\t{    0.0,    0.5,    0.0,    0.0},\n\t{    0.0,    0.0,    "
+      "0.5,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n, material: "
+      "Material { color: Color { red:1, green:1, blue:1, alpha:1}, pattern: "
+      "Pattern {}, ambient: 0.1, diffuse: 0.9, specular: 0.9, shininess: "
+      "200.0}}  ]}");
 }
 
 TEST(World, intersection) {

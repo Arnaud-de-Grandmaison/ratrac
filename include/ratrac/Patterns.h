@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cmath>
-#include <string>
+#include <memory>
 #include <ostream>
+#include <string>
 
 #include "ratrac/Color.h"
 #include "ratrac/Tuple.h"
@@ -14,14 +15,21 @@ class Pattern {
 public:
   virtual ~Pattern();
 
+  virtual std::unique_ptr<Pattern> clone() const = 0;
+
   virtual Color at(const Tuple &point) const = 0;
 
-  virtual explicit operator std::string() const { return std::string(); }
+  virtual explicit operator std::string() const { return "Pattern {}"; }
 };
 
-class Stripes: public Pattern {
+class Stripes : public Pattern {
 public:
-  Stripes(const Color &a, const Color &b): Pattern(), a(a), b(b) {}
+  Stripes(const Stripes &) =default;
+  Stripes(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<Stripes>(new Stripes(*this));
+  }
 
   const Color &color1() const { return a; }
   const Color &color2() const { return b; }

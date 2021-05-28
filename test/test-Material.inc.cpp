@@ -8,6 +8,7 @@ TEST(Material, base) {
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.diffuse(), 0.9));
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.specular(), 0.9));
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.shininess(), 200.0));
+  EXPECT_EQ(m.pattern(), nullptr);
 
   // Setters.
   m.color(Color::BLACK());
@@ -20,6 +21,18 @@ TEST(Material, base) {
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.specular(), 0.5));
   m.shininess(100.0);
   EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.shininess(), 100.0));
+  m.pattern(Stripes(Color::WHITE(), Color::BLACK()));
+  EXPECT_NE(m.pattern(), nullptr);
+  EXPECT_EQ(m.color(), Color::BLACK());
+
+  // Constructor with a Pattern
+  m = Material(Stripes(Color::BLACK(), Color::WHITE()), 0.1, 0.9, 0.9, 200.0);
+  EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.ambient(), 0.1));
+  EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.diffuse(), 0.9));
+  EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.specular(), 0.9));
+  EXPECT_TRUE(close_to_equal<RayTracerColorType>(m.shininess(), 200.0));
+  EXPECT_NE(m.pattern(), nullptr);
+  EXPECT_EQ(m.color(), Color::BLACK());
 }
 
 TEST(Material, output) {
@@ -28,6 +41,16 @@ TEST(Material, output) {
   string_stream << m;
   EXPECT_EQ(string_stream.str(),
             "Material { color: Color { red:1, green:1, blue:1, alpha:1}, "
+            "pattern: Pattern {}, "
+            "ambient: 0.1, diffuse: 0.9, specular: 0.9, shininess: 200.0}");
+
+  string_stream.str("");
+  m = Material(Stripes(Color::BLACK(), Color::WHITE()), 0.1, 0.9, 0.9, 200.0);
+  string_stream << m;
+  EXPECT_EQ(string_stream.str(),
+            "Material { color: Color { red:0, green:0, blue:0, alpha:1}, "
+            "pattern: Stripes { a: Color { red:0, green:0, blue:0, alpha:1}, "
+            "b: Color { red:1, green:1, blue:1, alpha:1}}, "
             "ambient: 0.1, diffuse: 0.9, specular: 0.9, shininess: 200.0}");
 }
 
@@ -90,4 +113,14 @@ TEST(Material, lighting) {
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
   result = lighting(m, light, position, eyev, normalv, in_shadow);
   EXPECT_EQ(result, Color(0.1, 0.1, 0.1));
+
+  // Lighting with a pattern applied.
+  m = Material(Stripes(Color::WHITE(), Color::BLACK()), 1, 0, 0, 200.0);
+  eyev = Vector(0, 0, -1);
+  normalv = Vector(0, 0, -1);
+  light = LightPoint(Point(0, 0, -10), Color::WHITE());
+  Color c1 = lighting(m, light, Point(0.9, 0, 0), eyev, normalv, false);
+  EXPECT_EQ(c1, Color::WHITE());
+  Color c2 = lighting(m, light, Point(1.1, 0, 0), eyev, normalv, false);
+  EXPECT_EQ(c2, Color::BLACK());
 }

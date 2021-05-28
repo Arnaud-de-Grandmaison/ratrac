@@ -1,9 +1,11 @@
 #pragma once
 
+#include <memory>
 #include <ostream>
 
 #include "ratrac/Color.h"
 #include "ratrac/Light.h"
+#include "ratrac/Patterns.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
@@ -20,10 +22,39 @@ public:
            RayTracerColorType diffuse, RayTracerColorType specular,
            RayTracerColorType shininess)
       : m_color(color), m_ambient(ambient), m_diffuse(diffuse),
-        m_specular(specular), m_shininess(shininess) {}
-  Material(const Material &) = default;
+        m_specular(specular), m_shininess(shininess), m_pattern(nullptr) {}
+  Material(std::unique_ptr<Pattern> &pattern, RayTracerColorType ambient,
+           RayTracerColorType diffuse, RayTracerColorType specular,
+           RayTracerColorType shininess)
+      : m_color(Color::BLACK()), m_ambient(ambient), m_diffuse(diffuse),
+        m_specular(specular), m_shininess(shininess),
+        m_pattern(pattern.release()) {}
+  Material(const Pattern &pattern, RayTracerColorType ambient,
+           RayTracerColorType diffuse, RayTracerColorType specular,
+           RayTracerColorType shininess)
+      : m_color(Color::BLACK()), m_ambient(ambient), m_diffuse(diffuse),
+        m_specular(specular), m_shininess(shininess),
+        m_pattern(pattern.clone()) {}
+  Material(const Material &rhs)
+      : m_color(rhs.m_color), m_ambient(rhs.m_ambient),
+        m_diffuse(rhs.m_diffuse), m_specular(rhs.m_specular),
+        m_shininess(rhs.m_shininess),
+        m_pattern(rhs.m_pattern ? rhs.m_pattern->clone() : nullptr) {}
+  Material(Material &&) = default;
 
-  Material &operator=(const Material &) = default;
+  Material &operator=(const Material &rhs) {
+    m_color = rhs.m_color;
+    m_ambient = rhs.m_ambient;
+    m_diffuse = rhs.m_diffuse;
+    m_specular = rhs.m_specular;
+    m_shininess = rhs.m_shininess;
+    if (rhs.m_pattern)
+      m_pattern = rhs.m_pattern->clone();
+    else
+      m_pattern.reset();
+    return *this;
+  }
+  Material &operator=(Material &&) = default;
 
   bool operator==(const Material &rhs) const {
     return m_color == rhs.m_color && close_to_equal(m_ambient, rhs.m_ambient) &&
@@ -38,6 +69,7 @@ public:
   const RayTracerColorType &diffuse() const { return m_diffuse; }
   const RayTracerColorType &specular() const { return m_specular; }
   const RayTracerColorType &shininess() const { return m_shininess; }
+  const Pattern *pattern() const { return m_pattern.get(); }
 
   // Setters.
   Material &color(const Color &color) {
@@ -60,11 +92,22 @@ public:
     m_shininess = shininess;
     return *this;
   }
+  Material &pattern(std::unique_ptr<Pattern> &pattern) {
+    m_pattern = std::move(pattern);
+    return *this;
+  }
+  Material &pattern(const Pattern &pattern) {
+    m_pattern = pattern.clone();
+    return *this;
+  }
 
   Color lighting(const LightPoint &light, const Tuple &position,
                  const Tuple &eyev, const Tuple &normalv, bool shadow) const {
+    // Get the surface color from the pattern if we have one.
+    Color color = m_pattern ? m_pattern->at(position) : m_color;
+
     // Combine the surface color with the light's color/intensity.
-    Color effective_color = m_color * light.intensity();
+    Color effective_color = color * light.intensity();
 
     // Find the direction to the light source.
     Tuple lightv = normalize(light.position() - position);
@@ -104,6 +147,7 @@ private:
   RayTracerColorType m_diffuse;
   RayTracerColorType m_specular;
   RayTracerColorType m_shininess;
+  std::unique_ptr<Pattern> m_pattern;
 };
 
 inline Color lighting(const Material &material, const LightPoint &light,
