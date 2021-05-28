@@ -67,6 +67,7 @@ add_library(ratrac STATIC
   ${RATRACLIB_SOURCE_DIR}/Ray.cpp
   ${RATRACLIB_SOURCE_DIR}/Light.cpp
   ${RATRACLIB_SOURCE_DIR}/Material.cpp
+  ${RATRACLIB_SOURCE_DIR}/Patterns.cpp
   ${RATRACLIB_SOURCE_DIR}/Intersections.cpp
   ${RATRACLIB_SOURCE_DIR}/World.cpp
 )
