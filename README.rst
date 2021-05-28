@@ -4,7 +4,7 @@
     :alt: Github licence
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/blob/main/LICENSE
     
-.. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/C/C++%20CI/badge.svg
+.. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/Ubuntu%20+%20clang/badge.svg
     :alt: Github last build status
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions
 
