@@ -82,6 +82,23 @@ TEST(Patterns, output) {
       "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  Checkers c(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(
+      std::string(c),
+      "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  string_stream.str("");
+  string_stream << c;
+  EXPECT_EQ(
+      string_stream.str(),
+      "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 }
 
 TEST(Patterns, at) {
@@ -119,6 +136,24 @@ TEST(Patterns, at) {
   EXPECT_EQ(r.at(Point(1, 0, 0)), Color::BLACK());
   EXPECT_EQ(r.at(Point(0, 0, 1)), Color::BLACK());
   EXPECT_EQ(r.at(Point(0.708, 0, 0.708)), Color::BLACK());
+
+  // Checkers should repeat in x
+  Checkers c(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(0.99, 0, 0)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(1.01, 0, 0)), Color::BLACK());
+
+  // Checkers should repeat in y
+  c = Checkers(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(0, 0.99, 0)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(0, 1.01, 0)), Color::BLACK());
+
+  // Checkers should repeat in z
+  c = Checkers(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(0, 0, 0.99)), Color::WHITE());
+  EXPECT_EQ(c.at(Point(0, 0, 1.01)), Color::BLACK());
 }
 
 TEST(Patterns, transform) {

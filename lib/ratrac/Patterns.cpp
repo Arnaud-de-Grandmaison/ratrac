@@ -17,6 +17,11 @@ Ring::operator std::string() const {
   return "Ring { a: " + std::string(color1()) + ", b: " + std::string(color2()) +
          ", transform: " + std::string(transform()) + "}";
 }
+
+Checkers::operator std::string() const {
+  return "Checkers { a: " + std::string(color1()) + ", b: " + std::string(color2()) +
+         ", transform: " + std::string(transform()) + "}";
+}
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Pattern &P) {

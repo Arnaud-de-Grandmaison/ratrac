@@ -123,8 +123,30 @@ public:
   }
 
   virtual explicit operator std::string() const override;
-
 };
+
+class Checkers : public BiColorPattern {
+public:
+  Checkers(const Checkers &) = default;
+  Checkers(const Color &a, const Color &b) : BiColorPattern(a, b) {}
+  Checkers(const Color &a, const Color &b, const Matrice &t)
+      : BiColorPattern(a, b, t) {}
+  Checkers(const Color &a, const Color &b, Matrice &&t)
+      : BiColorPattern(a, b, t) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<Checkers>(new Checkers(*this));
+  }
+
+  virtual Color local_at(const Tuple &point) const override {
+    long m = long(std::floor(point.x()) + std::floor(point.y()) +
+                  std::floor(point.z()));
+    return m % 2 == 0 ? color1() : color2();
+  }
+
+  virtual explicit operator std::string() const override;
+};
+
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Pattern &P);
