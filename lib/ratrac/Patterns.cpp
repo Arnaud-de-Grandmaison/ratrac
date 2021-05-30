@@ -4,17 +4,17 @@ namespace ratrac {
 Pattern::~Pattern() {}
 
 Stripes::operator std::string() const {
-  return "Stripes { a: " + std::string(a) + ", b: " + std::string(b) +
+  return "Stripes { a: " + std::string(color1()) + ", b: " + std::string(color2()) +
          ", transform: " + std::string(transform()) + "}";
 }
 
 Gradient::operator std::string() const {
-  return "Gradient { a: " + std::string(a) + ", b: " + std::string(b) +
+  return "Gradient { a: " + std::string(color1()) + ", b: " + std::string(color2()) +
          ", transform: " + std::string(transform()) + "}";
 }
 
 Ring::operator std::string() const {
-  return "Ring { a: " + std::string(a) + ", b: " + std::string(b) +
+  return "Ring { a: " + std::string(color1()) + ", b: " + std::string(color2()) +
          ", transform: " + std::string(transform()) + "}";
 }
 } // namespace ratrac

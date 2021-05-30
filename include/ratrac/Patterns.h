@@ -46,87 +46,84 @@ private:
   Matrice m_transform;
 };
 
-class Stripes : public Pattern {
+class BiColorPattern : public Pattern {
+public:
+  BiColorPattern(const BiColorPattern &) = default;
+  BiColorPattern(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  BiColorPattern(const Color &a, const Color &b, const Matrice &t)
+      : Pattern(t), a(a), b(b) {}
+  BiColorPattern(const Color &a, const Color &b, Matrice &&t)
+      : Pattern(t), a(a), b(b) {}
+
+  const Color &color1() const { return a; }
+  const Color &color2() const { return b; }
+
+private:
+  Color a;
+  Color b;
+};
+
+class Stripes : public BiColorPattern {
 public:
   Stripes(const Stripes &) = default;
-  Stripes(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  Stripes(const Color &a, const Color &b) : BiColorPattern(a, b) {}
   Stripes(const Color &a, const Color &b, const Matrice &t)
-      : Pattern(t), a(a), b(b) {}
+      : BiColorPattern(a, b, t) {}
   Stripes(const Color &a, const Color &b, Matrice &&t)
-      : Pattern(t), a(a), b(b) {}
+      : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
     return std::unique_ptr<Stripes>(new Stripes(*this));
   }
 
-  const Color &color1() const { return a; }
-  const Color &color2() const { return b; }
-
   virtual Color local_at(const Tuple &point) const override {
-    return long(std::floor(point.x())) % 2 == 0 ? a : b;
+    return long(std::floor(point.x())) % 2 == 0 ? color1() : color2();
   }
 
   virtual explicit operator std::string() const override;
-
-private:
-  Color a;
-  Color b;
 };
 
-class Gradient : public Pattern {
+class Gradient : public BiColorPattern {
 public:
   Gradient(const Gradient &) = default;
-  Gradient(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  Gradient(const Color &a, const Color &b) : BiColorPattern(a, b) {}
   Gradient(const Color &a, const Color &b, const Matrice &t)
-      : Pattern(t), a(a), b(b) {}
+      : BiColorPattern(a, b, t) {}
   Gradient(const Color &a, const Color &b, Matrice &&t)
-      : Pattern(t), a(a), b(b) {}
+      : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
     return std::unique_ptr<Gradient>(new Gradient(*this));
   }
 
-  const Color &color1() const { return a; }
-  const Color &color2() const { return b; }
-
   virtual Color local_at(const Tuple &point) const override {
-    Color distance = b - a;
-    return a + distance * (point.x() - std::floor(point.x()));
+    Color distance = color2() - color1();
+    return color1() + distance * (point.x() - std::floor(point.x()));
   }
 
   virtual explicit operator std::string() const override;
-
-private:
-  Color a;
-  Color b;
 };
 
-class Ring : public Pattern {
+class Ring : public BiColorPattern {
 public:
   Ring(const Ring &) = default;
-  Ring(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  Ring(const Color &a, const Color &b) : BiColorPattern(a, b) {}
   Ring(const Color &a, const Color &b, const Matrice &t)
-      : Pattern(t), a(a), b(b) {}
-  Ring(const Color &a, const Color &b, Matrice &&t) : Pattern(t), a(a), b(b) {}
+      : BiColorPattern(a, b, t) {}
+  Ring(const Color &a, const Color &b, Matrice &&t) : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
     return std::unique_ptr<Ring>(new Ring(*this));
   }
 
-  const Color &color1() const { return a; }
-  const Color &color2() const { return b; }
-
   virtual Color local_at(const Tuple &point) const override {
     long m = long(
         std::floor(std::sqrt(point.x() * point.x() + point.z() * point.z())));
-    return m % 2 == 0 ? a : b;
+    return m % 2 == 0 ? color1() : color2();
   }
 
   virtual explicit operator std::string() const override;
 
-private:
-  Color a;
-  Color b;
 };
 } // namespace ratrac
 
