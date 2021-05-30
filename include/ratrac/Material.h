@@ -101,10 +101,14 @@ public:
     return *this;
   }
 
+  Color at(const Tuple &position) const {
+    return m_pattern ? m_pattern->at(position) : m_color;
+  }
+
   Color lighting(const LightPoint &light, const Tuple &position,
                  const Tuple &eyev, const Tuple &normalv, bool shadow) const {
     // Get the surface color from the pattern if we have one.
-    Color color = m_pattern ? m_pattern->at(position) : m_color;
+    Color color = at(position);
 
     // Combine the surface color with the light's color/intensity.
     Color effective_color = color * light.intensity();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ratrac/Color.h"
 #include "ratrac/Intersections.h"
 #include "ratrac/Material.h"
 #include "ratrac/Ray.h"
@@ -42,6 +43,11 @@ public:
   Intersections intersect(const Ray &world_ray) const {
     Ray local_ray = ratrac::transform(world_ray, inverse(m_transform));
     return local_intersect(local_ray);
+  }
+
+  Color at(const Tuple &world_point) const {
+    Tuple object_point = inverse(m_transform) * world_point;
+    return m_material.at(object_point);
   }
 
   Tuple normal_at(const Tuple &world_point) const {
