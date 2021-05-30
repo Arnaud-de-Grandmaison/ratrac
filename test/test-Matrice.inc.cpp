@@ -45,12 +45,18 @@ TEST(Matrice, init) {
 }
 
 TEST(Matrice, output) {
-  // << operator Test
   Matrice M({{1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f}});
 
+  // String conversion
+  EXPECT_EQ(std::string(M), "Matrice {    1.0,    1.0,    1.0,    1.0},\n"
+                            "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                            "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                            "\t{    1.0,    1.0,    1.0,    1.0}}\n");
+
+  // << operator Test
   std::ostringstream string_stream;
   string_stream << M;
   EXPECT_EQ(string_stream.str(), "Matrice {    1.0,    1.0,    1.0,    1.0},\n"

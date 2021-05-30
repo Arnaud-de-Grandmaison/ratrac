@@ -262,6 +262,8 @@ static Matrice shearing(DataType Xy, DataType Xz,
     return !operator==(rhs);
   }
 
+  explicit operator std::string() const;
+
   // Both must be 4*4 matrices.
   Matrice &operator*=(const Matrice &rhs) {
     assert(getNumColumns() == rhs.getNumLines() &&
