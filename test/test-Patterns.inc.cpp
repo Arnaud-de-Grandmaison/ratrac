@@ -65,6 +65,23 @@ TEST(Patterns, output) {
       "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  Ring r(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(
+      std::string(r),
+      "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  string_stream.str("");
+  string_stream << r;
+  EXPECT_EQ(
+      string_stream.str(),
+      "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 }
 
 TEST(Patterns, at) {
@@ -95,6 +112,13 @@ TEST(Patterns, at) {
   EXPECT_EQ(g.at(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
   EXPECT_EQ(g.at(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
   EXPECT_EQ(g.at(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+
+  // A ring should extend in both x and z
+  Ring r(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(r.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(r.at(Point(1, 0, 0)), Color::BLACK());
+  EXPECT_EQ(r.at(Point(0, 0, 1)), Color::BLACK());
+  EXPECT_EQ(r.at(Point(0.708, 0, 0.708)), Color::BLACK());
 }
 
 TEST(Patterns, transform) {

@@ -101,6 +101,33 @@ private:
   Color b;
 };
 
+class Ring : public Pattern {
+public:
+  Ring(const Ring &) = default;
+  Ring(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  Ring(const Color &a, const Color &b, const Matrice &t)
+      : Pattern(t), a(a), b(b) {}
+  Ring(const Color &a, const Color &b, Matrice &&t) : Pattern(t), a(a), b(b) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<Ring>(new Ring(*this));
+  }
+
+  const Color &color1() const { return a; }
+  const Color &color2() const { return b; }
+
+  virtual Color local_at(const Tuple &point) const override {
+    long m = long(
+        std::floor(std::sqrt(point.x() * point.x() + point.z() * point.z())));
+    return m % 2 == 0 ? a : b;
+  }
+
+  virtual explicit operator std::string() const override;
+
+private:
+  Color a;
+  Color b;
+};
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Pattern &P);
