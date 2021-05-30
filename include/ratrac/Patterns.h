@@ -73,6 +73,34 @@ private:
   Color b;
 };
 
+class Gradient : public Pattern {
+public:
+  Gradient(const Gradient &) = default;
+  Gradient(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
+  Gradient(const Color &a, const Color &b, const Matrice &t)
+      : Pattern(t), a(a), b(b) {}
+  Gradient(const Color &a, const Color &b, Matrice &&t)
+      : Pattern(t), a(a), b(b) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<Gradient>(new Gradient(*this));
+  }
+
+  const Color &color1() const { return a; }
+  const Color &color2() const { return b; }
+
+  virtual Color local_at(const Tuple &point) const override {
+    Color distance = b - a;
+    return a + distance * (point.x() - std::floor(point.x()));
+  }
+
+  virtual explicit operator std::string() const override;
+
+private:
+  Color a;
+  Color b;
+};
+
 } // namespace ratrac
 
 std::ostream &operator<<(std::ostream &os, const ratrac::Pattern &P);

@@ -32,7 +32,7 @@ TEST(Patterns, base) {
 }
 
 TEST(Patterns, output) {
-  Stripes s = Stripes(Color::WHITE(), Color::BLACK());
+  Stripes s(Color::WHITE(), Color::BLACK());
   EXPECT_EQ(
       std::string(s),
       "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
@@ -45,6 +45,23 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       string_stream.str(),
       "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  Gradient g(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(
+      std::string(g),
+      "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+
+  string_stream.str("");
+  string_stream << g;
+  EXPECT_EQ(
+      string_stream.str(),
+      "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
       "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
@@ -71,6 +88,13 @@ TEST(Patterns, at) {
   EXPECT_EQ(s.at(Point(-0.1, 0, 0)), Color::BLACK());
   EXPECT_EQ(s.at(Point(-1, 0, 0)), Color::BLACK());
   EXPECT_EQ(s.at(Point(-1.1, 0, 0)), Color::WHITE());
+
+  // A gradient linearly interpolates between colors
+  Gradient g(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(g.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(g.at(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+  EXPECT_EQ(g.at(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+  EXPECT_EQ(g.at(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
 }
 
 TEST(Patterns, transform) {
