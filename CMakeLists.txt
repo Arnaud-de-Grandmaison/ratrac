@@ -79,19 +79,6 @@ target_include_directories(ratrac PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 # ========================================================
-# Ratrac main
+# Ratrac demonstration apps
 # --------------------------------------------------------
-add_executable(tick-main main-tick.cpp)
-target_link_libraries(tick-main ratrac)
-add_executable(clock-main main-clock.cpp)
-target_link_libraries(clock-main ratrac)
-add_executable(silhouette-main main-silhouette.cpp)
-target_link_libraries(silhouette-main ratrac)
-add_executable(full3d-main main-full3d.cpp)
-target_link_libraries(full3d-main ratrac)
-add_executable(scene-main main-scene.cpp)
-target_link_libraries(scene-main ratrac)
-add_executable(plane-main main-plane.cpp)
-target_link_libraries(plane-main ratrac)
-add_executable(patterns-main main-patterns.cpp)
-target_link_libraries(patterns-main ratrac)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/apps)
