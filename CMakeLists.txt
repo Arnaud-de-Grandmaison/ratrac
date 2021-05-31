@@ -72,6 +72,11 @@ add_library(ratrac STATIC
   ${RATRACLIB_SOURCE_DIR}/World.cpp
 )
 target_include_directories(ratrac PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set_target_properties(ratrac
+  PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+  LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
 
 # ========================================================
 # Unit testing.
