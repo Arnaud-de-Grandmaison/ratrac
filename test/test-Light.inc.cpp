@@ -19,7 +19,7 @@ TEST(Light, base) {
 }
 
 TEST(Light, output) {
-  LightPoint lp(Point(0, 0, 0), Color(1, 1, 1));
+  LightPoint lp(Point(0, 0, 0), Color::WHITE());
   std::ostringstream string_stream;
   string_stream << lp;
   EXPECT_EQ(string_stream.str(),

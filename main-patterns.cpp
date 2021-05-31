@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
   world.append(left);
 
   // The light source is white, shining from above and to the left:
-  world.lights().push_back(LightPoint(Point(-10, 10, -10), Color(1, 1, 1)));
+  world.lights().push_back(LightPoint(Point(-10, 10, -10), Color::WHITE()));
 
   // Camera camera(100, 50, M_PI / 3.);
   Camera camera(400, 200, M_PI / 3.);

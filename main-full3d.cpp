@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   unique_ptr<Sphere> s(new Sphere());
   s->material(m);
 
-  LightPoint light(Point(-10, 10, -10), Color(1, 1, 1));
+  LightPoint light(Point(-10, 10, -10), Color::WHITE());
 
   for (unsigned y = 0; y < C.height(); y++) {
     Matrice::DataType world_y = half - pixel_size * y;
