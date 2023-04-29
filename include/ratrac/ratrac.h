@@ -17,11 +17,12 @@ template <class DataTy> inline unsigned cap(DataTy c, unsigned MaxValue) {
   return v;
 }
 
-template <class DataTy> inline DataTy EPSILON() {
+template <class DataTy> inline constexpr DataTy EPSILON() noexcept {
   return DataTy(0.00001);
 }
 
-template <class DataTy> inline bool close_to_equal(DataTy a, DataTy b) {
+template <class DataTy>
+inline constexpr bool close_to_equal(DataTy a, DataTy b) {
   return std::fabs(a - b) < EPSILON<DataTy>();
 }
 
