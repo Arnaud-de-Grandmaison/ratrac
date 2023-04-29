@@ -47,7 +47,7 @@ TEST(Intersections, hit) {
   // The hit sould offset the point.
   Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
   s.reset(new Sphere());
-  s->transform(Matrice::translation(0, 0, 1));
+  s->transform(Matrix::translation(0, 0, 1));
   Intersection i = Intersection(5, *s.get());
   Computations comps(i, r);
   EXPECT_LT(comps.over_point.z(), -EPSILON<Tuple::DataType>()/2);

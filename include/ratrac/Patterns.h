@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ratrac/Color.h"
-#include "ratrac/Matrice.h"
+#include "ratrac/Matrix.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
@@ -14,9 +14,9 @@ namespace ratrac {
 
 class Pattern {
 public:
-  Pattern() : m_transform(Matrice::identity()) {}
-  Pattern(const Matrice &t) : m_transform(t) {}
-  Pattern(Matrice &&t) : m_transform(std::move(t)) {}
+  Pattern() : m_transform(Matrix::identity()) {}
+  Pattern(const Matrix &t) : m_transform(t) {}
+  Pattern(Matrix &&t) : m_transform(std::move(t)) {}
   virtual ~Pattern();
 
   virtual std::unique_ptr<Pattern> clone() const = 0;
@@ -30,29 +30,29 @@ public:
 
   virtual explicit operator std::string() const { return "Pattern {}"; }
 
-  const Matrice &transform() const { return m_transform; }
+  const Matrix &transform() const { return m_transform; }
 
-  Pattern &transform(const Matrice &M) {
+  Pattern &transform(const Matrix &M) {
     m_transform = M;
     return *this;
   }
 
-  Pattern &transform(Matrice &&M) {
+  Pattern &transform(Matrix &&M) {
     m_transform = std::move(M);
     return *this;
   }
 
 private:
-  Matrice m_transform;
+  Matrix m_transform;
 };
 
 class BiColorPattern : public Pattern {
 public:
   BiColorPattern(const BiColorPattern &) = default;
   BiColorPattern(const Color &a, const Color &b) : Pattern(), a(a), b(b) {}
-  BiColorPattern(const Color &a, const Color &b, const Matrice &t)
+  BiColorPattern(const Color &a, const Color &b, const Matrix &t)
       : Pattern(t), a(a), b(b) {}
-  BiColorPattern(const Color &a, const Color &b, Matrice &&t)
+  BiColorPattern(const Color &a, const Color &b, Matrix &&t)
       : Pattern(t), a(a), b(b) {}
 
   const Color &color1() const { return a; }
@@ -67,9 +67,9 @@ class Stripes : public BiColorPattern {
 public:
   Stripes(const Stripes &) = default;
   Stripes(const Color &a, const Color &b) : BiColorPattern(a, b) {}
-  Stripes(const Color &a, const Color &b, const Matrice &t)
+  Stripes(const Color &a, const Color &b, const Matrix &t)
       : BiColorPattern(a, b, t) {}
-  Stripes(const Color &a, const Color &b, Matrice &&t)
+  Stripes(const Color &a, const Color &b, Matrix &&t)
       : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
@@ -87,9 +87,9 @@ class Gradient : public BiColorPattern {
 public:
   Gradient(const Gradient &) = default;
   Gradient(const Color &a, const Color &b) : BiColorPattern(a, b) {}
-  Gradient(const Color &a, const Color &b, const Matrice &t)
+  Gradient(const Color &a, const Color &b, const Matrix &t)
       : BiColorPattern(a, b, t) {}
-  Gradient(const Color &a, const Color &b, Matrice &&t)
+  Gradient(const Color &a, const Color &b, Matrix &&t)
       : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
@@ -108,9 +108,9 @@ class Ring : public BiColorPattern {
 public:
   Ring(const Ring &) = default;
   Ring(const Color &a, const Color &b) : BiColorPattern(a, b) {}
-  Ring(const Color &a, const Color &b, const Matrice &t)
+  Ring(const Color &a, const Color &b, const Matrix &t)
       : BiColorPattern(a, b, t) {}
-  Ring(const Color &a, const Color &b, Matrice &&t) : BiColorPattern(a, b, t) {}
+  Ring(const Color &a, const Color &b, Matrix &&t) : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
     return std::unique_ptr<Ring>(new Ring(*this));
@@ -129,9 +129,9 @@ class Checkers : public BiColorPattern {
 public:
   Checkers(const Checkers &) = default;
   Checkers(const Color &a, const Color &b) : BiColorPattern(a, b) {}
-  Checkers(const Color &a, const Color &b, const Matrice &t)
+  Checkers(const Color &a, const Color &b, const Matrix &t)
       : BiColorPattern(a, b, t) {}
-  Checkers(const Color &a, const Color &b, Matrice &&t)
+  Checkers(const Color &a, const Color &b, Matrix &&t)
       : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {

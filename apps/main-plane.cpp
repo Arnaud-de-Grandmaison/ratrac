@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
   // The floor.
   Plane *floor = new Plane();
-  floor->transform(Matrice::rotation_y(-M_PI/2));
+  floor->transform(Matrix::rotation_y(-M_PI/2));
   Material m;
   m.color(Color(1, 0.9, 0.9));
   m.specular(0);
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
   // The middle sphere.
   Sphere *middle = new Sphere();
-  middle->transform(Matrice::translation(-0.5, 1, 0.5));
+  middle->transform(Matrix::translation(-0.5, 1, 0.5));
   Material m2;
   m2.color(Color(0.1, 1, 0.5));
   m2.diffuse(0.7);
@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
 
   // The right sphere.
   Sphere *right = new Sphere();
-  right->transform(Matrice::translation(1.5, 0.5, -0.5) *
-                   Matrice::scaling(0.5, 0.5, 0.5));
+  right->transform(Matrix::translation(1.5, 0.5, -0.5) *
+                   Matrix::scaling(0.5, 0.5, 0.5));
   Material m3;
   m3.color(Color(0.5, 1, 0.1));
   m3.diffuse(0.7);
@@ -48,8 +48,8 @@ int main(int argc, char *argv[]) {
 
   // The left sphere.
   Sphere *left = new Sphere();
-  left->transform(Matrice::translation(-1.5, 0.33, -0.75) *
-                  Matrice::scaling(0.33, 0.33, 0.33));
+  left->transform(Matrix::translation(-1.5, 0.33, -0.75) *
+                  Matrix::scaling(0.33, 0.33, 0.33));
   Material m4;
   m4.color(Color(1, 0.8, 0.1));
   m4.diffuse(0.7);

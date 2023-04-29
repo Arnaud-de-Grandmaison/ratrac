@@ -50,7 +50,7 @@ TEST(Material, output) {
   EXPECT_EQ(string_stream.str(),
             "Material { color: Color { red:0, green:0, blue:0, alpha:1}, "
             "pattern: Stripes { a: Color { red:0, green:0, blue:0, alpha:1}, "
-            "b: Color { red:1, green:1, blue:1, alpha:1}, transform: Matrice { "
+            "b: Color { red:1, green:1, blue:1, alpha:1}, transform: Matrix { "
             "   1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    "
             "0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,  "
             "  0.0,    1.0}}\n}, ambient: 0.1, diffuse: 0.9, specular: 0.9, "

@@ -1,6 +1,6 @@
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
-#include "ratrac/Matrice.h"
+#include "ratrac/Matrix.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
@@ -14,10 +14,10 @@ void clock_generator(const char *filename = "clock.ppm") {
 
   // Generate a centered point
   for (unsigned i = 0; i < 12; i++) {
-    Matrice temp_transform = Matrice::identity();
-    temp_transform *= Matrice::rotation_y(double(i) * 2.0 * M_PI / double(12));
+    Matrix temp_transform = Matrix::identity();
+    temp_transform *= Matrix::rotation_y(double(i) * 2.0 * M_PI / double(12));
     Tuple temp_point =
-        Matrice::translation(100.0, 0.0, 100.0) * temp_transform * Point(50, 0, 0);
+        Matrix::translation(100.0, 0.0, 100.0) * temp_transform * Point(50, 0, 0);
     C.at(temp_point.x(), temp_point.z()) = Color(.5, .75, .5);
   }
 

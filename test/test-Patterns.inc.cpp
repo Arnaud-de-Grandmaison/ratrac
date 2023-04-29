@@ -18,12 +18,12 @@ public:
 TEST(Patterns, base) {
   // Default pattern transformation
   TestPattern p;
-  EXPECT_EQ(p.transform(), Matrice::identity());
+  EXPECT_EQ(p.transform(), Matrix::identity());
 
   // Assigning a transformation
   p = TestPattern();
-  p.transform(Matrice::translation(1, 2, 3));
-  EXPECT_EQ(p.transform(), Matrice::translation(1, 2, 3));
+  p.transform(Matrix::translation(1, 2, 3));
+  EXPECT_EQ(p.transform(), Matrix::translation(1, 2, 3));
 
   // Creating a stripe pattern
   Stripes s = Stripes(Color::WHITE(), Color::BLACK());
@@ -36,7 +36,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       std::string(s),
       "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -45,7 +45,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       string_stream.str(),
       "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -53,7 +53,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       std::string(g),
       "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -62,7 +62,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       string_stream.str(),
       "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -70,7 +70,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       std::string(r),
       "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -79,7 +79,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       string_stream.str(),
       "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -87,7 +87,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       std::string(c),
       "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 
@@ -96,7 +96,7 @@ TEST(Patterns, output) {
   EXPECT_EQ(
       string_stream.str(),
       "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrice {    1.0,    0.0,  "
+      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
 }
@@ -162,7 +162,7 @@ TEST(Patterns, transform) {
 
   // A pattern with an object transformation
   s = Sphere();
-  s.transform(Matrice::scaling(2, 2, 2));
+  s.transform(Matrix::scaling(2, 2, 2));
   s.material().pattern(TestPattern());
   c = s.at(Point(2, 3, 4));
   EXPECT_EQ(c, Color(1, 1.5, 2));
@@ -170,23 +170,23 @@ TEST(Patterns, transform) {
   // A pattern with a pattern transformation
   s = Sphere();
   TestPattern tp;
-  tp.transform(Matrice::scaling(2, 2, 2));
+  tp.transform(Matrix::scaling(2, 2, 2));
   s.material().pattern(tp);
   c = s.at(Point(2, 3, 4));
   EXPECT_EQ(c, Color(1, 1.5, 2));
 
   // A pattern with both an object and a pattern transformation
   s = Sphere();
-  s.transform(Matrice::scaling(2, 2, 2));
+  s.transform(Matrix::scaling(2, 2, 2));
   tp = TestPattern();
-  tp.transform(Matrice::translation(0.5, 1, 1.5));
+  tp.transform(Matrix::translation(0.5, 1, 1.5));
   s.material().pattern(tp);
   c = s.at(Point(2.5, 3, 3.5));
   EXPECT_EQ(c, Color(0.75, 0.5, 0.25));
 
   // Stripes with an object transformation
   s = Sphere();
-  s.transform(Matrice::scaling(2, 2, 2));
+  s.transform(Matrix::scaling(2, 2, 2));
   s.material().pattern(Stripes(Color::WHITE(), Color::BLACK()));
   c = s.at(Point(1.5, 0, 0));
   EXPECT_EQ(c, Color::WHITE());
@@ -194,16 +194,16 @@ TEST(Patterns, transform) {
   // Stripes with a pattern transformation
   s = Sphere();
   Stripes p(Color::WHITE(), Color::BLACK());
-  p.transform(Matrice::scaling(2, 2, 2));
+  p.transform(Matrix::scaling(2, 2, 2));
   s.material().pattern(p);
   c = s.at(Point(1.5, 0, 0));
   EXPECT_EQ(c, Color::WHITE());
 
   // Stripes with both an object and a pattern transformation
   s = Sphere();
-  s.transform(Matrice::scaling(2, 2, 2));
+  s.transform(Matrix::scaling(2, 2, 2));
   p = Stripes(Color::WHITE(), Color::BLACK());
-  p.transform(Matrice::translation(0.5, 0, 0));
+  p.transform(Matrix::translation(0.5, 0, 0));
   s.material().pattern(p);
   c = s.at(Point(2.5, 0, 0));
   EXPECT_EQ(c, Color::WHITE());

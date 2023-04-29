@@ -61,7 +61,7 @@ World World::get_default() {
   w.objects().push_back(unique_ptr<Shape>(s1));
 
   Sphere *s2 = new Sphere();
-  s2->transform(Matrice::scaling(0.5, 0.5, 0.5));
+  s2->transform(Matrix::scaling(0.5, 0.5, 0.5));
   w.objects().push_back(unique_ptr<Shape>(s2));
 
   return w;

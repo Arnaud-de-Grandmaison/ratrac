@@ -16,7 +16,7 @@ TEST(World, base) {
                         /* diffuse: */ 0.7, /* specular: */ 0.2,
                         /* shininess: */ 200.0));
   Sphere *s2 = new Sphere();
-  s2->transform(Matrice::scaling(0.5, 0.5, 0.5));
+  s2->transform(Matrix::scaling(0.5, 0.5, 0.5));
   EXPECT_EQ(*w.objects()[0], *s1);
   EXPECT_EQ(*w.objects()[1], *s2);
 }
@@ -30,12 +30,12 @@ TEST(World, output) {
       "World {  lights: [LightPoint { intensity: Color { red:1, green:1, "
       "blue:1, alpha:1}, position: Tuple { -10, 10, -10, 1}}  ],  objects: "
       "[Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: "
-      "Matrice {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+      "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
       "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
       "0.0,    1.0}}\n, material: Material { color: Color { red:0.8, "
       "green:1, blue:0.6, alpha:1}, pattern: Pattern {}, ambient: 0.1, "
       "diffuse: 0.7, specular: 0.2, shininess: 200.0}}, Sphere { center: Tuple "
-      "{ 0, 0, 0, 1}, radius: 1, transform: Matrice {    0.5,    0.0,    0.0,  "
+      "{ 0, 0, 0, 1}, radius: 1, transform: Matrix {    0.5,    0.0,    0.0,  "
       "  0.0},\n\t{    0.0,    0.5,    0.0,    0.0},\n\t{    0.0,    0.0,    "
       "0.5,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n, material: "
       "Material { color: Color { red:1, green:1, blue:1, alpha:1}, pattern: "
@@ -101,7 +101,7 @@ TEST(World, shading) {
   w.lights().push_back(LightPoint(Point(0, 0, -10), Color::WHITE()));
   Sphere *s1 = new Sphere();
   Sphere *s2 = new Sphere();
-  s2->transform(Matrice::translation(0, 0, 10));
+  s2->transform(Matrix::translation(0, 0, 10));
   w.append(s1);
   w.append(s2);
   r = Ray(Point(0, 0, 5), Vector(0, 0, 1));

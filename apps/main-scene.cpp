@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
   // The floor.
   Sphere *floor = new Sphere();
-  floor->transform(Matrice::scaling(10, 0.01, 10));
+  floor->transform(Matrix::scaling(10, 0.01, 10));
   Material m;
   m.color(Color(1, 0.9, 0.9));
   m.specular(0);
@@ -28,22 +28,22 @@ int main(int argc, char *argv[]) {
   // The left Wall.
   Sphere *left_wall = new Sphere();
   left_wall->transform(
-      Matrice::translation(0, 0, 5) * Matrice::rotation_y(-M_PI / 4.) *
-      Matrice::rotation_x(M_PI / 2.) * Matrice::scaling(10, 0.01, 10));
+      Matrix::translation(0, 0, 5) * Matrix::rotation_y(-M_PI / 4.) *
+      Matrix::rotation_x(M_PI / 2.) * Matrix::scaling(10, 0.01, 10));
   left_wall->material(floor->material());
   world.append(left_wall);
 
   // The right Wall.
   Sphere *right_wall = new Sphere();
   right_wall->transform(
-      Matrice::translation(0, 0, 5) * Matrice::rotation_y(M_PI / 4.) *
-      Matrice::rotation_x(M_PI / 2.) * Matrice::scaling(10, 0.01, 10));
+      Matrix::translation(0, 0, 5) * Matrix::rotation_y(M_PI / 4.) *
+      Matrix::rotation_x(M_PI / 2.) * Matrix::scaling(10, 0.01, 10));
   right_wall->material(floor->material());
   world.append(right_wall);
 
   // The middle sphere.
   Sphere *middle = new Sphere();
-  middle->transform(Matrice::translation(-0.5, 1, 0.5));
+  middle->transform(Matrix::translation(-0.5, 1, 0.5));
   Material m2;
   m2.color(Color(0.1, 1, 0.5));
   m2.diffuse(0.7);
@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 
   // The right sphere.
   Sphere *right = new Sphere();
-  right->transform(Matrice::translation(1.5, 0.5, -0.5) *
-                   Matrice::scaling(0.5, 0.5, 0.5));
+  right->transform(Matrix::translation(1.5, 0.5, -0.5) *
+                   Matrix::scaling(0.5, 0.5, 0.5));
   Material m3;
   m3.color(Color(0.5, 1, 0.1));
   m3.diffuse(0.7);
@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
 
   // The left sphere.
   Sphere *left = new Sphere();
-  left->transform(Matrice::translation(-1.5, 0.33, -0.75) *
-                  Matrice::scaling(0.33, 0.33, 0.33));
+  left->transform(Matrix::translation(-1.5, 0.33, -0.75) *
+                  Matrix::scaling(0.33, 0.33, 0.33));
   Material m4;
   m4.color(Color(1, 0.8, 0.1));
   m4.diffuse(0.7);

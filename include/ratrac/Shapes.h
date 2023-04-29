@@ -13,7 +13,7 @@
 namespace ratrac {
 class Shape {
 public:
-  Shape() : m_transform(Matrice::identity()), m_material() {}
+  Shape() : m_transform(Matrix::identity()), m_material() {}
   virtual ~Shape();
 
   bool operator==(const Shape &rhs) const {
@@ -21,7 +21,7 @@ public:
   }
   bool operator!=(const Shape &rhs) const { return !(*this == rhs); }
 
-  const Matrice &transform() const { return m_transform; }
+  const Matrix &transform() const { return m_transform; }
   const Material &material() const { return m_material; }
   Material &material() { return m_material; }
 
@@ -30,12 +30,12 @@ public:
     return *this;
   }
 
-  Shape &transform(const Matrice &M) {
+  Shape &transform(const Matrix &M) {
     m_transform = M;
     return *this;
   }
 
-  Shape &transform(Matrice &&M) {
+  Shape &transform(Matrix &&M) {
     m_transform = std::move(M);
     return *this;
   }
@@ -64,7 +64,7 @@ public:
   virtual explicit operator std::string() const { return std::string(); }
 
 private:
-  Matrice m_transform;
+  Matrix m_transform;
   Material m_material;
 };
 

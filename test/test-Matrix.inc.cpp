@@ -1,10 +1,10 @@
-TEST(Matrice, init) {
+TEST(Matrix, init) {
   // init Tests
   // ==========
 
-  // 4*4 matrice
+  // 4*4 Matrix
 
-  Matrice M({{1., 2., 3., 4.},
+  Matrix M({{1., 2., 3., 4.},
              {5.5, 6.5, 7.5, 8.5},
              {9., 10., 11., 12.},
              {13.5, 14.5, 15.5, 16.5}});
@@ -20,7 +20,7 @@ TEST(Matrice, init) {
   EXPECT_EQ(M.getNumColumns(), 4);
   EXPECT_EQ(M.getNumLines(), 4);
 
-  // 3*3 Matrice
+  // 3*3 Matrix
 
   M = {{-3, 5, 0}, {1, -2, -7}, {0, 1, 1}};
   EXPECT_EQ(M.at(0, 0), -3);
@@ -31,7 +31,7 @@ TEST(Matrice, init) {
   EXPECT_EQ(M.getNumColumns(), 3);
   EXPECT_EQ(M.getNumLines(), 3);
 
-  // 2*2 Matrice
+  // 2*2 Matrix
 
   M = {{-3, 5}, {1, -2}};
   EXPECT_EQ(M.at(0, 0), -3);
@@ -44,14 +44,14 @@ TEST(Matrice, init) {
   EXPECT_EQ(M.getNumLines(), 2);
 }
 
-TEST(Matrice, output) {
-  Matrice M({{1.0f, 1.0f, 1.0f, 1.0f},
+TEST(Matrix, output) {
+  Matrix M({{1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f},
              {1.0f, 1.0f, 1.0f, 1.0f}});
 
   // String conversion
-  EXPECT_EQ(std::string(M), "Matrice {    1.0,    1.0,    1.0,    1.0},\n"
+  EXPECT_EQ(std::string(M), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
                             "\t{    1.0,    1.0,    1.0,    1.0},\n"
                             "\t{    1.0,    1.0,    1.0,    1.0},\n"
                             "\t{    1.0,    1.0,    1.0,    1.0}}\n");
@@ -59,63 +59,63 @@ TEST(Matrice, output) {
   // << operator Test
   std::ostringstream string_stream;
   string_stream << M;
-  EXPECT_EQ(string_stream.str(), "Matrice {    1.0,    1.0,    1.0,    1.0},\n"
+  EXPECT_EQ(string_stream.str(), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
                                  "\t{    1.0,    1.0,    1.0,    1.0},\n"
                                  "\t{    1.0,    1.0,    1.0,    1.0},\n"
                                  "\t{    1.0,    1.0,    1.0,    1.0}}\n");
 }
 
-TEST(Matrice, operators) {
+TEST(Matrix, operators) {
   // Equality test
 
-  Matrice M1({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
-  Matrice M2({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
+  Matrix M1({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
+  Matrix M2({{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}});
   EXPECT_EQ(M1, M2);
   M2 = {{2, 3, 4, 5}, {6, 7, 8, 9}, {8, 7, 6, 5}, {4, 3, 2, 1}};
   EXPECT_NE(M1, M2);
 
   // Mutliply test
 
-  // Multiply Matrices
+  // Multiply Matrixs
 
-  Matrice matrice1 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}};
-  M1 = matrice1;
+  Matrix Matrix1 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}};
+  M1 = Matrix1;
   M2 = {{-2, 1, 2, 3}, {3, 2, 1, -1}, {4, 3, 6, 5}, {1, 2, 7, 8}};
-  const Matrice result({{20, 22, 50, 48},
+  const Matrix result({{20, 22, 50, 48},
                         {44, 54, 114, 108},
                         {40, 58, 110, 102},
                         {16, 26, 46, 42}});
   M1 *= M2;
   EXPECT_EQ(M1, result);
-  M1 = matrice1;
+  M1 = Matrix1;
   EXPECT_EQ(M1 * M2, result);
 
-  // Multiply a Matrice by a Tuple
+  // Multiply a Matrix by a Tuple
 
-  Matrice M = {{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}};
+  Matrix M = {{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}};
   Tuple b(1., 2., 3., 1.);
   EXPECT_EQ(M * b, Tuple(18., 24., 33., 1.));
 }
 
-TEST(Matrice, other_stuff) {
-  // Identity matrice tests
+TEST(Matrix, other_stuff) {
+  // Identity Matrix tests
 
-  Matrice M({{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}});
-  EXPECT_EQ(M * Matrice::identity(), M);
+  Matrix M({{0, 1, 2, 4}, {1, 2, 4, 8}, {2, 4, 8, 16}, {4, 8, 16, 32}});
+  EXPECT_EQ(M * Matrix::identity(), M);
   Tuple a(1., 2., 3., 4.);
-  EXPECT_EQ(Matrice::identity() * a, a);
+  EXPECT_EQ(Matrix::identity() * a, a);
 
   M = {{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}};
   EXPECT_EQ(transpose(M),
-            Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
+            Matrix({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
   M.transpose();
   EXPECT_EQ(M,
-            Matrice({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
+            Matrix({{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}}));
 
-  EXPECT_EQ(transpose(Matrice::identity()), Matrice::identity());
-  EXPECT_EQ(Matrice::identity().transpose(), Matrice::identity());
+  EXPECT_EQ(transpose(Matrix::identity()), Matrix::identity());
+  EXPECT_EQ(Matrix::identity().transpose(), Matrix::identity());
 
-  // Inverting Matrices
+  // Inverting Matrixs
   // ==================
 
   // Calculating the determinant of a 2*2 matrix
@@ -125,17 +125,17 @@ TEST(Matrice, other_stuff) {
 
   // A submatrix of a 3*3 matrix is a 2*2 matrix
   M = {{1, 5, 0}, {-3, 2, 7}, {0, 6, -3}};
-  EXPECT_EQ(submatrix(M, 0, 2), Matrice({{-3, 2}, {0, 6}}));
-  EXPECT_EQ(M.submatrix(0, 2), Matrice({{-3, 2}, {0, 6}}));
+  EXPECT_EQ(submatrix(M, 0, 2), Matrix({{-3, 2}, {0, 6}}));
+  EXPECT_EQ(M.submatrix(0, 2), Matrix({{-3, 2}, {0, 6}}));
 
   // A submatrix of a 4*4 matrix is a 3*3 matrix
   M = {{-6, 1, 1, 6}, {-8, 5, 8, 6}, {-1, 0, 8, 2}, {-7, 1, -1, 1}};
-  EXPECT_EQ(submatrix(M, 2, 1), Matrice({{-6, 1, 6}, {-8, 8, 6}, {-7, -1, 1}}));
-  EXPECT_EQ(M.submatrix(2, 1), Matrice({{-6, 1, 6}, {-8, 8, 6}, {-7, -1, 1}}));
+  EXPECT_EQ(submatrix(M, 2, 1), Matrix({{-6, 1, 6}, {-8, 8, 6}, {-7, -1, 1}}));
+  EXPECT_EQ(M.submatrix(2, 1), Matrix({{-6, 1, 6}, {-8, 8, 6}, {-7, -1, 1}}));
 
   // Calculating a minor of a 3*3 matrix
   M = {{3, 5, 0}, {2, -1, -7}, {6, -1, 5}};
-  Matrice M2 = submatrix(M, 1, 0);
+  Matrix M2 = submatrix(M, 1, 0);
   EXPECT_EQ(determinant(M2), 25);
   EXPECT_EQ(matrixminor(M, 1, 0), 25);
 
@@ -201,7 +201,7 @@ TEST(Matrice, other_stuff) {
   M2 = inverse(M);
   EXPECT_EQ(determinant(M), 532);
   EXPECT_EQ(cofactor(M, 2, 3), -160);
-  Matrice::DataType value_f = -160;
+  Matrix::DataType value_f = -160;
   value_f /= 532;
   EXPECT_TRUE(close_to_equal(M2.at(3, 2), value_f)); // float(-160 / 532));
   EXPECT_EQ(cofactor(M, 3, 2), 105);
@@ -209,7 +209,7 @@ TEST(Matrice, other_stuff) {
   value_f /= 532;
   EXPECT_TRUE(close_to_equal(M2.at(2, 3), value_f)); // float(105 / 532));
   EXPECT_TRUE(M2.approximatly_equal(
-      Matrice({{0.21805, 0.45113, 0.24060, -0.04511},
+      Matrix({{0.21805, 0.45113, 0.24060, -0.04511},
                {-0.80827, -1.45677, -0.44361, 0.52068},
                {-0.07895, -0.22368, -0.05263, 0.19737},
                {-0.52256, -0.81391, -0.30075, 0.30639}})));
@@ -217,13 +217,13 @@ TEST(Matrice, other_stuff) {
   // Calculating the invert of another matrix
   M = {{8, -5, 9, 2}, {7, 5, 6, 1}, {-6, 0, 9, 6}, {-3, 0, -9, -4}};
   EXPECT_TRUE(inverse(M).approximatly_equal(
-      Matrice({{-0.15385, -0.15385, -0.28205, -0.53846},
+      Matrix({{-0.15385, -0.15385, -0.28205, -0.53846},
                {-0.07692, 0.12308, 0.02564, 0.03077},
                {0.35897, 0.35897, 0.43590, 0.92308},
                {-0.69231, -0.69231, -0.76923, -1.92308}})));
 
   EXPECT_TRUE(M.inverse().approximatly_equal(
-      Matrice({{-0.15385, -0.15385, -0.28205, -0.53846},
+      Matrix({{-0.15385, -0.15385, -0.28205, -0.53846},
                {-0.07692, 0.12308, 0.02564, 0.03077},
                {0.35897, 0.35897, 0.43590, 0.92308},
                {-0.69231, -0.69231, -0.76923, -1.92308}})));
@@ -231,13 +231,13 @@ TEST(Matrice, other_stuff) {
   // Calculating the invert of a third matrix
   M = {{9, 3, 0, 9}, {-5, -2, -6, -3}, {-4, 9, 6, 4}, {-7, 6, 6, 2}};
   EXPECT_TRUE(inverse(M).approximatly_equal(
-      Matrice({{-0.04074, -0.07778, 0.14444, -0.22222},
+      Matrix({{-0.04074, -0.07778, 0.14444, -0.22222},
                {-0.07778, 0.03333, 0.36667, -0.33333},
                {-0.02901, -0.14630, -0.10926, 0.12963},
                {0.17778, 0.06667, -0.26667, 0.33333}})));
 
   EXPECT_TRUE(M.inverse().approximatly_equal(
-      Matrice({{-0.04074, -0.07778, 0.14444, -0.22222},
+      Matrix({{-0.04074, -0.07778, 0.14444, -0.22222},
                {-0.07778, 0.03333, 0.36667, -0.33333},
                {-0.02901, -0.14630, -0.10926, 0.12963},
                {0.17778, 0.06667, -0.26667, 0.33333}})));
@@ -245,28 +245,28 @@ TEST(Matrice, other_stuff) {
   // Multiplying a product by its inverse
   M = {{3, -9, 7, 3}, {3, -8, 2, -9}, {-4, 4, 4, 1}, {-6, 5, -1, 1}};
   M2 = {{8, 2, 2, 2}, {3, -1, 7, 0}, {7, 0, 5, 4}, {6, -2, 0, 5}};
-  Matrice M3 = M * M2;
+  Matrix M3 = M * M2;
   EXPECT_TRUE((M3 * inverse(M2)).approximatly_equal(M));
   EXPECT_TRUE((M3 * M2.inverse()).approximatly_equal(M));
 }
 
-TEST(Matrice, transformations) {
+TEST(Matrix, transformations) {
   // Translation matrix
   // ==================
 
   // Mutiplying by a translating matrix
-  Matrice transform = Matrice::translation(5., -3., 2.);
+  Matrix transform = Matrix::translation(5., -3., 2.);
   Tuple p = Point(-3., 4., 5.);
   EXPECT_EQ(transform * p, Point(2., 1., 7.));
 
   // Multiplying by the inverse of a translation matrix
-  transform = Matrice::translation(5., -3., 2.);
-  Matrice inv = inverse(transform);
+  transform = Matrix::translation(5., -3., 2.);
+  Matrix inv = inverse(transform);
   p = Point(-3., 4., 5.);
   EXPECT_EQ(inv * p, Point(-8., 7., 3.));
 
   // Translation does not affect vectors
-  transform = Matrice::translation(5., -3., 2.);
+  transform = Matrix::translation(5., -3., 2.);
   Tuple v = Vector(-3., 4., 5.);
   EXPECT_EQ(transform * v, v);
 
@@ -274,7 +274,7 @@ TEST(Matrice, transformations) {
   // ==============
 
   // A scaling matrix applied to a point
-  transform = Matrice::scaling(2., 3., 4.);
+  transform = Matrix::scaling(2., 3., 4.);
   p = Point(-4., 6., 8.);
   EXPECT_EQ(transform * p, Point(-8., 18., 32.));
 
@@ -284,13 +284,13 @@ TEST(Matrice, transformations) {
   EXPECT_EQ(transform * v, Vector(-8., 18., 32.));
 
   // Multiplying by the inverse of a scaling matrix
-  transform = Matrice::scaling(2., 3., 4.);
+  transform = Matrix::scaling(2., 3., 4.);
   inv = inverse(transform);
   v = Vector(-4., 6., 8.);
   EXPECT_EQ(inv * v, Vector(-2., 2., 2.));
 
   // Relfection is scaling by a negative value
-  transform = Matrice::scaling(-1., 1., 1.);
+  transform = Matrix::scaling(-1., 1., 1.);
   p = Point(2., 3., 4.);
   EXPECT_EQ(transform * p, Point(-2., 3., 4.));
 
@@ -301,13 +301,13 @@ TEST(Matrice, transformations) {
 
   // Rotating a point around the x axis
   p = Point(0., 1., 0.);
-  Matrice half_quarter = Matrice::rotation_x(M_PI / 4);
-  Matrice full_quarter = Matrice::rotation_x(M_PI / 2);
+  Matrix half_quarter = Matrix::rotation_x(M_PI / 4);
+  Matrix full_quarter = Matrix::rotation_x(M_PI / 2);
   EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, std::sqrt(2) / 2));
 
   /// The inverse of an x-rotation rotates in the opposite direction
   p = Point(0., 1., 0.);
-  half_quarter = Matrice::rotation_x(M_PI / 4);
+  half_quarter = Matrix::rotation_x(M_PI / 4);
   inv = inverse(half_quarter);
   EXPECT_EQ(inv * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
 
@@ -315,16 +315,16 @@ TEST(Matrice, transformations) {
 
   // Rotating a point around the y axis
   p = Point(0, 0, 1);
-  half_quarter = Matrice::rotation_y(M_PI / 4);
-  full_quarter = Matrice::rotation_y(M_PI / 2);
+  half_quarter = Matrix::rotation_y(M_PI / 4);
+  full_quarter = Matrix::rotation_y(M_PI / 2);
   EXPECT_EQ(half_quarter * p, Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
   EXPECT_EQ(full_quarter * p, Point(1, 0, 0));
   // Z axis
 
   // Rotating a point arround the z axis
   p = Point(0, 1, 0);
-  half_quarter = Matrice::rotation_z(M_PI / 4);
-  full_quarter = Matrice::rotation_z(M_PI / 2);
+  half_quarter = Matrix::rotation_z(M_PI / 4);
+  full_quarter = Matrix::rotation_z(M_PI / 2);
   EXPECT_EQ(half_quarter * p, Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
   EXPECT_EQ(full_quarter * p, Point(-1, 0, 0));
 
@@ -332,32 +332,32 @@ TEST(Matrice, transformations) {
   // ========
 
   // A shearing transformation moves x in proportion to y
-  transform = Matrice::shearing(1, 0, 0, 0, 0, 0);
+  transform = Matrix::shearing(1, 0, 0, 0, 0, 0);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(5, 3, 4));
 
   // A shearing transformation moves x in proportion to z
-  transform = Matrice::shearing(0, 1, 0, 0, 0, 0);
+  transform = Matrix::shearing(0, 1, 0, 0, 0, 0);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(6, 3, 4));
 
   // A shearing transformation moves y in proportion to x
-  transform = Matrice::shearing(0, 0, 1, 0, 0, 0);
+  transform = Matrix::shearing(0, 0, 1, 0, 0, 0);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(2, 5, 4));
 
   // A shearing transformation moves y in proportion to z
-  transform = Matrice::shearing(0, 0, 0, 1, 0, 0);
+  transform = Matrix::shearing(0, 0, 0, 1, 0, 0);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(2, 7, 4));
 
   // A shearing transformation moves z in proportion to x
-  transform = Matrice::shearing(0, 0, 0, 0, 1, 0);
+  transform = Matrix::shearing(0, 0, 0, 0, 1, 0);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(2, 3, 6));
 
   // A shearing transformation moves x in proportion to z
-  transform = Matrice::shearing(0, 0, 0, 0, 0, 1);
+  transform = Matrix::shearing(0, 0, 0, 0, 0, 1);
   p = Point(2, 3, 4);
   EXPECT_EQ(transform * p, Point(2, 3, 7));
 
@@ -368,9 +368,9 @@ TEST(Matrice, transformations) {
   // --------------------------------------------------
 
   p = Point(1, 0, 1);
-  Matrice A = Matrice::rotation_x(M_PI / 2);
-  Matrice B = Matrice::scaling(5, 5, 5);
-  Matrice C = Matrice::translation(10, 5, 7);
+  Matrix A = Matrix::rotation_x(M_PI / 2);
+  Matrix B = Matrix::scaling(5, 5, 5);
+  Matrix C = Matrix::translation(10, 5, 7);
   // Apply rotation first
   Tuple p2 = A * p;
   EXPECT_EQ(p2, Point(1, -1, 0));
@@ -385,9 +385,9 @@ TEST(Matrice, transformations) {
   // --------------------------------------------------------
 
   p = Point(1, 0, 1);
-  A = Matrice::rotation_x(M_PI / 2);
-  B = Matrice::scaling(5, 5, 5);
-  C = Matrice::translation(10, 5, 7);
-  Matrice T = C * B * A;
+  A = Matrix::rotation_x(M_PI / 2);
+  B = Matrix::scaling(5, 5, 5);
+  C = Matrix::translation(10, 5, 7);
+  Matrix T = C * B * A;
   EXPECT_EQ(T * p, Point(15, 0, 7));
 }
