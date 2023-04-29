@@ -25,16 +25,15 @@ public:
   // ============
 
   /** Not secured; every kind of matrices can be generated/exist. */
-  Matrice(){};
+  Matrice() {}
   Matrice(const Matrice &) = default;
   Matrice(const std::vector<std::vector<DataType>> &M) : m_matrice(M) {}
-  Matrice(std::vector<std::vector<DataType>> &&M)
-      : m_matrice(std::move(M)) {}
+  Matrice(std::vector<std::vector<DataType>> &&M) : m_matrice(std::move(M)) {}
   Matrice(Matrice &&M) : m_matrice(std::move(M.m_matrice)) {}
   Matrice(std::initializer_list<std::initializer_list<DataType>> il)
       : m_matrice() {
-    for (typename std::initializer_list<std::initializer_list<DataType>>::iterator
-             it = il.begin();
+    for (typename std::initializer_list<
+             std::initializer_list<DataType>>::iterator it = il.begin();
          it != il.end(); it++)
       m_matrice.push_back(*it);
   }
@@ -50,7 +49,7 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
       {    0.0,    1.0,    0.0,    0.0},
       {    0.0,    0.0,    1.0,    0.0},
       {    0.0,    0.0,    0.0,    1.0}}*/
-  static Matrice identity() {
+  static Matrice identity() noexcept {
     return Matrice({{1., 0., 0., 0.},
                     {0., 1., 0., 0.},
                     {0., 0., 1., 0.},
@@ -60,68 +59,65 @@ Matrice {    1.0,    0.0,    0.0,    0.0},
 // Chapter 4 transformations
 // =========================
 
-static Matrice translation(DataType x, DataType y,
-                           DataType z) {
-  Matrice result = Matrice::identity();
-  result.set(0, 3, x);
-  result.set(1, 3, y);
-  result.set(2, 3, z);
-  return result;
-}
+  static Matrice translation(DataType x, DataType y, DataType z) {
+    Matrice result = Matrice::identity();
+    result.set(0, 3, x);
+    result.set(1, 3, y);
+    result.set(2, 3, z);
+    return result;
+  }
 
-/** Refer at the top of p49 for visual explanations. */
-static Matrice scaling(DataType x, DataType y,
-                       DataType z) {
-  Matrice result = Matrice::identity();
-  result.set(0, 0, x);
-  result.set(1, 1, y);
-  result.set(2, 2, z);
-  return result;
-}
+  /** Refer at the top of p49 for visual explanations. */
+  static Matrice scaling(DataType x, DataType y, DataType z) {
+    Matrice result = Matrice::identity();
+    result.set(0, 0, x);
+    result.set(1, 1, y);
+    result.set(2, 2, z);
+    return result;
+  }
 
-/** Refer at the top of p50 for visual explanations. */
-static Matrice rotation_x(DataType radians) {
-  Matrice result = Matrice::identity();
-  result.set(1, 1, std::cos(radians));
-  result.set(1, 2, -std::sin(radians));
-  result.set(2, 1, std::sin(radians));
-  result.set(2, 2, std::cos(radians));
-  return result;
-}
+  /** Refer at the top of p50 for visual explanations. */
+  static Matrice rotation_x(DataType radians) {
+    Matrice result = Matrice::identity();
+    result.set(1, 1, std::cos(radians));
+    result.set(1, 2, -std::sin(radians));
+    result.set(2, 1, std::sin(radians));
+    result.set(2, 2, std::cos(radians));
+    return result;
+  }
 
-/** Refer at the bottom of p50 for visual explanations. */
-static Matrice rotation_y(DataType radians) {
-  Matrice result = Matrice::identity();
-  result.set(0, 0, std::cos(radians));
-  result.set(0, 2, std::sin(radians));
-  result.set(2, 0, -std::sin(radians));
-  result.set(2, 2, std::cos(radians));
-  return result;
-}
+  /** Refer at the bottom of p50 for visual explanations. */
+  static Matrice rotation_y(DataType radians) {
+    Matrice result = Matrice::identity();
+    result.set(0, 0, std::cos(radians));
+    result.set(0, 2, std::sin(radians));
+    result.set(2, 0, -std::sin(radians));
+    result.set(2, 2, std::cos(radians));
+    return result;
+  }
 
-static Matrice rotation_z(DataType radians) {
-  Matrice result = Matrice::identity();
-  result.set(0, 0, std::cos(radians));
-  result.set(0, 1, -std::sin(radians));
-  result.set(1, 0, std::sin(radians));
-  result.set(1, 1, std::cos(radians));
-  return result;
-}
+  static Matrice rotation_z(DataType radians) {
+    Matrice result = Matrice::identity();
+    result.set(0, 0, std::cos(radians));
+    result.set(0, 1, -std::sin(radians));
+    result.set(1, 0, std::sin(radians));
+    result.set(1, 1, std::cos(radians));
+    return result;
+  }
 
-/** Function that moves points proportionnaly to an axis. See image p51 for more
+/** Function that moves points proportionally to an axis. See image p51 for more
  * information.*/
-static Matrice shearing(DataType Xy, DataType Xz,
-                        DataType Yx, DataType Yz,
-                        DataType Zx, DataType Zy) {
-  Matrice result = Matrice::identity();
-  result.set(0, 1, Xy);
-  result.set(0, 2, Xz);
-  result.set(1, 0, Yx);
-  result.set(1, 2, Yz);
-  result.set(2, 0, Zx);
-  result.set(2, 1, Zy);
-  return result;
-}
+  static Matrice shearing(DataType Xy, DataType Xz, DataType Yx, DataType Yz,
+                          DataType Zx, DataType Zy) {
+    Matrice result = Matrice::identity();
+    result.set(0, 1, Xy);
+    result.set(0, 2, Xz);
+    result.set(1, 0, Yx);
+    result.set(1, 2, Yz);
+    result.set(2, 0, Zx);
+    result.set(2, 1, Zy);
+    return result;
+  }
   // Special operators
   // =================
 
@@ -137,7 +133,7 @@ static Matrice shearing(DataType Xy, DataType Xz,
     return *this;
   }
 
-  DataType determinant() const {
+  constexpr DataType determinant() const {
     if (shape() == std::tuple<int, int>(2, 2))
       return at(0, 0) * at(1, 1) - at(0, 1) * at(1, 0);
 
@@ -152,7 +148,7 @@ static Matrice shearing(DataType Xy, DataType Xz,
     return result;
   }
 
-  bool is_invertible() const { return determinant() != 0; }
+  constexpr bool is_invertible() const { return determinant() != 0; }
 
   /** Returns a submatrix(a matrice with one row and column less). */
   Matrice submatrix(unsigned line, unsigned column) const {
@@ -229,18 +225,18 @@ static Matrice shearing(DataType Xy, DataType Xz,
   const std::vector<std::vector<DataType>> &matrice() const { return m_matrice; }
 
   /** Returns the Matrice shape as a tuple<int x, int, y>. */
-  std::tuple<int, int> shape() const {
+  constexpr std::tuple<int, int> shape() const {
     return std::tuple<int, int>(m_matrice.size(), m_matrice[0].size());
   }
 
   /** Returns the Matrice number of rows. */
-  unsigned getNumLines() const { return m_matrice.size(); }
+  constexpr unsigned getNumLines() const { return m_matrice.size(); }
 
   /** Returns the Matrice number of columns. */
-  unsigned getNumColumns() const { return m_matrice[0].size(); }
+  constexpr unsigned getNumColumns() const { return m_matrice[0].size(); }
 
   /** Returns the corresponding value(float). */
-  DataType at(unsigned line, unsigned column) const {
+  constexpr DataType at(unsigned line, unsigned column) const {
     return m_matrice[line][column];
   }
 
@@ -283,7 +279,7 @@ static Matrice shearing(DataType Xy, DataType Xz,
   // Editors
   // =======
 
-  Matrice &set(unsigned line, unsigned column, DataType value) {
+  constexpr Matrice &set(unsigned line, unsigned column, DataType value) {
     m_matrice[line][column] = value;
     return *this;
   }
