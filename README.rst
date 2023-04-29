@@ -29,10 +29,8 @@
     :target: #
 
 ===============================================================================
-Ratrac:a ray tracer experiment
+Ratrac : a ray tracer experiment
 ===============================================================================
-
-
 
 Build
 =====
@@ -62,4 +60,3 @@ Use
 Enjoy !
 
 .. _googletest: https://github.com/google/googletest
-
