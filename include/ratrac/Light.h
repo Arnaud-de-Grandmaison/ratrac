@@ -1,10 +1,10 @@
 #pragma once
 
-#include <ostream>
-
 #include "ratrac/Color.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
+
+#include <ostream>
 
 namespace ratrac {
 /** A lightPoint represents a point of light, i.e. a light source with no size,

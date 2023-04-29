@@ -1,14 +1,14 @@
 #pragma once
 
+#include "ratrac/Tuple.h"
+#include "ratrac/ratrac.h"
+
 #include <cassert>
 #include <cmath>
 #include <initializer_list>
 #include <ostream>
 #include <tuple>
 #include <vector>
-
-#include "ratrac/Tuple.h"
-#include "ratrac/ratrac.h"
 
 namespace ratrac {
 class Matrice;

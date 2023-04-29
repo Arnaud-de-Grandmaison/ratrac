@@ -1,10 +1,10 @@
 #pragma once
 
+#include "ratrac/Color.h"
+
 #include <cassert>
 #include <ostream>
 #include <vector>
-
-#include "ratrac/Color.h"
 
 namespace ratrac {
 

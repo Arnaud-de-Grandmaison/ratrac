@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ratrac/Light.h"
-//#include "ratrac/Material.h"
 #include "ratrac/Ray.h"
 #include "ratrac/Shapes.h"
 #include "ratrac/ratrac.h"

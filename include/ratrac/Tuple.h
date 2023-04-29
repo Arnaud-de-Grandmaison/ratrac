@@ -1,10 +1,10 @@
 #pragma once
 
+#include "ratrac/ratrac.h"
+
 #include <array>
 #include <cmath>
 #include <ostream>
-
-#include "ratrac/ratrac.h"
 
 namespace ratrac {
 // Classes

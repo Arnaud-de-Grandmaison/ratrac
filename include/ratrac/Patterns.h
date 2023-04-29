@@ -1,14 +1,14 @@
 #pragma once
 
-#include <cmath>
-#include <memory>
-#include <ostream>
-#include <string>
-
 #include "ratrac/Color.h"
 #include "ratrac/Matrice.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
+
+#include <cmath>
+#include <memory>
+#include <ostream>
+#include <string>
 
 namespace ratrac {
 
