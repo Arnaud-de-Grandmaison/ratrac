@@ -31,28 +31,30 @@ public:
   // Accessors
   // =========
 
-  ColorType &red() { return m_color[0]; }
-  ColorType &green() { return m_color[1]; }
-  ColorType &blue() { return m_color[2]; }
-  ColorType &alpha() { return m_color[3]; }
+  ColorType &red() noexcept { return m_color[0]; }
+  ColorType &green() noexcept { return m_color[1]; }
+  ColorType &blue() noexcept { return m_color[2]; }
+  ColorType &alpha() noexcept { return m_color[3]; }
 
-  const ColorType &red() const { return m_color[0]; }
-  const ColorType &green() const { return m_color[1]; }
-  const ColorType &blue() const { return m_color[2]; }
-  const ColorType &alpha() const { return m_color[3]; }
+  const constexpr ColorType &red() const noexcept { return m_color[0]; }
+  const constexpr ColorType &green() const noexcept { return m_color[1]; }
+  const constexpr ColorType &blue() const noexcept { return m_color[2]; }
+  const constexpr ColorType &alpha() const noexcept { return m_color[3]; }
 
   // Operators
   // =========
 
   // equal/not equal
 
-  bool operator==(const Color &rhs) const {
+  constexpr bool operator==(const Color &rhs) const noexcept {
     return close_to_equal(red(), rhs.red()) &&
            close_to_equal(green(), rhs.green()) &&
            close_to_equal(blue(), rhs.blue()) &&
            close_to_equal(alpha(), rhs.alpha());
   }
-  bool operator!=(const Color &rhs) const { return !operator==(rhs); }
+  constexpr bool operator!=(const Color &rhs) const noexcept {
+    return !operator==(rhs);
+  }
 
   // operations
 
@@ -83,16 +85,16 @@ public:
   }
 
   // Color helpers.
-  constexpr static Color BLACK() { return Color(0, 0, 0); }
-  constexpr static Color WHITE() { return Color(1, 1, 1); }
-  constexpr static Color RED() { return Color(1, 0, 0); }
-  constexpr static Color GREEN() { return Color(0, 1, 0); }
-  constexpr static Color BLUE() { return Color(0, 0, 1); }
+  constexpr static Color BLACK() noexcept { return Color(0, 0, 0); }
+  constexpr static Color WHITE() noexcept { return Color(1, 1, 1); }
+  constexpr static Color RED() noexcept { return Color(1, 0, 0); }
+  constexpr static Color GREEN() noexcept { return Color(0, 1, 0); }
+  constexpr static Color BLUE() noexcept { return Color(0, 0, 1); }
 
   explicit operator std::string() const;
 
 private:
-  // An array formated as following: RayTracerColor(red, green, blue, alpha).
+  // An array formatted as following: RayTracerColor(red, green, blue, alpha).
   std::array<ColorType, 4> m_color;
 };
 

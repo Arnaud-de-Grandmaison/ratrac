@@ -15,15 +15,16 @@ public:
   Ray(const Ray &other)
       : m_origin(other.m_origin), m_direction(other.m_direction) {}
 
-  const Tuple &origin() const { return m_origin; }
-  const Tuple &direction() const { return m_direction; }
+  constexpr const Tuple &origin() const noexcept { return m_origin; }
+  constexpr const Tuple &direction() const noexcept { return m_direction; }
 
 private:
   Tuple m_origin;
   Tuple m_direction;
 };
 
-template <class DataTy> Tuple position(const Ray &ray, DataTy t) {
+template <class DataTy>
+constexpr Tuple position(const Ray &ray, DataTy t) noexcept {
   return ray.origin() + ray.direction() * Tuple::DataType(t);
 }
 

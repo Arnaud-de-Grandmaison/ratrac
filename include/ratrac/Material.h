@@ -64,12 +64,20 @@ public:
   }
 
   // Getters.
-  const Color &color() const { return m_color; }
-  const RayTracerColorType &ambient() const { return m_ambient; }
-  const RayTracerColorType &diffuse() const { return m_diffuse; }
-  const RayTracerColorType &specular() const { return m_specular; }
-  const RayTracerColorType &shininess() const { return m_shininess; }
-  const Pattern *pattern() const { return m_pattern.get(); }
+  const constexpr Color &color() const noexcept { return m_color; }
+  const constexpr RayTracerColorType &ambient() const noexcept {
+    return m_ambient;
+  }
+  const constexpr RayTracerColorType &diffuse() const noexcept {
+    return m_diffuse;
+  }
+  const constexpr RayTracerColorType &specular() const noexcept {
+    return m_specular;
+  }
+  const constexpr RayTracerColorType &shininess() const noexcept {
+    return m_shininess;
+  }
+  const constexpr Pattern *pattern() const noexcept { return m_pattern.get(); }
 
   // Setters.
   Material &color(const Color &color) {

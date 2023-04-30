@@ -19,15 +19,15 @@ public:
 
   LightPoint &operator=(const LightPoint &) = default;
 
-  bool operator==(const LightPoint &rhs) const {
+  constexpr bool operator==(const LightPoint &rhs) const noexcept {
     return m_intensity == rhs.m_intensity && m_position == rhs.m_position;
   }
-  bool operator!=(const LightPoint &rhs) const {
+  constexpr bool operator!=(const LightPoint &rhs) const noexcept {
     return !(*this == rhs);
   }
 
-  const Color &intensity() const { return m_intensity; }
-  const Tuple &position() const { return m_position; }
+  const constexpr Color &intensity() const noexcept { return m_intensity; }
+  const constexpr Tuple &position() const noexcept { return m_position; }
 
 private:
   Color m_intensity;
