@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   unique_ptr<Sphere> s(new Sphere());
 
   {
-    ProgressBar PB("Rendering", C.height() * C.width(), cout);
+    TimedProgressBar PB("Rendering", C.height() * C.width(), cout);
     for (unsigned y = 0; y < C.height(); y++) {
       Matrix::DataType world_y = half - pixel_size * y;
       for (unsigned x = 0; x < C.width(); x++) {

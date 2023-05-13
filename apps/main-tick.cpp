@@ -1,7 +1,7 @@
-#include "ratrac/ratrac.h"
-#include "ratrac/Tuple.h"
-#include "ratrac/Color.h"
 #include "ratrac/Canvas.h"
+#include "ratrac/Color.h"
+#include "ratrac/Tuple.h"
+#include "ratrac/ratrac.h"
 
 #include <fstream>
 #include <iomanip>

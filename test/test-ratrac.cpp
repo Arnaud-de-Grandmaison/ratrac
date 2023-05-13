@@ -12,11 +12,14 @@
 #include "ratrac/ProgressBar.h"
 #include "ratrac/Ray.h"
 #include "ratrac/Shapes.h"
+#include "ratrac/StopWatch.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/World.h"
 
+#include <chrono>
 #include <cmath>
 #include <sstream>
+#include <thread>
 #include <tuple>
 #include <vector>
 
@@ -34,6 +37,7 @@ using namespace testing;
 #include "test-ProgressBar.inc.cpp"
 #include "test-Ray.inc.cpp"
 #include "test-Shapes.inc.cpp"
+#include "test-StopWatch.inc.cpp"
 #include "test-Tuple.inc.cpp"
 #include "test-World.inc.cpp"
 

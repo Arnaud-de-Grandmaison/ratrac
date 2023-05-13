@@ -17,7 +17,7 @@ void clock_generator(size_t width, size_t height, const char *filename) {
 
   // Generate a centered point
   {
-    ProgressBar PB("Generation", 12, cout);
+    TimedProgressBar PB("Generation", 12, cout);
     for (unsigned i = 0; i < 12; i++) {
       Matrix temp_transform = Matrix::identity();
       temp_transform *= Matrix::rotation_y(double(i) * 2.0 * M_PI / double(12));
