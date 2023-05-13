@@ -31,7 +31,7 @@ public:
 
   Ray ray_for_pixel(unsigned px, unsigned py) const;
 
-  Canvas render(const World &w) const;
+  Canvas render(const World &w, bool verbose) const;
 
 private:
   Matrix m_transform;

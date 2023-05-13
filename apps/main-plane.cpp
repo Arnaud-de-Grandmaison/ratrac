@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
       view_transform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
 
   // Render the world to a canvas.
-  Canvas C = camera.render(world);
+  Canvas C = camera.render(world, /* verbose: */ true);
 
   // Save the scene.
   ofstream file("plane.ppm");

@@ -1,8 +1,10 @@
 #include "ratrac/Camera.h"
 #include "ratrac/Intersections.h"
+#include "ratrac/ProgressBar.h"
 #include "ratrac/ratrac.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace ratrac {
 
@@ -43,13 +45,14 @@ Ray Camera::ray_for_pixel(unsigned px, unsigned py) const {
   return Ray(origin, direction);
 }
 
-Canvas Camera::render(const World &world) const {
+Canvas Camera::render(const World &world, bool verbose) const {
   Canvas image(m_hsize, m_vsize);
-
+  ProgressBar PB("Camera::render", m_vsize * m_hsize, std::cout, !verbose);
   for (unsigned y = 0; y < m_vsize; y++) {
     for (unsigned x = 0; x < m_hsize; x++) {
       Ray ray = ray_for_pixel(x, y);
       image.at(x, y) = color_at(world, ray);
+      PB.incr();
     }
   }
 

@@ -2,14 +2,18 @@
 #include "ratrac/Color.h"
 #include "ratrac/Intersections.h"
 #include "ratrac/Matrix.h"
+#include "ratrac/ProgressBar.h"
 #include "ratrac/Shapes.h"
 #include "ratrac/Tuple.h"
 
 #include <fstream>
+#include <iostream>
 #include <memory>
 
 using namespace ratrac;
-using namespace std;
+using std::cout;
+using std::ofstream;
+using std::unique_ptr;
 
 int main(int argc, char *argv[]) {
   Canvas C(100, 100);
@@ -25,14 +29,18 @@ int main(int argc, char *argv[]) {
 
   unique_ptr<Sphere> s(new Sphere());
 
-  for (unsigned y = 0; y < C.height(); y++) {
-    Matrix::DataType world_y = half - pixel_size * y;
-    for (unsigned x = 0; x < C.width(); x++) {
-      Matrix::DataType world_x = half - pixel_size * x;
-      Ray r = Ray(ray_origin, normalize(Point(world_x, world_y, wall_z)));
-      Intersections xs = s->intersect(r);
-      if (xs.hit() != xs.end())
-        C.at(x, y) = red;
+  {
+    ProgressBar PB("Rendering", C.height() * C.width(), cout);
+    for (unsigned y = 0; y < C.height(); y++) {
+      Matrix::DataType world_y = half - pixel_size * y;
+      for (unsigned x = 0; x < C.width(); x++) {
+        Matrix::DataType world_x = half - pixel_size * x;
+        Ray r = Ray(ray_origin, normalize(Point(world_x, world_y, wall_z)));
+        Intersections xs = s->intersect(r);
+        if (xs.hit() != xs.end())
+          C.at(x, y) = red;
+        PB.incr();
+      }
     }
   }
 

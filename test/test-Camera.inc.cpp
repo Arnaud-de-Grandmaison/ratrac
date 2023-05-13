@@ -83,6 +83,6 @@ TEST(Camera, world_rendering) {
   Tuple to = Point(0, 0, 0);
   Tuple up = Vector(0, 1, 0);
   c.transform(view_transform(from, to, up));
-  Canvas image = c.render(w);
+  Canvas image = c.render(w, /* verbose: */ false);
   EXPECT_EQ(image.at(5, 5), Color(0.38066, 0.47583, 0.2855));
 }
