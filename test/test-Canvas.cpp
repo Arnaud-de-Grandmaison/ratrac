@@ -1,3 +1,16 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Canvas.h"
+
+#include <sstream>
+#include <string>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+using std::string;
+
 TEST(Canvas, canvas) {
   // Testing canvas
   // ==============
@@ -16,15 +29,15 @@ TEST(Canvas, canvas) {
   // =============
 
   // Constructing the PPM header
-  std::ostringstream sstr;
+  ostringstream oss;
   C = Canvas(5, 3);
-  C.to_ppm(sstr);
-  EXPECT_EQ(sstr.str(),
+  C.to_ppm(oss);
+  EXPECT_EQ(oss.str(),
             "P3\n5 3\n255\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 "
             "0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n");
 
   // Constructing the PPM pixel data
-  sstr.str("");
+  oss.str("");
   C = Canvas(5, 3);
   Color c1(1.5, 0.0, 0.0);
   Color c2(0.0, 0.5, 0.0);
@@ -32,26 +45,26 @@ TEST(Canvas, canvas) {
   C.at(0, 0) = c1;
   C.at(2, 1) = c2;
   C.at(4, 2) = c3;
-  C.to_ppm(sstr);
-  EXPECT_EQ(sstr.str(),
+  C.to_ppm(oss);
+  EXPECT_EQ(oss.str(),
             "P3\n5 3\n255\n255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 128 "
             "0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n");
 
   // Splitting long lines in PPM files
-  sstr.str("");
+  oss.str("");
   C = Canvas(10, 2, Color(1., 0.8, 0.6));
-  C.to_ppm(sstr);
+  C.to_ppm(oss);
   EXPECT_EQ(
-      sstr.str(),
+      oss.str(),
       "P3\n10 2\n255\n255 204 153 255 204 153 255 204 153 255 204 153 255 204 "
       "153 255 204\n153 255 204 153 255 204 153 255 204 153 255 204 153\n255 "
       "204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n153 "
       "255 204 153 255 204 153 255 204 153 255 204 153\n");
 
   // PPM files are terminated by a newline character
-  sstr.str("");
+  oss.str("");
   C = Canvas(5, 3);
-  C.to_ppm(sstr);
-  std::string s = sstr.str();
+  C.to_ppm(oss);
+  string s = oss.str();
   EXPECT_EQ(s[s.size() - 1], '\n');
 }

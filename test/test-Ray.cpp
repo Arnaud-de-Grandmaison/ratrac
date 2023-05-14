@@ -1,3 +1,14 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Ray.h"
+
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+
 TEST(Ray, base) {
   // Testing Ray
   // ===========
@@ -27,10 +38,10 @@ TEST(Ray, base) {
 
 TEST(Ray, output) {
   Ray ray(Point(1, 2, 3), Vector(4, 5, 6));
-  std::ostringstream string_stream;
-  string_stream << ray;
+  ostringstream oss;
+  oss << ray;
   EXPECT_EQ(
-      string_stream.str(),
+      oss.str(),
       "Ray { origin: Tuple { 1, 2, 3, 1}, direction: Tuple { 4, 5, 6, 0}}");
 }
 

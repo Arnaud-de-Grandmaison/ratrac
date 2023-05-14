@@ -1,5 +1,10 @@
 #include <gtest/gtest.h>
 
+#include "ratrac/Camera.h"
+
+using namespace ratrac;
+using namespace testing;
+
 TEST(Camera, view_transform) {
   // The transformation matrix for the default orientation.
   Tuple from = Point(0, 0, 0);

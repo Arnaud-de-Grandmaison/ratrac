@@ -8,17 +8,29 @@ include_directories(${GOOGLETEST_SOURCE_DIR}/include
 add_custom_target(check
   COMMENT "Running ratrac unit tests")
 
-macro(add_test name)
-  # Compile the specific test:
-  add_executable(test-${name}
-                 EXCLUDE_FROM_ALL
-                 ${CMAKE_CURRENT_SOURCE_DIR}/test-${name}.cpp)
-  target_include_directories(test-${name} PRIVATE ${WAN_SOURCE_DIR})
-  target_link_libraries(test-${name} gtest ratrac)
-  add_custom_target(check-${name} test-${name} --gtest_color=yes --gtest_output=xml:test-${name}.xml
-                    DEPENDS test-${name}
-                    COMMENT "Running ${name} unit tests")
-  add_dependencies(check check-${name})
-endmacro(add_test name)
+set(RATRAC_TEST_SOURCE_FILES
+  test-Camera.cpp
+  test-Canvas.cpp
+  test-Color.cpp
+  test-Intersections.cpp
+  test-Light.cpp
+  test-Material.cpp
+  test-Matrix.cpp
+  test-Patterns.cpp
+  test-ProgressBar.cpp
+  test-Ray.cpp
+  test-Shapes.cpp
+  test-StopWatch.cpp
+  test-Tuple.cpp
+  test-World.cpp
+)
 
-add_test(ratrac)
+add_executable(test-ratrac
+               EXCLUDE_FROM_ALL
+               test-ratrac.cpp
+               ${RATRAC_TEST_SOURCE_FILES})
+target_link_libraries(test-ratrac gtest ratrac)
+add_custom_target(check-ratrac test-ratrac --gtest_color=yes --gtest_output=xml:test-ratrac.xml
+                  DEPENDS test-ratrac
+                  COMMENT "Running ratrac unit tests")
+add_dependencies(check check-ratrac)

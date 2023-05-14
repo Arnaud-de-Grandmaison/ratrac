@@ -1,3 +1,14 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Material.h"
+
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+
 TEST(Material, base) {
   // Default material
   Material m;
@@ -37,17 +48,17 @@ TEST(Material, base) {
 
 TEST(Material, output) {
   Material m;
-  std::ostringstream string_stream;
-  string_stream << m;
-  EXPECT_EQ(string_stream.str(),
+  ostringstream oss;
+  oss << m;
+  EXPECT_EQ(oss.str(),
             "Material { color: Color { red:1, green:1, blue:1, alpha:1}, "
             "pattern: Pattern {}, "
             "ambient: 0.1, diffuse: 0.9, specular: 0.9, shininess: 200.0}");
 
-  string_stream.str("");
+  oss.str("");
   m = Material(Stripes(Color::BLACK(), Color::WHITE()), 0.1, 0.9, 0.9, 200.0);
-  string_stream << m;
-  EXPECT_EQ(string_stream.str(),
+  oss << m;
+  EXPECT_EQ(oss.str(),
             "Material { color: Color { red:0, green:0, blue:0, alpha:1}, "
             "pattern: Stripes { a: Color { red:0, green:0, blue:0, alpha:1}, "
             "b: Color { red:1, green:1, blue:1, alpha:1}, transform: Matrix { "

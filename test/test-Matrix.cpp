@@ -1,3 +1,17 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Matrix.h"
+
+#include <string>
+#include <sstream>
+#include <tuple>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+using std::string;
+
 TEST(Matrix, init) {
   // init Tests
   // ==========
@@ -51,18 +65,18 @@ TEST(Matrix, output) {
              {1.0f, 1.0f, 1.0f, 1.0f}});
 
   // String conversion
-  EXPECT_EQ(std::string(M), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
-                            "\t{    1.0,    1.0,    1.0,    1.0},\n"
-                            "\t{    1.0,    1.0,    1.0,    1.0},\n"
-                            "\t{    1.0,    1.0,    1.0,    1.0}}\n");
+  EXPECT_EQ(string(M), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0}}\n");
 
   // << operator Test
-  std::ostringstream string_stream;
-  string_stream << M;
-  EXPECT_EQ(string_stream.str(), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
-                                 "\t{    1.0,    1.0,    1.0,    1.0},\n"
-                                 "\t{    1.0,    1.0,    1.0,    1.0},\n"
-                                 "\t{    1.0,    1.0,    1.0,    1.0}}\n");
+  ostringstream oss;
+  oss << M;
+  EXPECT_EQ(oss.str(), "Matrix {    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0},\n"
+                       "\t{    1.0,    1.0,    1.0,    1.0}}\n");
 }
 
 TEST(Matrix, operators) {

@@ -1,3 +1,14 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Light.h"
+
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+
 TEST(Light, base) {
   // A point of light has a position and intensity.
   Color intensity(1, 1, 1);
@@ -20,9 +31,9 @@ TEST(Light, base) {
 
 TEST(Light, output) {
   LightPoint lp(Point(0, 0, 0), Color::WHITE());
-  std::ostringstream string_stream;
-  string_stream << lp;
-  EXPECT_EQ(string_stream.str(),
+  ostringstream oss;
+  oss << lp;
+  EXPECT_EQ(oss.str(),
             "LightPoint { intensity: Color { red:1, green:1, blue:1, alpha:1}, "
             "position: Tuple { 0, 0, 0, 1}}");
 }

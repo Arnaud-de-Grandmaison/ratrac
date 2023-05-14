@@ -1,3 +1,16 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Shapes.h"
+
+#include <memory>
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+using std::unique_ptr;
+
 struct TestShape : public Shape {
   TestShape() : Shape(), saved_ray() {}
 
@@ -16,7 +29,7 @@ struct TestShape : public Shape {
 TEST(Shapes, base) {
 
   // Default transformation.
-  std::unique_ptr<TestShape> s(new TestShape());
+  unique_ptr<TestShape> s(new TestShape());
   EXPECT_EQ(s->transform(), Matrix::identity());
 
   // Assign a transformation.
@@ -40,7 +53,7 @@ TEST(Shapes, base) {
   s.reset(new TestShape());
   EXPECT_TRUE(*s == TestShape());
   EXPECT_FALSE(*s != TestShape());
-  std::unique_ptr<TestShape> s2(new TestShape());
+  unique_ptr<TestShape> s2(new TestShape());
   s2->transform(Matrix::translation(1, 2, 3));
   EXPECT_FALSE(*s == *s2);
   EXPECT_TRUE(*s != *s2);
@@ -55,7 +68,7 @@ TEST(Shapes, base) {
 TEST(Shapes, sphere) {
 
   // Basic sphere creation.
-  std::unique_ptr<Sphere> s(new Sphere());
+  unique_ptr<Sphere> s(new Sphere());
   EXPECT_EQ(s->center(), Point(0, 0, 0));
   EXPECT_EQ(s->radius(), 1.0);
   EXPECT_EQ(s->transform(), Matrix::identity());
@@ -78,7 +91,7 @@ TEST(Shapes, sphere) {
   s.reset(new Sphere());
   EXPECT_TRUE(*s == Sphere());
   EXPECT_FALSE(*s != Sphere());
-  std::unique_ptr<Sphere> s2(new Sphere());
+  unique_ptr<Sphere> s2(new Sphere());
   s2->transform(Matrix::translation(1, 2, 3));
   EXPECT_FALSE(*s == *s2);
   EXPECT_TRUE(*s != *s2);
@@ -92,22 +105,22 @@ TEST(Shapes, sphere) {
 
 TEST(Shapes, plane) {
   // Basic plane creation.
-  std::unique_ptr<Plane> p(new Plane());
+  unique_ptr<Plane> p(new Plane());
 
   EXPECT_EQ(p->transform(), Matrix::identity());
   EXPECT_EQ(p->material(), Material());
 
   // Equality and inequality.
-  std::unique_ptr<Plane> p2(new Plane());
+  unique_ptr<Plane> p2(new Plane());
   EXPECT_TRUE(*p == *p2);
   EXPECT_FALSE(*p != *p2);
 }
 
 TEST(Shapes, output) {
   Sphere s;
-  std::ostringstream string_stream;
-  string_stream << s;
-  EXPECT_EQ(string_stream.str(),
+  ostringstream oss;
+  oss << s;
+  EXPECT_EQ(oss.str(),
             "Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: "
             "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,   "
             " 0.0,    0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0, "
@@ -119,7 +132,7 @@ TEST(Shapes, output) {
 TEST(Shapes, intersections) {
   // Intersecting a scaled shape with a ray.
   Ray r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  std::unique_ptr<TestShape> shape(new TestShape());
+  unique_ptr<TestShape> shape(new TestShape());
   shape->transform(Matrix::scaling(2, 2, 2));
   Intersections xs = shape->intersect(r);
   EXPECT_EQ(shape->saved_ray.origin(), Point(0, 0, -2.5));
@@ -135,7 +148,7 @@ TEST(Shapes, intersections) {
 
   // A ray intersects a sphere at two points.
   r = Ray(Point(0, 0, -5), Vector(0, 0, 1));
-  std::unique_ptr<Sphere> s(new Sphere());
+  unique_ptr<Sphere> s(new Sphere());
   xs = s->intersect(r);
   EXPECT_EQ(xs.count(), 2);
   EXPECT_EQ(xs[0].t, 4.0);
@@ -193,7 +206,7 @@ TEST(Shapes, intersections) {
   EXPECT_TRUE(xs.empty());
 
   // Intersecting with a ray parallel to the plane.
-  std::unique_ptr<Plane> p(new Plane());
+  unique_ptr<Plane> p(new Plane());
   r = Ray(Point(0, 10, 0), Vector(0, 0, 1));
   xs = p->local_intersect(r);
   EXPECT_EQ(xs.count(), 0);
@@ -227,7 +240,7 @@ TEST(Shapes, intersections) {
 
 TEST(Shapes, normal) {
   // Computing the normal on a translated Shape.
-  std::unique_ptr<TestShape> shape(new TestShape());
+  unique_ptr<TestShape> shape(new TestShape());
   shape->transform(Matrix::translation(0, 1, 0));
   Tuple n = shape->normal_at(Point(0, 1.70711, -0.70711));
   EXPECT_EQ(n, Vector(0, 0.70711, -0.70711));
@@ -239,7 +252,7 @@ TEST(Shapes, normal) {
   n = shape->normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
 
-  std::unique_ptr<Sphere> s(new Sphere());
+  unique_ptr<Sphere> s(new Sphere());
 
   // The normal on a sphere at a point on the x axis.
   n = s->normal_at(Point(1, 0, 0));
@@ -273,7 +286,7 @@ TEST(Shapes, normal) {
   n = s->normal_at(Point(0, sqrt(2.0) / 2.0, -sqrt(2.0) / 2.0));
   EXPECT_EQ(n, Vector(0, 0.97014, -0.24254));
 
-  std::unique_ptr<Plane> p(new Plane());
+  unique_ptr<Plane> p(new Plane());
 
   // The normal of  plane is constant everywhere.
   Tuple n1 = p->local_normal_at(Point(0, 0, 0));

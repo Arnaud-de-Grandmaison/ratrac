@@ -1,3 +1,14 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/World.h"
+
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+
 TEST(World, base) {
   // Creating an (empty) world.
   World w;
@@ -23,10 +34,10 @@ TEST(World, base) {
 
 TEST(World, output) {
   World w = World::get_default();
-  std::ostringstream string_stream;
-  string_stream << w;
+  ostringstream oss;
+  oss << w;
   EXPECT_EQ(
-      string_stream.str(),
+      oss.str(),
       "World {  lights: [LightPoint { intensity: Color { red:1, green:1, "
       "blue:1, alpha:1}, position: Tuple { -10, 10, -10, 1}}  ],  objects: "
       "[Sphere { center: Tuple { 0, 0, 0, 1}, radius: 1, transform: "

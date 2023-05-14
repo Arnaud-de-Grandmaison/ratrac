@@ -1,3 +1,15 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Intersections.h"
+#include "ratrac/Shapes.h"
+
+#include <memory>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::unique_ptr;
+
 TEST(Intersections, intersection) {
   // An intersection encapsulates t and object.
   Sphere s;
@@ -16,7 +28,7 @@ TEST(Intersections, intersection) {
 
 TEST(Intersections, hit) {
   // The hit, when all intersections have positive t.
-  std::unique_ptr<Sphere> s(new Sphere());
+  unique_ptr<Sphere> s(new Sphere());
   Intersection i1(1, *s.get());
   Intersection i2(2, *s.get());
   Intersections xs(i1, i2);
@@ -56,7 +68,7 @@ TEST(Intersections, hit) {
 
 TEST(Intersections, computations) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
-  std::unique_ptr<Sphere> s(new Sphere());
+  unique_ptr<Sphere> s(new Sphere());
   Intersection i(4, *s.get());
   Computations c(i, r);
   EXPECT_EQ(c.t , i.t);

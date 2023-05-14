@@ -1,3 +1,14 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/Tuple.h"
+
+#include <sstream>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+
 TEST(Tuple, init) {
   // Tuple initialisation.
   Tuple rtt(4.3, -4.2, 3.1, 1.0);
@@ -29,9 +40,9 @@ TEST(Tuple, init) {
 
 TEST(Tuple, output) {
   Tuple t(4.3, -4.2, 3.1, 1.0);
-  std::ostringstream string_stream;
-  string_stream << t;
-  EXPECT_EQ(string_stream.str(), "Tuple { 4.3, -4.2, 3.1, 1}");
+  ostringstream oss;
+  oss << t;
+  EXPECT_EQ(oss.str(), "Tuple { 4.3, -4.2, 3.1, 1}");
 }
 
 TEST(Tuple, operations) {

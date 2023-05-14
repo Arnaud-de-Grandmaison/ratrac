@@ -1,5 +1,18 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/ProgressBar.h"
+
+#include <sstream>
+#include <string>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+using std::string;
+
 TEST(ProgressBar, ProgressBar) {
-    std::ostringstream oss;
+    ostringstream oss;
     ProgressBar PB1("caption", 100, oss);
     EXPECT_EQ(oss.str(), "\rcaption: 0%");
 
@@ -39,7 +52,7 @@ TEST(ProgressBar, ProgressBar) {
 }
 
 TEST(ProgressBar, TimedProgressBar) {
-    std::ostringstream oss;
+    ostringstream oss;
     {
         TimedProgressBar TPB1("caption", 100, oss);
         EXPECT_EQ(oss.str(), "\rcaption: 0%");
@@ -56,7 +69,7 @@ TEST(ProgressBar, TimedProgressBar) {
         TPB1.incr(10);
         EXPECT_EQ(oss.str(), "\rcaption: 12%");
     }
-    std::string s = oss.str();
+    string s = oss.str();
     EXPECT_EQ(s.substr(0, 15), "\rcaption: 12% (");
     EXPECT_EQ(s.substr(s.size()-3, 2), "s)");
 

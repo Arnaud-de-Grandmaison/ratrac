@@ -1,3 +1,18 @@
+#include "gtest/gtest.h"
+
+#include "ratrac/StopWatch.h"
+
+#include <chrono>
+#include <sstream>
+#include <string>
+#include <thread>
+
+using namespace ratrac;
+using namespace testing;
+
+using std::ostringstream;
+using std::string;
+
 TEST(StopWatch, StopWatch) {
     StopWatch W;
     EXPECT_FALSE(W.isRunning());
@@ -15,12 +30,12 @@ TEST(StopWatch, StopWatch) {
 }
 
 TEST(StopWatch, AutoStopWatch) {
-    std::ostringstream oss;
+    ostringstream oss;
 
     {
         AutoStopWatch ASW1("stopwatch1", oss);
     }
-    std::string s = oss.str();
+    string s = oss.str();
     EXPECT_EQ(s.substr(0, 12), "stopwatch1: ");
     EXPECT_EQ(s.substr(s.size()-2, 1), "s");
 
