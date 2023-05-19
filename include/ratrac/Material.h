@@ -77,7 +77,7 @@ public:
   const constexpr RayTracerColorType &shininess() const noexcept {
     return m_shininess;
   }
-  const constexpr Pattern *pattern() const noexcept { return m_pattern.get(); }
+  const Pattern *pattern() const noexcept { return m_pattern.get(); }
 
   // Setters.
   Material &color(const Color &color) {
