@@ -2,7 +2,6 @@
 
 #include "ratrac/ratrac.h"
 
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <ostream>
@@ -41,36 +40,35 @@ public:
   // Accessors
   // =========
 
-  const DataType &x() const noexcept { return m_tuple[0]; }
-  const DataType &y() const noexcept { return m_tuple[1]; }
-  const DataType &z() const noexcept { return m_tuple[2]; }
-  const DataType &w() const noexcept { return m_tuple[3]; }
+  constexpr const DataType &x() const noexcept { return m_tuple[0]; }
+  constexpr const DataType &y() const noexcept { return m_tuple[1]; }
+  constexpr const DataType &z() const noexcept { return m_tuple[2]; }
+  constexpr const DataType &w() const noexcept { return m_tuple[3]; }
 
-  DataType &operator[](size_t index) noexcept {
-    assert(index < m_tuple.size() && "out of bounds access in Tuple");
+  constexpr DataType &operator[](size_t index) noexcept {
+    assert(index < size() && "out of bounds access in Tuple");
     return m_tuple[index];
     }
-  const DataType &operator[](size_t index) const noexcept {
-    assert(index < m_tuple.size() && "out of bounds access in Tuple");
+  constexpr const DataType &operator[](size_t index) const noexcept {
+    assert(index < size() && "out of bounds access in Tuple");
     return m_tuple[index];
   }
 
   constexpr bool isPoint() const noexcept { return m_tuple[3] == 1.0; }
   constexpr bool isVector() const noexcept { return m_tuple[3] == 0.0; }
 
-  constexpr size_t size() const noexcept { return m_tuple.size(); }
+  constexpr size_t size() const noexcept { return 4; }
 
   // Advanced vectors properties
   // ===========================
 
-  DataType magnitude() const {
-    DataType result = 0.0;
-    for (const DataType &c : m_tuple)
-      result += c * c;
+  constexpr DataType magnitude() const {
+    DataType result = m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1]
+                      + m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3];
     return std::sqrt(result);
   }
 
-  Tuple &normalize() {
+  constexpr Tuple &normalize() {
     *this /= magnitude();
     return *this;
   }
@@ -89,23 +87,23 @@ public:
   // operations
 
   constexpr Tuple &operator+=(const Tuple &rhs) noexcept {
-    for (unsigned i = 0; i < m_tuple.size(); i++)
+    for (size_t i = 0; i < size(); i++)
       m_tuple[i] += rhs.m_tuple[i];
     return *this;
   }
   constexpr Tuple &operator-=(const Tuple &rhs) noexcept {
-    for (unsigned i = 0; i < m_tuple.size(); i++)
+    for (size_t i = 0; i < size(); i++)
       m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
   constexpr Tuple &operator*=(DataType rhs) noexcept {
-    for (DataType &c : m_tuple)
-      c *= rhs;
+    for (size_t i = 0; i < size(); i++)
+      m_tuple[i] *= rhs;
     return *this;
   }
   constexpr Tuple &operator/=(DataType rhs) noexcept {
-    for (DataType &c : m_tuple)
-      c /= rhs;
+    for (size_t i = 0; i < size(); i++)
+      m_tuple[i] /= rhs;
     return *this;
   }
 
@@ -116,10 +114,8 @@ public:
   // Advanced operations
 
   constexpr DataType dot(const Tuple &rhs) const noexcept {
-    DataType result = 0;
-    for (unsigned i = 0; i < m_tuple.size(); i++) {
-      result += m_tuple[i] * rhs.m_tuple[i];
-    }
+    DataType result = m_tuple[0] * rhs.m_tuple[0] + m_tuple[1] * rhs.m_tuple[1]
+                      + m_tuple[2] * rhs.m_tuple[2] + m_tuple[3] * rhs.m_tuple[3];
     return result;
   }
 
@@ -138,9 +134,7 @@ public:
   }
 
 private:
-  /** An array formatted as following: Tuple(x, y, z, w). Args type:
-   * float/double. */
-  std::array<DataType, 4> m_tuple;
+  DataType m_tuple[4];
 };
 
 // Other/External operators
