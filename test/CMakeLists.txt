@@ -9,6 +9,8 @@ add_custom_target(check
   COMMENT "Running ratrac unit tests")
 
 set(RATRAC_TEST_SOURCE_FILES
+  test-App.cpp
+  test-ArgParse.cpp
   test-Camera.cpp
   test-Canvas.cpp
   test-Color.cpp

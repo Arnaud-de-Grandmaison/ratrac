@@ -58,6 +58,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}" CACHE STRING "C++ compiler 
 # --------------------------------------------------------
 set(RATRACLIB_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/ratrac")
 add_library(ratrac STATIC
+  ${RATRACLIB_SOURCE_DIR}/App.cpp
+  ${RATRACLIB_SOURCE_DIR}/ArgParse.cpp
   ${RATRACLIB_SOURCE_DIR}/Color.cpp
   ${RATRACLIB_SOURCE_DIR}/Canvas.cpp
   ${RATRACLIB_SOURCE_DIR}/Camera.cpp

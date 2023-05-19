@@ -1,3 +1,4 @@
+#include "ratrac/App.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
 #include "ratrac/Intersections.h"
@@ -19,7 +20,13 @@ using std::ofstream;
 using std::unique_ptr;
 
 int main(int argc, char *argv[]) {
-  Canvas C(100, 100);
+  App app("full3d", "tests full 3d", 100, 100);
+  if (!app.parse(argc - 1, (const char **)argv + 1))
+    app.error("command line arguments parsing failed.");
+  if (app.verbose())
+    cout << app.parameters() << '\n';
+
+  Canvas C(app.width(), app.height());
 
   Tuple ray_origin = Point(0, 0, -5);
   Matrix::DataType wall_z = 10;
@@ -57,7 +64,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  ofstream file("full3d.ppm");
+  ofstream file(app.outputFilename().c_str());
   C.to_ppm(file);
 
   return 0;

@@ -1,3 +1,4 @@
+#include "ratrac/App.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
 #include "ratrac/Matrix.h"
@@ -33,6 +34,13 @@ void clock_generator(size_t width, size_t height, const char *filename) {
 }
 
 int main(int argc, char *argv[]) {
-  clock_generator(200, 200, "clock.ppm");
+  App app("clock", "simple clock test", 200, 200);
+  if (!app.parse(argc - 1, (const char **)argv + 1))
+    app.error("command line arguments parsing failed.");
+  if (app.verbose())
+    cout << app.parameters() << '\n';
+
+  clock_generator(app.width(), app.height(), app.outputFilename().c_str());
+
   return 0;
 }

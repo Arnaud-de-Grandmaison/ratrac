@@ -1,3 +1,4 @@
+#include "ratrac/App.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
 #include "ratrac/Tuple.h"
@@ -87,16 +88,16 @@ void experiment1() {
   };
 }
 
-void experiment2(const char *filename) {
-  Canvas C(900, 550);
+void experiment2(size_t w, size_t h, const char *filename) {
+  Canvas C(w, h);
 
   Projectile p(Point(0.0, 1.0, 0.0), normalize(Vector(1.0, 1.8, 0.0)) * 11.25);
   Environment e(p, Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
 
   for (; e.projectile().position().y() >= 0.0; e.tick()) {
     Tuple Pos = e.projectile().position();
-    unsigned x = cap(Pos.x(), C.width());
-    unsigned y = C.height() - cap(Pos.y(), C.height());
+    unsigned x = cap(Pos.x(), C.width() - 1);
+    unsigned y = C.height() - cap(Pos.y(), C.height() - 1);
     C.at(x, y) = Color(.8, .8, .8);
   };
 
@@ -105,7 +106,13 @@ void experiment2(const char *filename) {
 }
 
 int main(int argc, char *argv[]) {
+  App app("tick", "tests tick", 900, 550);
+  if (!app.parse(argc - 1, (const char **)argv + 1))
+    app.error("command line arguments parsing failed.");
+  if (app.verbose())
+    cout << app.parameters() << '\n';
+
   experiment1();
-  experiment2("tick.ppm");
+  experiment2(app.width(), app.height(), app.outputFilename().c_str());
   return 0;
 }

@@ -1,3 +1,4 @@
+#include "ratrac/App.h"
 #include "ratrac/Camera.h"
 #include "ratrac/Canvas.h"
 #include "ratrac/Color.h"
@@ -10,11 +11,18 @@
 
 #include <cmath>
 #include <fstream>
+#include <iostream>
 
 using namespace ratrac;
 using namespace std;
 
 int main(int argc, char *argv[]) {
+  App app("patterns", "tests the use of patterns.");
+  if (!app.parse(argc - 1, (const char **)argv + 1))
+    app.error("command line arguments parsing failed.");
+  if (app.verbose())
+    cout << app.parameters() << '\n';
+
   World world;
 
   // The floor.
@@ -69,15 +77,15 @@ int main(int argc, char *argv[]) {
   world.lights().push_back(LightPoint(Point(-10, 10, -10), Color::WHITE()));
 
   // Camera camera(100, 50, M_PI / 3.);
-  Camera camera(400, 200, M_PI / 3.);
+  Camera camera(app.width(), app.height(), M_PI / 3.);
   camera.transform(
       view_transform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0)));
 
   // Render the world to a canvas.
-  Canvas C = camera.render(world, /* verbose: */ true);
+  Canvas C = camera.render(world, app.verbose());
 
   // Save the scene.
-  ofstream file("patterns.ppm");
+  ofstream file(app.outputFilename());
   C.to_ppm(file);
 
   return 0;
