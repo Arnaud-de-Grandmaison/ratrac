@@ -5,16 +5,20 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstring>
 #include <initializer_list>
 #include <ostream>
 #include <tuple>
-#include <vector>
 
 namespace ratrac {
 class Matrix;
 
-/** A Matrix of multiple forms. At the moment all types are supported. */
+/** Square matrices of  size 2x2, 3x3 or 4x4. */
 class Matrix {
+  static const unsigned NR = 4;       // Maximum number of rows.
+  static const unsigned NC = 4;       // Maximum  number of columns.
+  static const unsigned NE = NR * NC; // Maximum number of elements.
+  static_assert(NR == NC, "only square matrices are supported.");
   static_assert(std::is_floating_point<ratrac::RayTracerDataType>::value,
                 "Matrix DataTy must be a floating point type.");
 
@@ -24,25 +28,62 @@ public:
   // Constructors
   // ============
 
-  /** Not secured; every kind of Matrixs can be generated/exist. */
-  Matrix() {}
-  Matrix(const Matrix &) = default;
-  Matrix(const std::vector<std::vector<DataType>> &M) : m_Matrix(M) {}
-  Matrix(std::vector<std::vector<DataType>> &&M) : m_Matrix(std::move(M)) {}
-  Matrix(Matrix &&M) : m_Matrix(std::move(M.m_Matrix)) {}
-  Matrix(std::initializer_list<std::initializer_list<DataType>> il)
-      : m_Matrix() {
-    for (typename std::initializer_list<
-             std::initializer_list<DataType>>::iterator it = il.begin();
-         it != il.end(); it++)
-      m_Matrix.push_back(*it);
+  Matrix() = delete;
+  Matrix(const Matrix &M)
+      : m_Matrix(new DataType[NE]), m_Rows(M.m_Rows), m_Columns(M.m_Columns) {
+    assert(m_Matrix && "Allocation error");
+    std::memcpy(m_Matrix, M.m_Matrix, NE * sizeof(DataType));
   }
-  /** Allocate a lines x columns uninitialized Matrix. */
-  Matrix(unsigned lines, unsigned columns)
-      : m_Matrix(lines, std::vector<DataType>(columns)) {}
-  /** Allocate a lines x columns Val initialized Matrix. */
-  Matrix(unsigned lines, unsigned columns, DataType Val)
-      : m_Matrix(lines, std::vector<DataType>(columns, Val)) {}
+  // Matrix(const std::vector<std::vector<DataType>> &M) : m_Matrix(M) {}
+  // Matrix(std::vector<std::vector<DataType>> &&M) : m_Matrix(std::move(M)) {}
+  Matrix(Matrix &&M)
+      : m_Matrix(M.m_Matrix), m_Rows(M.m_Rows), m_Columns(M.m_Columns) {
+    M.m_Matrix = nullptr;
+    M.m_Rows = 0;
+    M.m_Columns = 0;
+  }
+
+  Matrix(std::initializer_list<std::initializer_list<DataType>> il);
+
+  /** Allocate a rows x columns uninitialized Matrix. */
+  Matrix(unsigned rows, unsigned columns)
+      : m_Matrix(new DataType[NE]), m_Rows(rows), m_Columns(columns) {
+    assert(m_Matrix && "Allocation error");
+  }
+  /** Allocate a rows x columns Val initialized Matrix. */
+  Matrix(unsigned rows, unsigned columns, DataType Val)
+      : m_Matrix(new DataType[NE]), m_Rows(rows), m_Columns(columns) {
+    assert(m_Matrix && "Allocation error");
+    for (unsigned row = 0; row < rows; row++)
+      for (unsigned col = 0; col < columns; col++)
+        set(row, col, Val);
+  }
+
+  Matrix &operator=(const Matrix &M) {
+    if (!m_Matrix)
+      m_Matrix = new DataType[NE];
+    assert(m_Matrix && "Allocation error");
+    std::memcpy(m_Matrix, M.m_Matrix, NE * sizeof(DataType));
+    m_Rows = M.m_Rows;
+    m_Columns = M.m_Columns;
+    return *this;
+  }
+
+  Matrix &operator=(Matrix &&M) {
+    if (m_Matrix)
+      delete[] m_Matrix;
+    m_Matrix = M.m_Matrix;
+    m_Rows = M.m_Rows;
+    m_Columns = M.m_Columns;
+    M.m_Matrix = nullptr;
+    M.m_Rows = 0;
+    M.m_Columns = 0;
+    return *this;
+  }
+
+  Matrix &operator=(std::initializer_list<std::initializer_list<DataType>> il);
+
+  ~Matrix() { delete[] m_Matrix; }
 
   /** Return an identity Matrix being as following:
 Matrix {    1.0,    0.0,    0.0,    0.0},
@@ -51,13 +92,13 @@ Matrix {    1.0,    0.0,    0.0,    0.0},
       {    0.0,    0.0,    0.0,    1.0}}*/
   static Matrix identity() noexcept {
     return Matrix({{1., 0., 0., 0.},
-                    {0., 1., 0., 0.},
-                    {0., 0., 1., 0.},
-                    {0., 0., 0., 1.}});
+                   {0., 1., 0., 0.},
+                   {0., 0., 1., 0.},
+                   {0., 0., 0., 1.}});
   }
 
-// Chapter 4 transformations
-// =========================
+  // Chapter 4 transformations
+  // =========================
 
   static Matrix translation(DataType x, DataType y, DataType z) {
     Matrix result = Matrix::identity();
@@ -105,10 +146,10 @@ Matrix {    1.0,    0.0,    0.0,    0.0},
     return result;
   }
 
-/** Function that moves points proportionally to an axis. See image p51 for more
- * information.*/
+  /** Function that moves points proportionally to an axis. See image p51 for
+   * more information.*/
   static Matrix shearing(DataType Xy, DataType Xz, DataType Yx, DataType Yz,
-                          DataType Zx, DataType Zy) {
+                         DataType Zx, DataType Zy) {
     Matrix result = Matrix::identity();
     result.set(0, 1, Xy);
     result.set(0, 2, Xz);
@@ -121,166 +162,79 @@ Matrix {    1.0,    0.0,    0.0,    0.0},
   // Special operators
   // =================
 
-  Matrix &operator=(const Matrix &) = default;
-  Matrix &operator=(Matrix &&) = default;
-  Matrix &
-  operator=(std::initializer_list<std::initializer_list<DataType>> il) {
-    m_Matrix.clear();
-    for (typename std::initializer_list<std::initializer_list<DataType>>::iterator
-             it = il.begin();
-         it != il.end(); it++)
-      m_Matrix.push_back(*it);
-    return *this;
-  }
+  DataType determinant() const;
 
-  constexpr DataType determinant() const {
-    if (shape() == std::tuple<int, int>(2, 2))
-      return at(0, 0) * at(1, 1) - at(0, 1) * at(1, 0);
-
-    DataType result = 0.0;
-    if (shape() == std::tuple<int, int>(4, 4) ||
-        shape() == std::tuple<int, int>(3, 3)) {
-      for (unsigned column = 0; column < getNumColumns(); column++)
-        result += at(0, column) * cofactor(0, column);
-    } else
-      assert(0 && "Case not handled.");
-
-    return result;
-  }
-
-  constexpr bool is_invertible() const { return determinant() != 0; }
+  bool is_invertible() const { return determinant() != 0; }
 
   /** Returns a submatrix(a Matrix with one row and column less). */
-  Matrix submatrix(unsigned line, unsigned column) const {
-    assert(line < getNumLines() && "line out of Matrix bounds.");
-    assert(column < getNumColumns() && "column out of Matrix bounds.");
-
-    std::vector<std::vector<Matrix::DataType>> table;
-    table.reserve(getNumLines() - 1);
-    for (unsigned l = 0; l < getNumLines(); l++) {
-      if (l != line) {
-        std::vector<Matrix::DataType> TheLine;
-        TheLine.reserve(getNumColumns() - 1);
-        for (unsigned c = 0; c < getNumColumns(); c++) {
-          if (c != column)
-            TheLine.push_back(at(l, c));
-        }
-        table.push_back(std::move(TheLine));
-      }
-    }
-
-    return Matrix(std::move(table));
-  }
+  Matrix submatrix(unsigned row, unsigned column) const;
 
   /** Returns the determinant of a subMatrix; " minor is easier to say than
    * determinant of a subMatrix ".
    * Note: we would prefer to nme it minor, but this fails with gcc that has a
    * macro with the same name...
    * */
-  DataType matrixminor(unsigned line, unsigned column) const {
-    return submatrix(line, column).determinant();
+  DataType matrixminor(unsigned row, unsigned column) const {
+    return submatrix(row, column).determinant();
   }
 
   /** Returns the cofactor of a 3*3 matrix. */
-  DataType cofactor(unsigned line, unsigned column) const {
-    DataType m = matrixminor(line, column);
+  DataType cofactor(unsigned row, unsigned column) const {
+    DataType m = matrixminor(row, column);
 
-    return ((line + column) % 2) != 0 ? -m : m;
+    return ((row + column) % 2) != 0 ? -m : m;
   }
 
   /** Transpose this matrix in place. */
-  Matrix &transpose() {
-    std::vector<std::vector<Matrix::DataType>> future_Matrix;
-
-    // Extract column; M_column = future_line
-    for (unsigned M_column = 0; M_column < getNumColumns(); M_column++) {
-      future_Matrix.push_back(std::vector<Matrix::DataType>());
-      for (unsigned it_line = 0; it_line < getNumLines(); it_line++)
-        future_Matrix[M_column].push_back(matrix()[it_line][M_column]);
-    }
-
-    m_Matrix = std::move(future_Matrix);
-    return *this;
-  }
+  Matrix &transpose();
 
   /** Invert this Matrix in place. */
-  Matrix &inverse() {
-    Matrix M2(getNumColumns(), getNumLines());
-    Matrix::DataType det = determinant();
-    if (det != 0.0) { // Matrix is invertible
-      for (unsigned row = 0; row < getNumLines(); row++)
-        for (unsigned col = 0; col < getNumColumns(); col++)
-          M2.set(col, row, cofactor(row, col) / det);
-    } else
-      assert(0 && "Matrix is not invertible.");
-
-    *this = std::move(M2);
-    return *this;
-  }
+  Matrix &inverse();
 
   // Accessors
   // =========
 
-  /** Returns m_Matrix. */
-  const std::vector<std::vector<DataType>> &matrix() const { return m_Matrix; }
-
   /** Returns the Matrix shape as a tuple<int x, int, y>. */
   constexpr std::tuple<int, int> shape() const {
-    return std::tuple<int, int>(m_Matrix.size(), m_Matrix[0].size());
+    return std::tuple<int, int>(m_Rows, m_Columns);
   }
 
   /** Returns the Matrix number of rows. */
-  constexpr unsigned getNumLines() const { return m_Matrix.size(); }
+  constexpr unsigned rows() const { return m_Rows; }
 
   /** Returns the Matrix number of columns. */
-  constexpr unsigned getNumColumns() const { return m_Matrix[0].size(); }
+  constexpr unsigned columns() const { return m_Columns; }
 
   /** Returns the corresponding value(float). */
-  constexpr DataType at(unsigned line, unsigned column) const {
-    return m_Matrix[line][column];
+  constexpr DataType operator()(unsigned row, unsigned column) const {
+    assert(row < m_Rows && "Out of bound row access");
+    assert(column < m_Columns && "Out of bound column access");
+    assert(m_Matrix && "Nowhere to get the data from");
+    return m_Matrix[row * NC + column];
+  }
+  /** Returns the corresponding value(float). */
+  constexpr DataType at(unsigned row, unsigned column) const {
+    return this->operator()(row, column);
   }
 
   // Operators
   // =========
-  bool operator==(const Matrix &rhs) const {
-    return m_Matrix == rhs.m_Matrix;
-  }
-
-  bool approximatly_equal(const Matrix &rhs) {
-    for (unsigned row = 0; row < getNumLines(); row++)
-      for (unsigned column = 0; column < getNumColumns(); column++)
-        if (!close_to_equal(at(row, column), rhs.at(row, column)))
-          return false;
-    return true;
-  }
-
-  bool operator!=(const Matrix &rhs) const {
-    return !operator==(rhs);
-  }
+  bool operator==(const Matrix &rhs) const ;
+  bool approximatly_equal(const Matrix &rhs) const;
+  bool operator!=(const Matrix &rhs) const { return !operator==(rhs); }
 
   explicit operator std::string() const;
 
-  // Both must be 4*4 Matrixs.
-  Matrix &operator*=(const Matrix &rhs) {
-    assert(getNumColumns() == rhs.getNumLines() &&
-           "Matrixs must have compatible shapes");
-    // Create a zero filled matrix of the same size.
-    std::vector<std::vector<DataType>> result(
-        getNumLines(), std::vector<DataType>(getNumColumns(), DataType()));
-    for (unsigned line = 0; line < getNumLines(); line++)
-      for (unsigned column = 0; column < rhs.getNumColumns(); column++)
-        for (unsigned it = 0; it < getNumColumns(); it++)
-          result[line][column] +=
-              m_Matrix[line][it] * rhs.m_Matrix[it][column];
-    m_Matrix = std::move(result);
-    return *this;
-  }
+  Matrix &operator*=(const Matrix &rhs);
 
   // Editors
   // =======
 
-  constexpr Matrix &set(unsigned line, unsigned column, DataType value) {
-    m_Matrix[line][column] = value;
+  constexpr Matrix &set(unsigned row, unsigned column, DataType value) {
+    assert(row < m_Rows && "Out of bound row access");
+    assert(column < m_Columns && "Out of bound column access");
+    assert(m_Matrix && "Nowhere to get the data from");
+    m_Matrix[row * NC + column] = value;
     return *this;
   }
 
@@ -297,8 +251,9 @@ Matrix {    1.0,    0.0,    0.0,    0.0},
   }*/
 
 private:
-  // #Help: Should it be an array as a Matrix is of fixed size.
-  std::vector<std::vector<DataType>> m_Matrix;
+  DataType *m_Matrix;
+  unsigned m_Rows;
+  unsigned m_Columns;
 };
 
 // Other operators
@@ -311,30 +266,27 @@ inline Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
 }
 
 inline Tuple operator*(const Matrix &lhs, const Tuple &rhs) {
-  Tuple future_tuple;
-  assert(lhs.getNumLines() == lhs.getNumColumns() &&
-         lhs.getNumLines() == rhs.size() &&
+  Tuple T;
+  assert(lhs.rows() == lhs.columns() && lhs.rows() == rhs.size() &&
          "Incompatible number of rows and columns.");
-  for (unsigned line = 0; line < lhs.getNumLines(); line++) {
-    Matrix::DataType acc = 0.0;
-    for (unsigned column = 0; column < lhs.getNumColumns(); column++)
-      acc += lhs.at(line, column) * rhs[column];
-    future_tuple[line] = acc;
+  for (unsigned row = 0; row < lhs.rows(); row++) {
+    Matrix::DataType acc = Matrix::DataType();
+    for (unsigned col = 0; col < lhs.columns(); col++)
+      acc += lhs.at(row, col) * rhs[col];
+    T[row] = acc;
   }
 
-  return future_tuple;
+  return T;
 }
 // Other chapter 3 stuff
 // =====================
 
-/** Returns the determinant of 2*2, 3*3 or 4*4 Matrixs. */
-inline Matrix::DataType determinant(const Matrix &M) {
-  return M.determinant();
-}
+/** Returns the determinant of 2*2, 3*3 or 4*4 Matrices. */
+inline Matrix::DataType determinant(const Matrix &M) { return M.determinant(); }
 
 /** Returns a submatrix(a Matrix with one row and column less). */
-inline Matrix submatrix(const Matrix &M, unsigned line, unsigned column) {
-  return M.submatrix(line, column);
+inline Matrix submatrix(const Matrix &M, unsigned row, unsigned col) {
+  return M.submatrix(row, col);
 }
 
 /** Returns the determinant of a subMatrix; " minor is easier to say than
@@ -342,21 +294,18 @@ inline Matrix submatrix(const Matrix &M, unsigned line, unsigned column) {
  * Note: we would prefer to name it minor, but this fails with gcc that has a
  * macro with the same name...
  * */
-inline Matrix::DataType matrixminor(const Matrix &M, unsigned line,
-                                     unsigned column) {
-  return M.matrixminor(line, column);
+inline Matrix::DataType matrixminor(const Matrix &M, unsigned row,
+                                    unsigned col) {
+  return M.matrixminor(row, col);
 }
 
 /** Returns the cofactor of a 3*3 matrix. */
-inline Matrix::DataType cofactor(const Matrix &M, unsigned line,
-                                  unsigned column) {
-  return M.cofactor(line, column);
+inline Matrix::DataType cofactor(const Matrix &M, unsigned row, unsigned col) {
+  return M.cofactor(row, col);
 }
 
 /** Returns the cofactor of a 3*3 matrix. */
-inline bool is_invertible(const Matrix &M) {
-  return M.is_invertible();
-}
+inline bool is_invertible(const Matrix &M) { return M.is_invertible(); }
 
 inline Matrix transpose(const Matrix &M) {
   Matrix tmp = M;

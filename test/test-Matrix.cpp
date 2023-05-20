@@ -31,8 +31,8 @@ TEST(Matrix, init) {
   EXPECT_EQ(M.at(3, 2), 15.5);
   std::tuple<int, int> t(4, 4);
   EXPECT_EQ(M.shape(), t);
-  EXPECT_EQ(M.getNumColumns(), 4);
-  EXPECT_EQ(M.getNumLines(), 4);
+  EXPECT_EQ(M.columns(), 4);
+  EXPECT_EQ(M.rows(), 4);
 
   // 3*3 Matrix
 
@@ -42,8 +42,8 @@ TEST(Matrix, init) {
   EXPECT_EQ(M.at(2, 2), 1);
   t = std::tuple<int, int>(3, 3);
   EXPECT_EQ(M.shape(), t);
-  EXPECT_EQ(M.getNumColumns(), 3);
-  EXPECT_EQ(M.getNumLines(), 3);
+  EXPECT_EQ(M.columns(), 3);
+  EXPECT_EQ(M.rows(), 3);
 
   // 2*2 Matrix
 
@@ -54,8 +54,8 @@ TEST(Matrix, init) {
   EXPECT_EQ(M.at(1, 1), -2);
   t = std::tuple<int, int>(2, 2);
   EXPECT_EQ(M.shape(), t);
-  EXPECT_EQ(M.getNumColumns(), 2);
-  EXPECT_EQ(M.getNumLines(), 2);
+  EXPECT_EQ(M.columns(), 2);
+  EXPECT_EQ(M.rows(), 2);
 }
 
 TEST(Matrix, output) {
@@ -88,9 +88,9 @@ TEST(Matrix, operators) {
   M2 = {{2, 3, 4, 5}, {6, 7, 8, 9}, {8, 7, 6, 5}, {4, 3, 2, 1}};
   EXPECT_NE(M1, M2);
 
-  // Mutliply test
+  // Multiply test
 
-  // Multiply Matrixs
+  // Multiply Matrices
 
   Matrix Matrix1 = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 8, 7, 6}, {5, 4, 3, 2}};
   M1 = Matrix1;
@@ -129,7 +129,7 @@ TEST(Matrix, other_stuff) {
   EXPECT_EQ(transpose(Matrix::identity()), Matrix::identity());
   EXPECT_EQ(Matrix::identity().transpose(), Matrix::identity());
 
-  // Inverting Matrixs
+  // Inverting Matrices
   // ==================
 
   // Calculating the determinant of a 2*2 matrix
