@@ -1,4 +1,5 @@
-|CIUbuntu2004| |CIUbuntu2204| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage| |BadgeLicence|
+|CIUbuntu2004| |CIUbuntu2204| |CIMacOS13|
+|BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage| |BadgeLicence|
     
 .. |CIUbuntu2004| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-20.04.yml/badge.svg
     :alt: Last build status on Ubuntu 20.04
@@ -7,6 +8,10 @@
 .. |CIUbuntu2204| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml/badge.svg
     :alt: Last build status on Ubuntu 22.04
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml
+
+.. |CIMacOS13| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-13.yml/badge.svg
+    :alt: Last build status on macOS 13 Ventura
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-13.yml
 
 .. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
     :alt: Github size

@@ -1,0 +1,25 @@
+name: "macOS 13 Ventura"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CMAKE_BUILD_TYPE: Debug
+  JOBS: 2
+
+jobs:
+  macos_13:
+    name: "MacOS 13 Ventura: Configure, build and check"
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configure
+      run: CC=clang CXX=clang++ cmake -B ${{github.workspace}}/build-macos-13 -DCMAKE_BUILD_TYPE:STRING=${{env.CMAKE_BUILD_TYPE}}
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build-macos-13 --config ${{env.CMAKE_BUILD_TYPE}} -- -j${{env.JOBS}}
+    - name: Check
+      working-directory: ${{github.workspace}}/build-macos-13
+      run: make check
