@@ -62,13 +62,13 @@ public:
   // Advanced vectors properties
   // ===========================
 
-  constexpr DataType magnitude() const {
-    DataType result = m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1]
-                      + m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3];
+  DataType magnitude() const {
+    DataType result = m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1] +
+                      m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3];
     return std::sqrt(result);
   }
 
-  constexpr Tuple &normalize() {
+  Tuple &normalize() {
     *this /= magnitude();
     return *this;
   }
@@ -183,11 +183,11 @@ inline constexpr Tuple operator/(const Tuple &lhs,
 // Function like operators
 // =======================
 
-inline constexpr Tuple::DataType magnitude(const Tuple &T) {
+inline Tuple::DataType magnitude(const Tuple &T) {
   return T.magnitude();
 }
 
-inline constexpr Tuple normalize(const Tuple &T) {
+inline Tuple normalize(const Tuple &T) {
   Tuple tmp = T;
   return tmp.normalize();
 }
