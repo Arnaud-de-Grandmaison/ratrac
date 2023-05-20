@@ -87,16 +87,15 @@ public:
 
   /** Get the identity Matrix */
   static Matrix identity() noexcept {
-    return Matrix({{1., 0., 0., 0.},
-                   {0., 1., 0., 0.},
-                   {0., 0., 1., 0.},
-                   {0., 0., 0., 1.}});
+    Matrix M(NR, NC, DataType());
+    for (unsigned i = 0; i < NR; i++)
+      M.set(i, i, 1.);
+    return M;
   }
 
   // Chapter 4 transformations
   // =========================
-
-  static Matrix translation(DataType x, DataType y, DataType z) {
+  static Matrix translation(DataType x, DataType y, DataType z) noexcept {
     Matrix result = Matrix::identity();
     result.set(0, 3, x);
     result.set(1, 3, y);
@@ -105,7 +104,7 @@ public:
   }
 
   /** Refer at the top of p49 for visual explanations. */
-  static Matrix scaling(DataType x, DataType y, DataType z) {
+  static Matrix scaling(DataType x, DataType y, DataType z) noexcept {
     Matrix result = Matrix::identity();
     result.set(0, 0, x);
     result.set(1, 1, y);
@@ -114,7 +113,7 @@ public:
   }
 
   /** Refer at the top of p50 for visual explanations. */
-  static Matrix rotation_x(DataType radians) {
+  static Matrix rotation_x(DataType radians) noexcept {
     Matrix result = Matrix::identity();
     result.set(1, 1, std::cos(radians));
     result.set(1, 2, -std::sin(radians));
@@ -124,7 +123,7 @@ public:
   }
 
   /** Refer at the bottom of p50 for visual explanations. */
-  static Matrix rotation_y(DataType radians) {
+  static Matrix rotation_y(DataType radians) noexcept {
     Matrix result = Matrix::identity();
     result.set(0, 0, std::cos(radians));
     result.set(0, 2, std::sin(radians));
@@ -133,7 +132,7 @@ public:
     return result;
   }
 
-  static Matrix rotation_z(DataType radians) {
+  static Matrix rotation_z(DataType radians) noexcept {
     Matrix result = Matrix::identity();
     result.set(0, 0, std::cos(radians));
     result.set(0, 1, -std::sin(radians));
@@ -145,7 +144,7 @@ public:
   /** Function that moves points proportionally to an axis. See image p51 for
    * more information.*/
   static Matrix shearing(DataType Xy, DataType Xz, DataType Yx, DataType Yz,
-                         DataType Zx, DataType Zy) {
+                         DataType Zx, DataType Zy) noexcept {
     Matrix result = Matrix::identity();
     result.set(0, 1, Xy);
     result.set(0, 2, Xz);
