@@ -85,11 +85,7 @@ public:
 
   ~Matrix() { delete[] m_Matrix; }
 
-  /** Return an identity Matrix being as following:
-Matrix {    1.0,    0.0,    0.0,    0.0},
-      {    0.0,    1.0,    0.0,    0.0},
-      {    0.0,    0.0,    1.0,    0.0},
-      {    0.0,    0.0,    0.0,    1.0}}*/
+  /** Get the identity Matrix */
   static Matrix identity() noexcept {
     return Matrix({{1., 0., 0., 0.},
                    {0., 1., 0., 0.},

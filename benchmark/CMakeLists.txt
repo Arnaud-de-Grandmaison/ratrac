@@ -1,0 +1,21 @@
+set(GOOGLEBENCHMARK_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/benchmark-1.8.0)
+add_subdirectory(${GOOGLEBENCHMARK_SOURCE_DIR})
+
+include_directories(${CMAKE_SOURCE_DIR}/include
+                    ${GOOGLEBENCHMARK_SOURCE_DIR}/include)
+
+add_custom_target(bench COMMENT "Running ratrac benchmarking")
+
+set(RATRAC_BENCHMARK_SOURCE_FILES
+  bench-Matrix.cpp
+)
+
+add_executable(bench-ratrac
+               EXCLUDE_FROM_ALL
+               bench-ratrac.cpp
+               ${RATRAC_BENCHMARK_SOURCE_FILES})
+target_link_libraries(bench-ratrac benchmark::benchmark ratrac)
+add_custom_target(benchmark-ratrac bench-ratrac --benchmark_color=yes --benchmark_out_format=json --benchmark_out=bench-ratrac.json
+                  DEPENDS bench-ratrac
+                  COMMENT "Benchmarking ratrac")
+add_dependencies(bench benchmark-ratrac)
