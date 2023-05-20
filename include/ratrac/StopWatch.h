@@ -30,7 +30,6 @@ public:
   }
 
   double elapsed() const {
-
     time_point here = isRunning() ? now() : m_stop_time;
 
     return std::chrono::duration_cast<std::chrono::duration<double>>(

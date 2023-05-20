@@ -1,8 +1,8 @@
 set(GOOGLETEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0)
 add_subdirectory(${GOOGLETEST_SOURCE_DIR})
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${GOOGLETEST_SOURCE_DIR}/include
+include_directories(${CMAKE_SOURCE_DIR}/include
+                    ${GOOGLETEST_SOURCE_DIR}/include
                     ${GOOGLETEST_SOURCE_DIR}/gtest/include)
 
 add_custom_target(check
