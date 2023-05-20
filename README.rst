@@ -1,12 +1,12 @@
-|BadgeLicence| |BadgeBuild| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage|
-
-.. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
-    :alt: Github licence
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/blob/main/LICENSE
+|CIUbuntu2004| |CIUbuntu2204| |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage| |BadgeLicence|
     
-.. |BadgeBuild| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/workflows/Ubuntu%20+%20clang/badge.svg
-    :alt: Github last build status
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions
+.. |CIUbuntu2004| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-20.04.yml/badge.svg
+    :alt: Last build status on Ubuntu 20.04
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-20.04.yml
+
+.. |CIUbuntu2204| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml/badge.svg
+    :alt: Last build status on Ubuntu 22.04
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml
 
 .. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
     :alt: Github size
@@ -28,6 +28,10 @@
     :alt: Github main language
     :target: #
 
+.. |BadgeLicence| image:: https://img.shields.io/github/license/Arnaud-de-Grandmaison/ratrac
+    :alt: Github licence
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/blob/main/LICENSE
+
 ===============================================================================
 Ratrac : a ray tracer experiment
 ===============================================================================
@@ -41,7 +45,7 @@ Ratrac can be built from the command line with:
 
   $ mkdir build
   $ cd build
-  $ cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -G Ninja ..
+  $ CC=clang CXX=clang++ cmake -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -G Ninja ..
   $ ninja
 
 Test

@@ -1,0 +1,37 @@
+name: "Ubuntu 22.04 (gcc+clang)"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CMAKE_BUILD_TYPE: Debug
+  JOBS: 2
+
+jobs:
+  ubuntu_2204_clang:
+    name: "Ubuntu 22.04 + clang: Configure, build and check"
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configure
+      run: CC=clang CXX=clang++ cmake -B ${{github.workspace}}/build-ubuntu-2204-clang -DCMAKE_BUILD_TYPE:STRING=${{env.CMAKE_BUILD_TYPE}}
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build-ubuntu-2204-clang --config ${{env.CMAKE_BUILD_TYPE}} -- -j${{env.JOBS}}
+    - name: Check
+      working-directory: ${{github.workspace}}/build-ubuntu-2204-clang
+      run: make check
+  ubuntu_2204_gcc:
+    name: "Ubuntu 22.04 + gcc: Configure, build and check"
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configure
+      run: CC=gcc CXX=g++ cmake -B ${{github.workspace}}/build-ubuntu-2204-gcc -DCMAKE_BUILD_TYPE:STRING=${{env.CMAKE_BUILD_TYPE}}
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build-ubuntu-2204-gcc --config ${{env.CMAKE_BUILD_TYPE}} -- -j${{env.JOBS}}
+    - name: Check
+      working-directory: ${{github.workspace}}/build-ubuntu-2204-gcc
+      run: make check
