@@ -6,6 +6,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include
 
 set(RATRAC_BENCHMARK_SOURCE_FILES
   bench-Matrix.cpp
+  bench-Tuple.cpp
 )
 
 add_executable(bench-ratrac bench-ratrac.cpp ${RATRAC_BENCHMARK_SOURCE_FILES})
