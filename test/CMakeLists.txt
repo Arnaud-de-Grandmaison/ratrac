@@ -5,9 +5,6 @@ include_directories(${CMAKE_SOURCE_DIR}/include
                     ${GOOGLETEST_SOURCE_DIR}/include
                     ${GOOGLETEST_SOURCE_DIR}/gtest/include)
 
-add_custom_target(check
-  COMMENT "Running ratrac unit tests")
-
 set(RATRAC_TEST_SOURCE_FILES
   test-App.cpp
   test-ArgParse.cpp
@@ -27,11 +24,10 @@ set(RATRAC_TEST_SOURCE_FILES
   test-World.cpp
 )
 
-add_executable(test-ratrac
-               EXCLUDE_FROM_ALL
-               test-ratrac.cpp
-               ${RATRAC_TEST_SOURCE_FILES})
+add_executable(test-ratrac test-ratrac.cpp ${RATRAC_TEST_SOURCE_FILES})
 target_link_libraries(test-ratrac gtest ratrac)
+
+add_custom_target(check COMMENT "Running ratrac unit tests")
 add_custom_target(check-ratrac test-ratrac --gtest_color=yes --gtest_output=xml:test-ratrac.xml
                   DEPENDS test-ratrac
                   COMMENT "Running ratrac unit tests")
