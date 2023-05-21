@@ -234,17 +234,51 @@ public:
     return *this;
   }
 
-  void rotate_x(DataType radians) { *this *= rotation_x(radians); }
-  void rotate_y(DataType radians) { *this *= rotation_y(radians); }
-  void rotate_z(DataType radians) { *this *= rotation_z(radians); }
+  // Fluent API operations: these operations allow to chain matrix operations in
+  // the expected (i.e as you read them order) instead of having to write matrix
+  // multiplications in the reverse order.
+  Matrix &rotate_x(DataType radians) noexcept {
+    Matrix T = rotation_x(radians);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
 
-  void scale(DataType x, DataType y, DataType z) { *this *= scaling(x, y, z); }
-  /*
-  #help: Should be working...
-  void translate(DataTy x, DataTy y, DataTy z) {
-    //this = this * translation(x, y, z);
-    this *= translation(x, y, z);
-  }*/
+  Matrix &rotate_y(DataType radians) noexcept {
+    Matrix T = rotation_y(radians);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
+
+  Matrix &rotate_z(DataType radians) noexcept {
+    Matrix T = rotation_z(radians);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
+
+  Matrix &scale(DataType x, DataType y, DataType z) noexcept {
+    Matrix T = scaling(x, y, z);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
+
+  Matrix &translate(DataType x, DataType y, DataType z) noexcept {
+    Matrix T = translation(x, y, z);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
+
+  Matrix &shear(DataType Xy, DataType Xz, DataType Yx, DataType Yz, DataType Zx,
+                DataType Zy) noexcept {
+    Matrix T = shearing(Xy, Xz, Yx, Yz, Zx, Zy);
+    T *= *this;
+    *this = std::move(T);
+    return *this;
+  }
 
 private:
   DataType *m_Matrix;

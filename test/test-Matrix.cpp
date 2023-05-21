@@ -411,3 +411,35 @@ TEST(Matrix, transformations) {
   Matrix T = C * B * A;
   EXPECT_EQ(T * p, Point(15, 0, 7));
 }
+
+TEST(Matrix, fluent_transformations) {
+  Matrix A = Matrix::rotation_x(M_PI / 2);
+  Matrix B = Matrix::scaling(5, 5, 5);
+  Matrix C = Matrix::translation(10, 5, 7);
+  Matrix D = Matrix::shearing(0, 0, 1, 0, 0, 0);
+  Matrix T = D * C * B * A;
+  Matrix F = Matrix::identity()
+                 .rotate_x(M_PI / 2)
+                 .scale(5, 5, 5)
+                 .translate(10, 5, 7)
+                 .shear(0, 0, 1, 0, 0, 0);
+  EXPECT_EQ(F, T);
+
+  A = Matrix::rotation_y(M_PI / 2);
+  T = C * D * B * A;
+  F = Matrix::identity()
+          .rotate_y(M_PI / 2)
+          .scale(5, 5, 5)
+          .shear(0, 0, 1, 0, 0, 0)
+          .translate(10, 5, 7);
+  EXPECT_EQ(F, T);
+
+  A = Matrix::rotation_z(M_PI / 2);
+  T = A * B * C * D;
+  F = Matrix::identity()
+          .shear(0, 0, 1, 0, 0, 0)
+          .translate(10, 5, 7)
+          .scale(5, 5, 5)
+          .rotate_z(M_PI / 2);
+  EXPECT_EQ(F, T);
+}
