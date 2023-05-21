@@ -63,8 +63,9 @@ public:
   // ===========================
 
   DataType magnitude() const {
-    DataType result = m_tuple[0] * m_tuple[0] + m_tuple[1] * m_tuple[1] +
-                      m_tuple[2] * m_tuple[2] + m_tuple[3] * m_tuple[3];
+    DataType result = DataType();
+    for (size_t i = 0; i < size(); i++)
+      result += m_tuple[i] * m_tuple[i];
     return std::sqrt(result);
   }
 
@@ -114,8 +115,9 @@ public:
   // Advanced operations
 
   constexpr DataType dot(const Tuple &rhs) const noexcept {
-    DataType result = m_tuple[0] * rhs.m_tuple[0] + m_tuple[1] * rhs.m_tuple[1]
-                      + m_tuple[2] * rhs.m_tuple[2] + m_tuple[3] * rhs.m_tuple[3];
+    DataType result = DataType();
+    for (size_t i = 0; i < size(); i++)
+      result += m_tuple[i] * rhs.m_tuple[i];
     return result;
   }
 
