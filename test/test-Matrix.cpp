@@ -268,16 +268,15 @@ TEST(Matrix, transformations) {
   // Translation matrix
   // ==================
 
-  // Mutiplying by a translating matrix
+  // Multiplying by a translating matrix
   Matrix transform = Matrix::translation(5., -3., 2.);
   Tuple p = Point(-3., 4., 5.);
   EXPECT_EQ(transform * p, Point(2., 1., 7.));
 
   // Multiplying by the inverse of a translation matrix
   transform = Matrix::translation(5., -3., 2.);
-  Matrix inv = inverse(transform);
   p = Point(-3., 4., 5.);
-  EXPECT_EQ(inv * p, Point(-8., 7., 3.));
+  EXPECT_EQ(inverse(transform) * p, Point(-8., 7., 3.));
 
   // Translation does not affect vectors
   transform = Matrix::translation(5., -3., 2.);
@@ -288,22 +287,21 @@ TEST(Matrix, transformations) {
   // ==============
 
   // A scaling matrix applied to a point
-  transform = Matrix::scaling(2., 3., 4.);
-  p = Point(-4., 6., 8.);
-  EXPECT_EQ(transform * p, Point(-8., 18., 32.));
+  transform = Matrix::scaling(2., 4., 8.);
+  p = Point(-1., 2., 3.);
+  EXPECT_EQ(transform * p, Point(-2., 8., 24.));
 
   // A scaling matrix applied to a vector
   // transform = scaling(2, 3, 4);
   v = Vector(-4., 6., 8.);
-  EXPECT_EQ(transform * v, Vector(-8., 18., 32.));
+  EXPECT_EQ(transform * v, Vector(-8., 24., 64.));
 
   // Multiplying by the inverse of a scaling matrix
   transform = Matrix::scaling(2., 3., 4.);
-  inv = inverse(transform);
   v = Vector(-4., 6., 8.);
-  EXPECT_EQ(inv * v, Vector(-2., 2., 2.));
+  EXPECT_EQ(inverse(transform) * v, Vector(-2., 2., 2.));
 
-  // Relfection is scaling by a negative value
+  // Reflection is scaling by a negative value
   transform = Matrix::scaling(-1., 1., 1.);
   p = Point(2., 3., 4.);
   EXPECT_EQ(transform * p, Point(-2., 3., 4.));
@@ -312,35 +310,43 @@ TEST(Matrix, transformations) {
   // ========
 
   // X axis
-
-  // Rotating a point around the x axis
-  p = Point(0., 1., 0.);
+  // ------
   Matrix half_quarter = Matrix::rotation_x(M_PI / 4);
   Matrix full_quarter = Matrix::rotation_x(M_PI / 2);
-  EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, std::sqrt(2) / 2));
 
-  /// The inverse of an x-rotation rotates in the opposite direction
+  // Rotating a point around the x axis.
   p = Point(0., 1., 0.);
-  half_quarter = Matrix::rotation_x(M_PI / 4);
-  inv = inverse(half_quarter);
-  EXPECT_EQ(inv * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
+  EXPECT_EQ(half_quarter * p, Point(0., std::sqrt(2) / 2, std::sqrt(2) / 2));
+  EXPECT_EQ(full_quarter * p, Point(0, 0, 1));
+
+  // The inverse of an x-rotation rotates in the opposite direction.
+  EXPECT_EQ(inverse(half_quarter) * p, Point(0., std::sqrt(2) / 2, -std::sqrt(2) / 2));
 
   // Y axis
-
-  // Rotating a point around the y axis
-  p = Point(0, 0, 1);
+  // ------
   half_quarter = Matrix::rotation_y(M_PI / 4);
   full_quarter = Matrix::rotation_y(M_PI / 2);
+
+  // Rotating a point around the y axis.
+  p = Point(0, 0, 1);
   EXPECT_EQ(half_quarter * p, Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
   EXPECT_EQ(full_quarter * p, Point(1, 0, 0));
-  // Z axis
 
-  // Rotating a point arround the z axis
-  p = Point(0, 1, 0);
+  // The inverse of an y-rotation rotates in the opposite direction.
+  EXPECT_EQ(inverse(half_quarter) * p, Point(-std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+
+  // Z axis
+  // ------
   half_quarter = Matrix::rotation_z(M_PI / 4);
   full_quarter = Matrix::rotation_z(M_PI / 2);
+
+  // Rotating a point around the z axis
+  p = Point(0, 1, 0);
   EXPECT_EQ(half_quarter * p, Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
   EXPECT_EQ(full_quarter * p, Point(-1, 0, 0));
+
+  // The inverse of an z-rotation rotates in the opposite direction.
+  EXPECT_EQ(inverse(half_quarter) * p, Point(std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
 
   // Shearing
   // ========
