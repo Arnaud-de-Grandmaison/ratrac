@@ -2,7 +2,6 @@
 
 #include "ratrac/ratrac.h"
 
-#include <array>
 #include <cmath>
 #include <ostream>
 #include <string>
@@ -14,6 +13,7 @@ namespace ratrac {
 /** Color represent a Color which is used by ratrac to manipulate
  * Points and Vectors. */
 class Color {
+  static const unsigned NC = 4; // Number of color components..
   static_assert(std::is_floating_point<ratrac::RayTracerColorType>::value,
                 "Color ColorTy must be a floating point type.");
 
@@ -59,27 +59,27 @@ public:
   // operations
 
   Color &operator+=(const Color &rhs) {
-    for (unsigned i = 0; i < m_color.size() - 1; i++)
+    for (unsigned i = 0; i < NC - 1; i++)
       m_color[i] += rhs.m_color[i];
     return *this;
   }
   Color &operator-=(const Color &rhs) {
-    for (unsigned i = 0; i < m_color.size() - 1; i++)
+    for (unsigned i = 0; i < NC - 1; i++)
       m_color[i] -= rhs.m_color[i];
     return *this;
   }
   Color &operator*=(ColorType rhs) {
-    for (unsigned i = 0; i < m_color.size() - 1; i++)
+    for (unsigned i = 0; i < NC - 1; i++)
       m_color[i] *= rhs;
     return *this;
   }
   Color &operator*=(const Color &rhs) {
-    for (unsigned i = 0; i < m_color.size(); i++)
+    for (unsigned i = 0; i < NC; i++)
       m_color[i] *= rhs.m_color[i];
     return *this;
   }
   Color &operator/=(ColorType rhs) {
-    for (unsigned i = 0; i < m_color.size() - 1; i++)
+    for (unsigned i = 0; i < NC - 1; i++)
       m_color[i] /= rhs;
     return *this;
   }
@@ -95,7 +95,7 @@ public:
 
 private:
   // An array formatted as following: RayTracerColor(red, green, blue, alpha).
-  std::array<ColorType, 4> m_color;
+  ColorType m_color[NC];
 };
 
 // Other/External operators
