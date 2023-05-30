@@ -11,12 +11,11 @@
 #include <tuple>
 
 namespace ratrac {
-class Matrix;
 
 /** Square matrices of  size 2x2, 3x3 or 4x4. */
 class Matrix {
   static const unsigned NR = 4;       // Maximum number of rows.
-  static const unsigned NC = 4;       // Maximum  number of columns.
+  static const unsigned NC = 4;       // Maximum number of columns.
   static const unsigned NE = NR * NC; // Maximum number of elements.
   static_assert(NR == NC, "only square matrices are supported.");
   static_assert(std::is_floating_point<ratrac::RayTracerDataType>::value,
@@ -34,8 +33,7 @@ public:
     assert(m_Matrix && "Allocation error");
     std::memcpy(m_Matrix, M.m_Matrix, NE * sizeof(DataType));
   }
-  // Matrix(const std::vector<std::vector<DataType>> &M) : m_Matrix(M) {}
-  // Matrix(std::vector<std::vector<DataType>> &&M) : m_Matrix(std::move(M)) {}
+
   Matrix(Matrix &&M)
       : m_Matrix(M.m_Matrix), m_Rows(M.m_Rows), m_Columns(M.m_Columns) {
     M.m_Matrix = nullptr;
@@ -214,7 +212,7 @@ public:
 
   // Operators
   // =========
-  bool operator==(const Matrix &rhs) const ;
+  bool operator==(const Matrix &rhs) const;
   bool approximatly_equal(const Matrix &rhs) const;
   bool operator!=(const Matrix &rhs) const { return !operator==(rhs); }
 
