@@ -13,7 +13,10 @@
 namespace ratrac {
 class Shape {
 public:
-  Shape() : m_transform(Matrix::identity()), m_material() {}
+  Shape()
+      : m_transform(Matrix::identity()),
+        m_inverted_transform(Matrix::identity()),
+        m_transposed_inverted_transform(Matrix::identity()), m_material() {}
   virtual ~Shape();
 
   bool operator==(const Shape &rhs) const {
@@ -32,28 +35,35 @@ public:
 
   Shape &transform(const Matrix &M) {
     m_transform = M;
+    precompute();
     return *this;
   }
 
   Shape &transform(Matrix &&M) {
     m_transform = std::move(M);
+    precompute();
     return *this;
   }
 
+  void precompute() {
+    m_inverted_transform = inverse(m_transform);
+    m_transposed_inverted_transform = transpose(m_inverted_transform);
+  }
+
   Intersections intersect(const Ray &world_ray) const {
-    Ray local_ray = ratrac::transform(world_ray, inverse(m_transform));
+    Ray local_ray = ratrac::transform(world_ray, m_inverted_transform);
     return local_intersect(local_ray);
   }
 
   Color at(const Tuple &world_point) const {
-    Tuple object_point = inverse(m_transform) * world_point;
+    Tuple object_point = m_inverted_transform * world_point;
     return m_material.at(object_point);
   }
 
   Tuple normal_at(const Tuple &world_point) const {
-    Tuple local_point = inverse(m_transform) * world_point;
+    Tuple local_point = m_inverted_transform * world_point;
     Tuple local_normal = local_normal_at(local_point);
-    Tuple world_normal = transpose(inverse(m_transform)) * local_normal;
+    Tuple world_normal = m_transposed_inverted_transform * local_normal;
     world_normal[3] = 0;
     return world_normal.normalize();
   }
@@ -65,6 +75,8 @@ public:
 
 private:
   Matrix m_transform;
+  Matrix m_inverted_transform;
+  Matrix m_transposed_inverted_transform;
   Material m_material;
 };
 

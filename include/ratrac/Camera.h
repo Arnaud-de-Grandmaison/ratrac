@@ -22,10 +22,12 @@ public:
 
   Camera &transform(const Matrix &transform) {
     m_transform = transform;
+    precompute();
     return *this;
   }
   Camera &transform(Matrix &&transform) {
     m_transform = std::move(transform);
+    precompute();
     return *this;
   }
 
@@ -35,12 +37,16 @@ public:
 
 private:
   Matrix m_transform;
+  Matrix m_inverted_transform;
+  Tuple  m_origin;
   unsigned m_hsize;
   unsigned m_vsize;
   RayTracerDataType m_fov; // Field of view, angle in radians.
   RayTracerDataType m_half_width;
   RayTracerDataType m_half_height;
   RayTracerDataType m_pixel_size;
+
+  void precompute();
 };
 
 } // namespace ratrac

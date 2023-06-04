@@ -9,8 +9,9 @@
 namespace ratrac {
 
 Camera::Camera(unsigned hsize, unsigned vsize, RayTracerDataType fov)
-    : m_transform(Matrix::identity()), m_hsize(hsize), m_vsize(vsize),
-      m_fov(fov), m_half_width(), m_half_height(), m_pixel_size() {
+    : m_transform(Matrix::identity()), m_inverted_transform(Matrix::identity()),
+      m_origin(Point(0, 0, 0)), m_hsize(hsize), m_vsize(vsize), m_fov(fov),
+      m_half_width(), m_half_height(), m_pixel_size() {
   RayTracerDataType half_view = std::tan(m_fov / 2.0);
   RayTracerDataType aspect =
       RayTracerDataType(m_hsize) / RayTracerDataType(m_vsize);
@@ -37,12 +38,10 @@ Ray Camera::ray_for_pixel(unsigned px, unsigned py) const {
   // Using the camera matrix, transform the canvas point and the origin,
   // and then compute the ray's direction vector.
   // (remember that the canvas is at z=-1)
-  Matrix i = inverse(m_transform);
-  Tuple pixel = i * Point(world_x, world_y, -1);
-  Tuple origin = i * Point(0, 0, 0);
-  Tuple direction = normalize(pixel - origin);
+  Tuple pixel = m_inverted_transform * Point(world_x, world_y, -1);
+  Tuple direction = normalize(pixel - m_origin);
 
-  return Ray(origin, direction);
+  return Ray(m_origin, direction);
 }
 
 Canvas Camera::render(const World &world, bool verbose) const {
@@ -57,6 +56,11 @@ Canvas Camera::render(const World &world, bool verbose) const {
   }
 
   return image;
+}
+
+void Camera::precompute() {
+  m_inverted_transform = inverse(m_transform);
+  m_origin = m_inverted_transform * Point(0, 0, 0);
 }
 
 Matrix view_transform(const Tuple &from, const Tuple &to, const Tuple &up) {
