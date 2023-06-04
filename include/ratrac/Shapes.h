@@ -45,11 +45,6 @@ public:
     return *this;
   }
 
-  void precompute() {
-    m_inverted_transform = inverse(m_transform);
-    m_transposed_inverted_transform = transpose(m_inverted_transform);
-  }
-
   Intersections intersect(const Ray &world_ray) const {
     Ray local_ray = ratrac::transform(world_ray, m_inverted_transform);
     return local_intersect(local_ray);
@@ -78,6 +73,11 @@ private:
   Matrix m_inverted_transform;
   Matrix m_transposed_inverted_transform;
   Material m_material;
+
+  void precompute() {
+    m_inverted_transform = inverse(m_transform);
+    m_transposed_inverted_transform = transpose(m_inverted_transform);
+  }
 };
 
 class Sphere : public Shape {
