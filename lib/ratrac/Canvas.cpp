@@ -12,25 +12,25 @@ void Canvas::to_ppm(ostream &os) const {
   os << m_width << " " << m_height << "\n";
   os << MaxValue << '\n';
   for(unsigned y = 0; y < m_height; y++) {
-    string delimiter;
-    string currentLine;
-    unsigned lineLenght = 0;
+    const char *delimiter = "";
+    unsigned delimiter_size = 0;
+    unsigned lineLength = 0;
     for (unsigned x = 0; x < m_width; x++) {
       const Color &Pixel = at(x, y);
-      // Scale to MaxValue
-      unsigned r = cap(Pixel.red() * MaxValue, MaxValue);
-      unsigned g = cap(Pixel.green() * MaxValue, MaxValue);
-      unsigned b = cap(Pixel.blue() * MaxValue, MaxValue);
-      for (const unsigned &c: {r, g, b}) {
-        string s = to_string(c);
-        if (lineLenght + delimiter.size() + s.size() > 70) {
+      const string r = to_string(cap(Pixel.red() * MaxValue, MaxValue));
+      const string g = to_string(cap(Pixel.green() * MaxValue, MaxValue));
+      const string b = to_string(cap(Pixel.blue() * MaxValue, MaxValue));
+      for (const auto &s: {r, g, b}) {
+        if (lineLength + delimiter_size + s.size() > 70) {
           os << '\n';
           delimiter = "";
-          lineLenght = 0;
+          delimiter_size = 0;
+          lineLength = 0;
         }
         os << delimiter << s;
-        lineLenght += delimiter.size() + s.size();
+        lineLength += delimiter_size + s.size();
         delimiter = " ";
+        delimiter_size = 1;
       }
     }
     os << '\n';
