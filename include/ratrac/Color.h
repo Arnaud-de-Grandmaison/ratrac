@@ -13,7 +13,11 @@ namespace ratrac {
 /** Color represent a Color which is used by ratrac to manipulate
  * Points and Vectors. */
 class Color {
-  static const unsigned NC = 4; // Number of color components..
+  static const unsigned NC = 4; // Number of color components.
+  static const unsigned RED_idx = 0;
+  static const unsigned GREEN_idx = 1;
+  static const unsigned BLUE_idx = 2;
+  static const unsigned ALPHA_idx = 3;
   static_assert(std::is_floating_point<ratrac::RayTracerColorType>::value,
                 "Color ColorTy must be a floating point type.");
 
@@ -31,15 +35,19 @@ public:
   // Accessors
   // =========
 
-  ColorType &red() noexcept { return m_color[0]; }
-  ColorType &green() noexcept { return m_color[1]; }
-  ColorType &blue() noexcept { return m_color[2]; }
-  ColorType &alpha() noexcept { return m_color[3]; }
+  ColorType &red() noexcept { return m_color[RED_idx]; }
+  ColorType &green() noexcept { return m_color[GREEN_idx]; }
+  ColorType &blue() noexcept { return m_color[BLUE_idx]; }
+  ColorType &alpha() noexcept { return m_color[ALPHA_idx]; }
 
-  const constexpr ColorType &red() const noexcept { return m_color[0]; }
-  const constexpr ColorType &green() const noexcept { return m_color[1]; }
-  const constexpr ColorType &blue() const noexcept { return m_color[2]; }
-  const constexpr ColorType &alpha() const noexcept { return m_color[3]; }
+  const constexpr ColorType &red() const noexcept { return m_color[RED_idx]; }
+  const constexpr ColorType &green() const noexcept {
+    return m_color[GREEN_idx];
+  }
+  const constexpr ColorType &blue() const noexcept { return m_color[BLUE_idx]; }
+  const constexpr ColorType &alpha() const noexcept {
+    return m_color[ALPHA_idx];
+  }
 
   // Operators
   // =========

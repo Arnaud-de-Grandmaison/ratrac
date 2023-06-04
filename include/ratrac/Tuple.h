@@ -13,6 +13,11 @@ namespace ratrac {
 /** RayTracerTuple represent the Tuples ratrac uses to manipulate point and
  * vectors. */
 class Tuple {
+  static const unsigned NC = 4; // Number of components in the Tuple.
+  static const unsigned X_idx = 0;
+  static const unsigned Y_idx = 1;
+  static const unsigned Z_idx = 2;
+  static const unsigned W_idx = 3;
   static_assert(std::is_floating_point<ratrac::RayTracerDataType>::value,
                 "Tuple DataTy must be a floating point type.");
 
@@ -40,22 +45,22 @@ public:
   // Accessors
   // =========
 
-  constexpr const DataType &x() const noexcept { return m_tuple[0]; }
-  constexpr const DataType &y() const noexcept { return m_tuple[1]; }
-  constexpr const DataType &z() const noexcept { return m_tuple[2]; }
-  constexpr const DataType &w() const noexcept { return m_tuple[3]; }
+  constexpr const DataType &x() const noexcept { return m_tuple[X_idx]; }
+  constexpr const DataType &y() const noexcept { return m_tuple[Y_idx]; }
+  constexpr const DataType &z() const noexcept { return m_tuple[Z_idx]; }
+  constexpr const DataType &w() const noexcept { return m_tuple[W_idx]; }
 
   constexpr DataType &operator[](size_t index) noexcept {
-    assert(index < size() && "out of bounds access in Tuple");
+    assert(index < NC && "out of bounds access in Tuple");
     return m_tuple[index];
-    }
+  }
   constexpr const DataType &operator[](size_t index) const noexcept {
-    assert(index < size() && "out of bounds access in Tuple");
+    assert(index < NC && "out of bounds access in Tuple");
     return m_tuple[index];
   }
 
-  constexpr bool isPoint() const noexcept { return m_tuple[3] == 1.0; }
-  constexpr bool isVector() const noexcept { return m_tuple[3] == 0.0; }
+  constexpr bool isPoint() const noexcept { return m_tuple[W_idx] == 1.0; }
+  constexpr bool isVector() const noexcept { return m_tuple[W_idx] == 0.0; }
 
   constexpr size_t size() const noexcept { return 4; }
 
@@ -64,7 +69,7 @@ public:
 
   DataType magnitude() const {
     DataType result = DataType();
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       result += m_tuple[i] * m_tuple[i];
     return std::sqrt(result);
   }
@@ -88,22 +93,22 @@ public:
   // operations
 
   constexpr Tuple &operator+=(const Tuple &rhs) noexcept {
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       m_tuple[i] += rhs.m_tuple[i];
     return *this;
   }
   constexpr Tuple &operator-=(const Tuple &rhs) noexcept {
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       m_tuple[i] -= rhs.m_tuple[i];
     return *this;
   }
   constexpr Tuple &operator*=(DataType rhs) noexcept {
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       m_tuple[i] *= rhs;
     return *this;
   }
   constexpr Tuple &operator/=(DataType rhs) noexcept {
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       m_tuple[i] /= rhs;
     return *this;
   }
@@ -116,15 +121,18 @@ public:
 
   constexpr DataType dot(const Tuple &rhs) const noexcept {
     DataType result = DataType();
-    for (size_t i = 0; i < size(); i++)
+    for (size_t i = 0; i < NC; i++)
       result += m_tuple[i] * rhs.m_tuple[i];
     return result;
   }
 
   constexpr Tuple cross(const Tuple &rhs) const noexcept {
-    return Vector(m_tuple[1] * rhs.m_tuple[2] - m_tuple[2] * rhs.m_tuple[1],
-                  m_tuple[2] * rhs.m_tuple[0] - m_tuple[0] * rhs.m_tuple[2],
-                  m_tuple[0] * rhs.m_tuple[1] - m_tuple[1] * rhs.m_tuple[0]);
+    return Vector(m_tuple[Y_idx] * rhs.m_tuple[Z_idx] -
+                      m_tuple[Z_idx] * rhs.m_tuple[Y_idx],
+                  m_tuple[Z_idx] * rhs.m_tuple[X_idx] -
+                      m_tuple[X_idx] * rhs.m_tuple[Z_idx],
+                  m_tuple[X_idx] * rhs.m_tuple[Y_idx] -
+                      m_tuple[Y_idx] * rhs.m_tuple[X_idx]);
   }
 
   constexpr Tuple reflect(const Tuple &normal) const noexcept {
@@ -185,9 +193,7 @@ inline constexpr Tuple operator/(const Tuple &lhs,
 // Function like operators
 // =======================
 
-inline Tuple::DataType magnitude(const Tuple &T) {
-  return T.magnitude();
-}
+inline Tuple::DataType magnitude(const Tuple &T) { return T.magnitude(); }
 
 inline Tuple normalize(const Tuple &T) {
   Tuple tmp = T;
