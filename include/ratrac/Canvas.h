@@ -56,6 +56,11 @@ public:
   /** Outputs the canvas in PPM format to a stream. */
   void to_ppm(std::ostream &os) const;
 
+#ifdef RATRAC_USES_LIBPNG
+  /** Outputs the canvas in PNG format to filename.*/
+  void to_png(const std::string &filename) const;
+#endif
+
 private:
   unsigned m_width;
   unsigned m_height;

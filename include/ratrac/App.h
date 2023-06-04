@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ratrac/ArgParse.h"
+#include "ratrac/Canvas.h"
 
 #include <string>
 
@@ -15,14 +16,21 @@ namespace ratrac {
  *   --width=W, -w W       Set canvas width to W
  *   --height=H, -h H      Set canvas height to H
  *   --output=F, -o F      Save output to filename F
- *   --format=T, -f T      Save output in image format T (PPM ony for now)
+ *   --format=T, -f T      Save output in image format T: PPM or PNG (if support built in)
  */
 class App : public ArgParse {
 public:
-  enum OutputFormat { PPM };
+  enum OutputFormat {
+    PPM,
+#ifdef RATRAC_USES_LIBPNG
+    PNG
+#endif
+  };
 
   App(const std::string &programName, const std::string &description,
       size_t width = 320, size_t height = 240);
+
+  virtual ~App() = default;
 
   const std::string &outputFilename() const { return m_outputFilename; }
   OutputFormat outputFormat() const { return m_outputFormat; }
@@ -34,6 +42,8 @@ public:
   size_t height() const { return m_height; }
 
   std::string parameters() const;
+
+  void save(const Canvas &C) const;
 
 private:
   std::string m_outputFilename;

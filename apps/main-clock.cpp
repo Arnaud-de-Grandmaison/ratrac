@@ -13,24 +13,17 @@ using namespace ratrac;
 using std::cout;
 using std::ofstream;
 
-void clock_generator(size_t width, size_t height, const char *filename) {
-  Canvas C(width, height);
-
+void clock_generator(Canvas &C) {
   // Generate a centered point
-  {
-    TimedProgressBar PB("Generation", 12, cout);
-    for (unsigned i = 0; i < 12; i++) {
-      Matrix temp_transform = Matrix::identity();
-      temp_transform *= Matrix::rotation_y(double(i) * 2.0 * M_PI / double(12));
-      Tuple temp_point = Matrix::translation(100.0, 0.0, 100.0) *
-                         temp_transform * Point(50, 0, 0);
-      C.at(temp_point.x(), temp_point.z()) = Color(.5, .75, .5);
-      PB.incr();
-    }
+  TimedProgressBar PB("Generation", 12, cout);
+  for (unsigned i = 0; i < 12; i++) {
+    Matrix temp_transform = Matrix::identity();
+    temp_transform *= Matrix::rotation_y(double(i) * 2.0 * M_PI / double(12));
+    Tuple temp_point = Matrix::translation(100.0, 0.0, 100.0) * temp_transform *
+                       Point(50, 0, 0);
+    C.at(temp_point.x(), temp_point.z()) = Color(.5, .75, .5);
+    PB.incr();
   }
-
-  ofstream file(filename);
-  C.to_ppm(file);
 }
 
 int main(int argc, char *argv[]) {
@@ -40,7 +33,11 @@ int main(int argc, char *argv[]) {
   if (app.verbose())
     cout << app.parameters() << '\n';
 
-  clock_generator(app.width(), app.height(), app.outputFilename().c_str());
+  Canvas C(app.width(), app.height());
+
+  clock_generator(C);
+
+  app.save(C);
 
   return 0;
 }

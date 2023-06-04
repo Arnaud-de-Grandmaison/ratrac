@@ -10,7 +10,6 @@
 #include "ratrac/World.h"
 
 #include <cmath>
-#include <fstream>
 #include <iostream>
 
 using namespace ratrac;
@@ -85,8 +84,7 @@ int main(int argc, char *argv[]) {
   Canvas C = camera.render(world, app.verbose());
 
   // Save the scene.
-  ofstream file(app.outputFilename());
-  C.to_ppm(file);
+  app.save(C);
 
   return 0;
 }

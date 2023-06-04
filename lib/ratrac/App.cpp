@@ -1,11 +1,13 @@
 #include "ratrac/App.h"
 
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
 
 using std::cout;
+using std::ofstream;
 using std::ostringstream;
 using std::stoul;
 using std::string;
@@ -46,15 +48,22 @@ App::App(const string &programName, const string &description, size_t width,
                        return true;
                      });
 
-  addOptionWithValue({"--format", "-f"}, "T",
-                     "Save output in image format T (PPM ony for now)",
-                     [&](const string &s) {
-                       if (s == "PPM" || s == "ppm") {
-                         m_outputFormat = App::PPM;
-                         return true;
-                       }
-                       return false;
-                     });
+  addOptionWithValue(
+      {"--format", "-f"}, "T",
+      "Save output in image format T, PPM or PNG (if support built in)",
+      [&](const string &s) {
+        if (s == "PPM" || s == "ppm") {
+          m_outputFormat = App::PPM;
+          return true;
+        }
+#ifdef RATRAC_USES_LIBPNG
+        if (s == "PNG" || s == "png") {
+          m_outputFormat = App::PNG;
+          return true;
+        }
+#endif
+        return false;
+      });
 }
 
 string App::parameters() const {
@@ -64,9 +73,27 @@ string App::parameters() const {
   switch (outputFormat()) {
   case App::PPM:
     os << "PPM";
+#ifdef RATRAC_USES_LIBPNG
+  case App::PNG:
+    os << "PNG";
+#endif
   }
   os << " format)";
   return os.str();
+}
+
+void App::save(const Canvas &C) const {
+  switch (outputFormat()) {
+  case App::PPM: {
+    ofstream file(outputFilename());
+    C.to_ppm(file);
+  } break;
+#ifdef RATRAC_USES_LIBPNG
+  case App::PNG:
+    C.to_png(outputFilename());
+    break;
+#endif
+  }
 }
 
 } // namespace ratrac

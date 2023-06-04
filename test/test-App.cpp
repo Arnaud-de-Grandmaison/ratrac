@@ -18,7 +18,7 @@ TEST(App, defaults) {
       "message.\n  --verbose, -v: Increase program verbosity.\n  --width=W, -w "
       "W: Set canvas width to W\n  --height=H, -h H: Set canvas height to H\n  "
       "--output=F, -o F: Save output to filename F\n  --format=T, -f T: Save "
-      "output in image format T (PPM ony for now)");
+      "output in image format T, PPM or PNG (if support built in)");
 
   array<const char *, 0> args = {};
   EXPECT_TRUE(A.parse(args.size(), args.data()));

@@ -51,8 +51,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  ofstream file(app.outputFilename().c_str());
-  C.to_ppm(file);
+  app.save(C);
 
   return 0;
 }

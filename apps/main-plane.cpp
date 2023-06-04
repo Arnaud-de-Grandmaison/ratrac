@@ -78,8 +78,7 @@ int main(int argc, char *argv[]) {
   Canvas C = camera.render(world, app.verbose());
 
   // Save the scene.
-  ofstream file(app.outputFilename().c_str());
-  C.to_ppm(file);
+  app.save(C);
 
   return 0;
 }

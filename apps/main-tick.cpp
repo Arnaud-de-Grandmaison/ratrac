@@ -88,9 +88,7 @@ void experiment1() {
   };
 }
 
-void experiment2(size_t w, size_t h, const char *filename) {
-  Canvas C(w, h);
-
+void experiment2(Canvas &C) {
   Projectile p(Point(0.0, 1.0, 0.0), normalize(Vector(1.0, 1.8, 0.0)) * 11.25);
   Environment e(p, Vector(0.0, -0.1, 0.0), Vector(-0.01, 0.0, 0.0));
 
@@ -100,9 +98,6 @@ void experiment2(size_t w, size_t h, const char *filename) {
     unsigned y = C.height() - cap(Pos.y(), C.height() - 1);
     C.at(x, y) = Color(.8, .8, .8);
   };
-
-  ofstream file(filename);
-  C.to_ppm(file);
 }
 
 int main(int argc, char *argv[]) {
@@ -113,6 +108,10 @@ int main(int argc, char *argv[]) {
     cout << app.parameters() << '\n';
 
   experiment1();
-  experiment2(app.width(), app.height(), app.outputFilename().c_str());
+
+  Canvas C(app.width(), app.height());
+  experiment2(C);
+  app.save(C);
+
   return 0;
 }
