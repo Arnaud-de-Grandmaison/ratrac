@@ -15,21 +15,23 @@ class Shape;
 class World;
 
 struct Intersection {
-  Intersection() : t(RayTracerDataType()), object(nullptr) {}
-  Intersection(const Intersection &) = default;
-  Intersection(RayTracerDataType t, const Shape *object)
+  constexpr Intersection() noexcept : t(RayTracerDataType()), object(nullptr) {}
+  constexpr Intersection(const Intersection &) noexcept = default;
+  constexpr Intersection(RayTracerDataType t, const Shape *object) noexcept
       : t(t), object(object) {}
-  Intersection(RayTracerDataType t, const Shape &object)
+  constexpr Intersection(RayTracerDataType t, const Shape &object) noexcept
       : t(t), object(&object) {}
 
   Intersection &operator=(const Intersection &) = default;
 
-  bool operator<(const Intersection &rhs) const { return t < rhs.t; }
+  constexpr bool operator<(const Intersection &rhs) const noexcept {
+    return t < rhs.t;
+  }
 
-  bool operator==(const Intersection &Other) const {
+  constexpr bool operator==(const Intersection &Other) const noexcept {
     return t == Other.t && object == Other.object;
   }
-  bool operator!=(const Intersection &Other) const {
+  constexpr bool operator!=(const Intersection &Other) const noexcept {
     return t != Other.t || object != Other.object;
   }
 
@@ -62,18 +64,47 @@ public:
 
   Intersections &add(const Intersection &x) {
     // Keep our list sorted upon insertion of a new Intersection.
-    if (m_xs.empty())
+    if (m_xs.empty()) {
       m_xs.push_back(x);
-    else {
+      return *this;
+    }
+
+    const_iterator it = std::lower_bound(m_xs.begin(), m_xs.end(), x);
+    m_xs.insert(it, x);
+    return *this;
+  }
+
+  Intersections &add(const Intersections &xs) {
+    if (xs.empty())
+      return *this;
+
+    if (m_xs.empty()) {
+      m_xs = xs.m_xs;
+      return *this;
+    }
+
+    m_xs.reserve(m_xs.size() + xs.m_xs.size());
+    for (const Intersection &x : xs) {
       const_iterator it = std::lower_bound(m_xs.begin(), m_xs.end(), x);
       m_xs.insert(it, x);
     }
     return *this;
   }
 
-  Intersections &add(const Intersections &xs) {
-    for (const Intersection &x : xs)
-      add(x);
+  Intersections &add(Intersections &&xs) {
+    if (xs.empty())
+      return *this;
+
+    if (m_xs.empty()) {
+      m_xs = std::move(xs.m_xs);
+      return *this;
+    }
+
+    m_xs.reserve(m_xs.size() + xs.m_xs.size());
+    for (const Intersection &x : xs) {
+      const_iterator it = std::lower_bound(m_xs.begin(), m_xs.end(), x);
+      m_xs.insert(it, x);
+    }
     return *this;
   }
 

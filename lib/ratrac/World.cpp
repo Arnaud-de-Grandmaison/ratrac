@@ -41,11 +41,8 @@ namespace ratrac {
 Intersections World::intersect(const Ray &r) const {
   Intersections xs;
 
-  for (const auto &o : m_objects) {
-    Intersections i = o->intersect(r);
-    if (!i.empty())
-      xs.add(i);
-  }
+  for (const auto &o : m_objects)
+    xs.add(o->intersect(r));
 
   return xs;
 }
