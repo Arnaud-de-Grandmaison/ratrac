@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
   left->transform(Matrix::translation(-1.5, 0.33, -0.75) *
                   Matrix::scaling(0.33, 0.33, 0.33));
   Material m4;
-  m4.pattern(Checkers(Color(0.05, 0.25, 0.05), Color(0.5, 0.8, 0.5),
-                      Matrix::scaling(0.1, 0.1, 0.1)));
+  m4.pattern(ColorCheckers(Color(0.05, 0.25, 0.05), Color(0.5, 0.8, 0.5),
+                           Matrix::scaling(0.5, 0.1, 0.1)));
   m4.color(Color(1, 0.8, 0.1));
   m4.diffuse(0.7);
   m4.specular(0.3);

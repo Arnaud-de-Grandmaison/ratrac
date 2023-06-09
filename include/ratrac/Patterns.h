@@ -52,9 +52,7 @@ private:
   Matrix m_transform;
   Matrix m_inverted_transform;
 
-  void precompute() {
-    m_inverted_transform = inverse(m_transform);
-  }
+  void precompute() { m_inverted_transform = inverse(m_transform); }
 };
 
 class BiColorPattern : public Pattern {
@@ -74,7 +72,7 @@ private:
   Color b;
 };
 
-class Stripes : public BiColorPattern {
+class Stripes final : public BiColorPattern {
 public:
   Stripes(const Stripes &) = default;
   Stripes(const Color &a, const Color &b) : BiColorPattern(a, b) {}
@@ -94,7 +92,7 @@ public:
   virtual explicit operator std::string() const override;
 };
 
-class Gradient : public BiColorPattern {
+class Gradient final : public BiColorPattern {
 public:
   Gradient(const Gradient &) = default;
   Gradient(const Color &a, const Color &b) : BiColorPattern(a, b) {}
@@ -115,7 +113,7 @@ public:
   virtual explicit operator std::string() const override;
 };
 
-class Ring : public BiColorPattern {
+class Ring final : public BiColorPattern {
 public:
   Ring(const Ring &) = default;
   Ring(const Color &a, const Color &b) : BiColorPattern(a, b) {}
@@ -136,23 +134,122 @@ public:
   virtual explicit operator std::string() const override;
 };
 
-class Checkers : public BiColorPattern {
+class ColorCheckers final : public BiColorPattern {
 public:
-  Checkers(const Checkers &) = default;
-  Checkers(const Color &a, const Color &b) : BiColorPattern(a, b) {}
-  Checkers(const Color &a, const Color &b, const Matrix &t)
+  ColorCheckers(const ColorCheckers &) = default;
+  ColorCheckers(const Color &a, const Color &b) : BiColorPattern(a, b) {}
+  ColorCheckers(const Color &a, const Color &b, const Matrix &t)
       : BiColorPattern(a, b, t) {}
-  Checkers(const Color &a, const Color &b, Matrix &&t)
+  ColorCheckers(const Color &a, const Color &b, Matrix &&t)
       : BiColorPattern(a, b, t) {}
 
   virtual std::unique_ptr<Pattern> clone() const override {
-    return std::unique_ptr<Checkers>(new Checkers(*this));
+    return std::unique_ptr<ColorCheckers>(new ColorCheckers(*this));
   }
 
   virtual Color local_at(const Tuple &point) const override {
     long m = long(std::floor(point.x()) + std::floor(point.y()) +
                   std::floor(point.z()));
     return m % 2 == 0 ? color1() : color2();
+  }
+
+  virtual explicit operator std::string() const override;
+};
+
+class RadialGradient final : public BiColorPattern {
+public:
+  RadialGradient(const RadialGradient &) = default;
+  RadialGradient(const Color &a, const Color &b) : BiColorPattern(a, b) {}
+  RadialGradient(const Color &a, const Color &b, const Matrix &t)
+      : BiColorPattern(a, b, t) {}
+  RadialGradient(const Color &a, const Color &b, Matrix &&t)
+      : BiColorPattern(a, b, t) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<RadialGradient>(new RadialGradient(*this));
+  }
+
+  virtual Color local_at(const Tuple &point) const override {
+    Color distance = color2() - color1();
+    auto m = magnitude(point - Point(0, 0, 0));
+    return color1() + distance * (m - std::floor(m));
+  }
+
+  virtual explicit operator std::string() const override;
+};
+
+class BiPattern : public Pattern {
+public:
+  BiPattern(const BiPattern &) = delete;
+  BiPattern(Pattern *a, Pattern *b) : Pattern(), a(a), b(b) {}
+  BiPattern(Pattern *a, Pattern *b, const Matrix &t) : Pattern(t), a(a), b(b) {}
+  BiPattern(std::unique_ptr<Pattern> a, std::unique_ptr<Pattern> b)
+      : Pattern(), a(std::move(a)), b(std::move(b)) {}
+  BiPattern(std::unique_ptr<Pattern> a, std::unique_ptr<Pattern> b,
+            const Matrix &t)
+      : Pattern(t), a(std::move(a)), b(std::move(b)) {}
+  BiPattern(Pattern *a, Pattern *b, Matrix &&t) : Pattern(t), a(a), b(b) {}
+  BiPattern(BiPattern &&other)
+      : Pattern(std::move(other)), a(std::move(other.a)),
+        b(std::move(other.b)) {}
+
+  BiPattern &operator=(const BiPattern &) = delete;
+  BiPattern &operator=(BiPattern &&rhs) {
+    a.reset(rhs.a.release());
+    b.reset(rhs.b.release());
+    this->Pattern::operator=(std::move(rhs));
+    return *this;
+  }
+
+  const Pattern *pattern1() const { return a.get(); }
+  const Pattern *pattern2() const { return b.get(); }
+
+private:
+  std::unique_ptr<Pattern> a;
+  std::unique_ptr<Pattern> b;
+};
+
+class PatternCheckers final : public BiPattern {
+public:
+  PatternCheckers(const PatternCheckers &other)
+      : BiPattern(other.pattern1()->clone(), other.pattern2()->clone(),
+                  other.transform()) {}
+  PatternCheckers(PatternCheckers &&other) : BiPattern(std::move(other)) {}
+  PatternCheckers(Pattern *a, Pattern *b) : BiPattern(a, b) {}
+  PatternCheckers(Pattern *a, Pattern *b, const Matrix &t)
+      : BiPattern(a, b, t) {}
+  PatternCheckers(Pattern *a, Pattern *b, Matrix &&t) : BiPattern(a, b, t) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<PatternCheckers>(new PatternCheckers(*this));
+  }
+
+  virtual Color local_at(const Tuple &point) const override {
+    long m = long(std::floor(point.x()) + std::floor(point.y()) +
+                  std::floor(point.z()));
+    return m % 2 == 0 ? pattern1()->at(point) : pattern2()->at(point);
+  }
+
+  virtual explicit operator std::string() const override;
+};
+
+class PatternBlender final : public BiPattern {
+public:
+  PatternBlender(const PatternBlender &other)
+      : BiPattern(other.pattern1()->clone(), other.pattern2()->clone(),
+                  other.transform()) {}
+  PatternBlender(PatternBlender &&other) : BiPattern(std::move(other)) {}
+  PatternBlender(Pattern *a, Pattern *b) : BiPattern(a, b) {}
+  PatternBlender(Pattern *a, Pattern *b, const Matrix &t)
+      : BiPattern(a, b, t) {}
+  PatternBlender(Pattern *a, Pattern *b, Matrix &&t) : BiPattern(a, b, t) {}
+
+  virtual std::unique_ptr<Pattern> clone() const override {
+    return std::unique_ptr<PatternBlender>(new PatternBlender(*this));
+  }
+
+  virtual Color local_at(const Tuple &point) const override {
+    return (pattern1()->at(point) + pattern2()->at(point)) / 2.0;
   }
 
   virtual explicit operator std::string() const override;

@@ -83,12 +83,44 @@ TEST(Patterns, output) {
        "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
        "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
        "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}"},
-      {new Checkers(Color::WHITE(), Color::BLACK()),
-       "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color "
+      {new ColorCheckers(Color::WHITE(), Color::BLACK()),
+       "ColorCheckers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color "
        "{ red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    "
        "0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    "
        "0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    "
        "1.0}}\n}"},
+      {new RadialGradient(Color::RED(), Color::GREEN()),
+       "RadialGradient { a: Color { red:1, green:0, blue:0, alpha:1}, b: Color "
+       "{ red:0, green:1, blue:0, alpha:1}, transform: Matrix {    1.0,    "
+       "0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    "
+       "0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    "
+       "1.0}}\n}"},
+      {new PatternCheckers(new Stripes(Color::RED(), Color::GREEN()),
+                           new Stripes(Color::WHITE(), Color::BLACK())),
+       "PatternCheckers { a: Stripes { a: Color { red:1, green:0, blue:0, "
+       "alpha:1}, b: Color { red:0, green:1, blue:0, alpha:1}, transform: "
+       "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+       "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
+       "0.0,    1.0}}\n}, b: Stripes { a: Color { red:1, green:1, blue:1, "
+       "alpha:1}, b: Color { red:0, green:0, blue:0, alpha:1}, transform: "
+       "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+       "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
+       "0.0,    1.0}}\n}, transform: Matrix {    1.0,    0.0,    0.0,    "
+       "0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    0.0,    "
+       "1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}"},
+      {new PatternBlender(new Stripes(Color::RED(), Color::GREEN()),
+                          new Stripes(Color::WHITE(), Color::BLACK())),
+       "PatternBlender { a: Stripes { a: Color { red:1, green:0, blue:0, "
+       "alpha:1}, b: Color { red:0, green:1, blue:0, alpha:1}, transform: "
+       "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+       "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
+       "0.0,    1.0}}\n}, b: Stripes { a: Color { red:1, green:1, blue:1, "
+       "alpha:1}, b: Color { red:0, green:0, blue:0, alpha:1}, transform: "
+       "Matrix {    1.0,    0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0, "
+       "   0.0},\n\t{    0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    "
+       "0.0,    1.0}}\n}, transform: Matrix {    1.0,    0.0,    0.0,    "
+       "0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    0.0,    "
+       "1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}"},
   });
 
   for (const auto &t : AllTest.tests) {
@@ -138,22 +170,62 @@ TEST(Patterns, at) {
   EXPECT_EQ(r.at(Point(0.708, 0, 0.708)), Color::BLACK());
 
   // Checkers should repeat in x
-  Checkers c(Color::WHITE(), Color::BLACK());
+  ColorCheckers c(Color::WHITE(), Color::BLACK());
   EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
   EXPECT_EQ(c.at(Point(0.99, 0, 0)), Color::WHITE());
   EXPECT_EQ(c.at(Point(1.01, 0, 0)), Color::BLACK());
 
   // Checkers should repeat in y
-  c = Checkers(Color::WHITE(), Color::BLACK());
+  c = ColorCheckers(Color::WHITE(), Color::BLACK());
   EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
   EXPECT_EQ(c.at(Point(0, 0.99, 0)), Color::WHITE());
   EXPECT_EQ(c.at(Point(0, 1.01, 0)), Color::BLACK());
 
   // Checkers should repeat in z
-  c = Checkers(Color::WHITE(), Color::BLACK());
+  c = ColorCheckers(Color::WHITE(), Color::BLACK());
   EXPECT_EQ(c.at(Point(0, 0, 0)), Color::WHITE());
   EXPECT_EQ(c.at(Point(0, 0, 0.99)), Color::WHITE());
   EXPECT_EQ(c.at(Point(0, 0, 1.01)), Color::BLACK());
+
+  // A RadialGradient interpolates radially.
+  RadialGradient gr(Color::WHITE(), Color::BLACK());
+  EXPECT_EQ(gr.at(Point(0, 0, 0)), Color::WHITE());
+  EXPECT_EQ(gr.at(Point(0.25, 0, 0)), Color(0.75, 0.75, 0.75));
+  EXPECT_EQ(gr.at(Point(0, 0.25, 0)), Color(0.75, 0.75, 0.75));
+  EXPECT_EQ(gr.at(Point(0, 0, 0.25)), Color(0.75, 0.75, 0.75));
+  EXPECT_EQ(gr.at(Point(0.5, 0, 0)), Color(0.5, 0.5, 0.5));
+  EXPECT_EQ(gr.at(Point(0, 0.5, 0)), Color(0.5, 0.5, 0.5));
+  EXPECT_EQ(gr.at(Point(0, 0, 0.5)), Color(0.5, 0.5, 0.5));
+  EXPECT_EQ(gr.at(Point(0.75, 0, 0)), Color(0.25, 0.25, 0.25));
+  EXPECT_EQ(gr.at(Point(0, 0.75, 0)), Color(0.25, 0.25, 0.25));
+  EXPECT_EQ(gr.at(Point(0, 0, 0.75)), Color(0.25, 0.25, 0.25));
+
+  // Check repetitions in the PatternChecker.
+  PatternCheckers pc(
+      new Stripes(Color::RED(), Color::GREEN(), Matrix::scaling(0.5, 0.5, 0.5)),
+      new Stripes(Color::WHITE(), Color::BLACK(),
+                  Matrix::scaling(0.5, 0.5, 0.5)));
+  EXPECT_EQ(pc.at(Point(0.25, 0, 0.25)), Color::RED());
+  EXPECT_EQ(pc.at(Point(0.75, 0, 0.25)), Color::GREEN());
+  EXPECT_EQ(pc.at(Point(1.25, 0, 0.25)), Color::WHITE());
+  EXPECT_EQ(pc.at(Point(1.75, 0, 0.25)), Color::BLACK());
+  EXPECT_EQ(pc.at(Point(0.25, 1.0, 0.25)), Color::WHITE());
+  EXPECT_EQ(pc.at(Point(0.75, 1.0, 0.25)), Color::BLACK());
+  EXPECT_EQ(pc.at(Point(1.25, 1.0, 0.25)), Color::RED());
+  EXPECT_EQ(pc.at(Point(1.75, 1.0, 0.25)), Color::GREEN());
+
+  // Check PatternBlender.
+  PatternBlender pb(
+      new Stripes(Color::RED(), Color::GREEN(), Matrix::scaling(0.5, 0.5, 0.5)),
+      new Stripes(Color::WHITE(), Color::BLACK(),
+                  Matrix::scaling(0.5, 0.5, 0.5) *
+                      Matrix::rotation_y(-M_PI / 2)));
+  EXPECT_EQ(pb.at(Point(0.25, 0, 0.25)), (Color::RED() + Color::WHITE()) / 2.0);
+  EXPECT_EQ(pb.at(Point(0.75, 0, 0.25)),
+            (Color::GREEN() + Color::WHITE()) / 2.0);
+  EXPECT_EQ(pb.at(Point(0.25, 0, 0.75)), (Color::RED() + Color::BLACK()) / 2.0);
+  EXPECT_EQ(pb.at(Point(0.75, 0, 0.75)),
+            (Color::GREEN() + Color::BLACK()) / 2.0);
 }
 
 TEST(Patterns, transform) {
