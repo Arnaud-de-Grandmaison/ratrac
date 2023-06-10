@@ -3,16 +3,20 @@
 #include "ratrac/Patterns.h"
 #include "ratrac/Shapes.h"
 
+#include <initializer_list>
 #include <memory>
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
 
 using namespace ratrac;
 using namespace testing;
 
+using std::initializer_list;
 using std::ostringstream;
 using std::string;
 using std::unique_ptr;
+using std::vector;
 
 class TestPattern : public Pattern {
 public:
@@ -48,73 +52,53 @@ TEST(Patterns, base) {
 }
 
 TEST(Patterns, output) {
-  Stripes s(Color::WHITE(), Color::BLACK());
-  EXPECT_EQ(
-      string(s),
-      "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+  struct T {
+    struct D {
+      D(Pattern *p, const char *s) : pattern(p), str(s) {}
+      D(D &&other)
+          : pattern(std::move(other.pattern)), str(std::move(other.str)) {}
+      D(const D &other) : pattern(other.pattern->clone()), str(other.str) {}
+      unique_ptr<Pattern> pattern;
+      string str;
+    };
+    T(initializer_list<T::D> d): tests(d) {}
+    vector<T::D> tests;
+  };
 
-  ostringstream oss;
-  oss << s;
-  EXPECT_EQ(
-      oss.str(),
-      "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+  T AllTest({
+      {new Stripes(Color::WHITE(), Color::BLACK()),
+       "Stripes { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+       "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    "
+       "0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    "
+       "0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    "
+       "1.0}}\n}"},
+      {new Gradient(Color::WHITE(), Color::BLACK()),
+       "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+       "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    "
+       "0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    "
+       "0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    "
+       "1.0}}\n}"},
+      {new Ring(Color::WHITE(), Color::BLACK()),
+       "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
+       "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
+       "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
+       "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}"},
+      {new Checkers(Color::WHITE(), Color::BLACK()),
+       "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color "
+       "{ red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    "
+       "0.0,    0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    "
+       "0.0,    0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    "
+       "1.0}}\n}"},
+  });
 
-  Gradient g(Color::WHITE(), Color::BLACK());
-  EXPECT_EQ(
-      string(g),
-      "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
-
-  oss.str("");
-  oss << g;
-  EXPECT_EQ(
-      oss.str(),
-      "Gradient { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
-
-  Ring r(Color::WHITE(), Color::BLACK());
-  EXPECT_EQ(
-      string(r),
-      "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
-
-  oss.str("");
-  oss << r;
-  EXPECT_EQ(
-      oss.str(),
-      "Ring { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
-
-  Checkers c(Color::WHITE(), Color::BLACK());
-  EXPECT_EQ(
-      string(c),
-      "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
-
-  oss.str("");
-  oss << c;
-  EXPECT_EQ(
-      oss.str(),
-      "Checkers { a: Color { red:1, green:1, blue:1, alpha:1}, b: Color { "
-      "red:0, green:0, blue:0, alpha:1}, transform: Matrix {    1.0,    0.0,  "
-      "  0.0,    0.0},\n\t{    0.0,    1.0,    0.0,    0.0},\n\t{    0.0,    "
-      "0.0,    1.0,    0.0},\n\t{    0.0,    0.0,    0.0,    1.0}}\n}");
+  for (const auto &t : AllTest.tests) {
+    // Check the string conversion operator.
+    EXPECT_EQ(string(*t.pattern), t.str);
+    // Check the << output operator.
+    ostringstream oss;
+    oss << *t.pattern;
+    EXPECT_EQ(oss.str(), t.str);
+  }
 }
 
 TEST(Patterns, at) {
