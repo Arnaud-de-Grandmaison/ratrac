@@ -88,8 +88,8 @@ void Canvas::to_png(const std::string &filename) const {
           // Set an image title.
           png_text title;
           title.compression = PNG_TEXT_COMPRESSION_NONE;
-          title.key = "Title";
-          title.text = "Ratrac image";
+          title.key = (png_charp) "Title";
+          title.text = (png_charp) "Ratrac image";
           png_set_text(png, info, &title, 1);
 
           png_write_info(png, info);
