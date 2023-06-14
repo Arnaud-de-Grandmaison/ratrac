@@ -4,6 +4,7 @@
 #include "ratrac/Intersections.h"
 #include "ratrac/Material.h"
 #include "ratrac/Ray.h"
+#include "ratrac/Transformable.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
@@ -11,20 +12,18 @@
 #include <string>
 
 namespace ratrac {
-class Shape {
+class Shape : public Transformable {
 public:
   Shape()
-      : m_transform(Matrix::identity()),
-        m_inverted_transform(Matrix::identity()),
-        m_transposed_inverted_transform(Matrix::identity()), m_material() {}
+      : Transformable(), m_transposed_inverted_transform(Matrix::identity()),
+        m_material() {}
   virtual ~Shape();
 
   bool operator==(const Shape &rhs) const {
-    return m_transform == rhs.m_transform && m_material == rhs.m_material;
+    return this->Transformable::operator==(rhs) && m_material == rhs.m_material;
   }
   bool operator!=(const Shape &rhs) const { return !(*this == rhs); }
 
-  const Matrix &transform() const { return m_transform; }
   const Material &material() const { return m_material; }
   Material &material() { return m_material; }
 
@@ -33,30 +32,18 @@ public:
     return *this;
   }
 
-  Shape &transform(const Matrix &M) {
-    m_transform = M;
-    precompute();
-    return *this;
-  }
-
-  Shape &transform(Matrix &&M) {
-    m_transform = std::move(M);
-    precompute();
-    return *this;
-  }
-
   Intersections intersect(const Ray &world_ray) const {
-    Ray local_ray = ratrac::transform(world_ray, m_inverted_transform);
+    Ray local_ray = ratrac::transform(world_ray, inverse_transform());
     return local_intersect(local_ray);
   }
 
   Color at(const Tuple &world_point) const {
-    Tuple object_point = m_inverted_transform * world_point;
+    Tuple object_point = inverse_transform(world_point);
     return m_material.at(object_point);
   }
 
   Tuple normal_at(const Tuple &world_point) const {
-    Tuple local_point = m_inverted_transform * world_point;
+    Tuple local_point = inverse_transform(world_point);
     Tuple local_normal = local_normal_at(local_point);
     Tuple world_normal = m_transposed_inverted_transform * local_normal;
     world_normal[3] = 0;
@@ -68,16 +55,13 @@ public:
 
   virtual explicit operator std::string() const { return std::string(); }
 
+  void update() override {
+    m_transposed_inverted_transform = transpose(inverse_transform());
+  }
+
 private:
-  Matrix m_transform;
-  Matrix m_inverted_transform;
   Matrix m_transposed_inverted_transform;
   Material m_material;
-
-  void precompute() {
-    m_inverted_transform = inverse(m_transform);
-    m_transposed_inverted_transform = transpose(m_inverted_transform);
-  }
 };
 
 class Sphere : public Shape {

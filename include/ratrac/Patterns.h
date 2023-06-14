@@ -2,6 +2,7 @@
 
 #include "ratrac/Color.h"
 #include "ratrac/Matrix.h"
+#include "ratrac/Transformable.h"
 #include "ratrac/Tuple.h"
 #include "ratrac/ratrac.h"
 
@@ -12,47 +13,23 @@
 
 namespace ratrac {
 
-class Pattern {
+class Pattern : public Transformable {
 public:
-  Pattern()
-      : m_transform(Matrix::identity()),
-        m_inverted_transform(Matrix::identity()) {}
-  Pattern(const Matrix &t)
-      : m_transform(t), m_inverted_transform(inverse(m_transform)) {}
-  Pattern(Matrix &&t)
-      : m_transform(std::move(t)), m_inverted_transform(inverse(m_transform)) {}
+  Pattern() : Transformable() {}
+  Pattern(const Matrix &M) : Transformable(M) {}
+  Pattern(Matrix &&M) : Transformable(std::move(M)) {}
   virtual ~Pattern();
 
   virtual std::unique_ptr<Pattern> clone() const = 0;
 
   Color at(const Tuple &point) const {
-    Tuple local_point = m_inverted_transform * point;
+    Tuple local_point = inverse_transform(point);
     return local_at(local_point);
   }
 
   virtual Color local_at(const Tuple &point) const = 0;
 
   virtual explicit operator std::string() const { return "Pattern {}"; }
-
-  const Matrix &transform() const { return m_transform; }
-
-  Pattern &transform(const Matrix &M) {
-    m_transform = M;
-    precompute();
-    return *this;
-  }
-
-  Pattern &transform(Matrix &&M) {
-    m_transform = std::move(M);
-    precompute();
-    return *this;
-  }
-
-private:
-  Matrix m_transform;
-  Matrix m_inverted_transform;
-
-  void precompute() { m_inverted_transform = inverse(m_transform); }
 };
 
 class BiColorPattern : public Pattern {
