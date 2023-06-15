@@ -41,6 +41,8 @@
 Ratrac : a ray tracer experiment
 ===============================================================================
 
+Ratrac is our C++ implementation of `The Ray Tracer Challenge <http://raytracerchallenge.com/>`_ excellent book from Jamis Buck.
+
 Build
 =====
 
