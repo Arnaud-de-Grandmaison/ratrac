@@ -1,4 +1,4 @@
-set(GOOGLETEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.13.0)
+set(GOOGLETEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/googletest-1.14.0)
 add_subdirectory(${GOOGLETEST_SOURCE_DIR})
 
 include_directories(${CMAKE_SOURCE_DIR}/include
