@@ -1,6 +1,7 @@
 #include "ratrac/ratrac.h"
 #include "ratrac/Canvas.h"
 
+#include <cstdint>
 #include <cstdio>
 #include <limits>
 #include <memory>

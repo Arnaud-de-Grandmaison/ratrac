@@ -1,17 +1,17 @@
-|CIUbuntu2004| |CIUbuntu2204| |CIMacOS13|
+|CIUbuntu2404| |CIUbuntu2604| |CIMacOS26|
 |BadgeRepoSize| |BadgeContributorsNb| |BadgeLastCommitMaster| |BadgeCommitFrequence| |BadgeMainLanguage| |BadgeLicence|
-    
-.. |CIUbuntu2004| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-20.04.yml/badge.svg
-    :alt: Last build status on Ubuntu 20.04
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-20.04.yml
 
-.. |CIUbuntu2204| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml/badge.svg
-    :alt: Last build status on Ubuntu 22.04
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-22.04.yml
+.. |CIUbuntu2404| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-24.04.yml/badge.svg
+    :alt: Last build status on Ubuntu 24.04
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-24.04.yml
 
-.. |CIMacOS13| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-13.yml/badge.svg
-    :alt: Last build status on macOS 13 Ventura
-    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-13.yml
+.. |CIUbuntu2604| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-26.04.yml/badge.svg
+    :alt: Last build status on Ubuntu 26.04
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/ubuntu-26.04.yml
+
+.. |CIMacOS26| image:: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-26.yml/badge.svg
+    :alt: Last build status on macOS 26
+    :target: https://github.com/Arnaud-de-Grandmaison/ratrac/actions/workflows/macOS-26.yml
 
 .. |BadgeRepoSize| image:: https://img.shields.io/github/repo-size/Arnaud-De-Grandmaison/ratrac
     :alt: Github size
@@ -24,7 +24,7 @@
 .. |BadgeLastCommitMaster| image:: https://img.shields.io/github/last-commit/arnaud-de-grandmaison/ratrac/main
     :alt: Github last commit day on main branch
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/commits/main
-   
+
 .. |BadgeCommitFrequence| image:: https://img.shields.io/github/commit-activity/m/arnaud-de-grandmaison/ratrac
     :alt: GitHub commit activity
     :target: https://github.com/Arnaud-de-Grandmaison/ratrac/graphs/commit-activity
